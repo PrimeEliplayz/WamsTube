@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Youtube/clone</title>
+    <title>WamsTube</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1330,6 +1330,88 @@
             }
         }
 
+        .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: #3ea6ff;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.8);
+  transform: translateY(-1px);
+}
+
+.verified-badge::before {
+  content: "✓";
+  display: block;
+}
+
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-row-main {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.admin-row-name {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.admin-chip {
+  border: 0;
+  border-radius: 18px;
+  padding: 8px 12px;
+  background: #f2f2f2;
+  color: #0f0f0f;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-chip.danger {
+  background: #fce4e4;
+  color: #a31515;
+}
+
+.admin-chip.success {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.admin-chip.warn {
+  background: #fff3cd;
+  color: #7a5200;
+}
+
+.admin-chip:hover {
+  filter: brightness(0.98);
+}
+
     
 /* BlueTube Shorts header */
 .shorts-topbar{
@@ -1996,6 +2078,15 @@
                 return;
             }
 
+            function renderChannelName(name, followers, forcedVerified) {
+  const verified = forcedVerified || Number(followers || 0) > 100;
+  const safeName = String(name || "Wams Tube creator");
+  return `
+    <span class="channel-name-text">${safeName}</span>
+    ${verified ? '<span class="verified-badge" title="Verified"></span>' : ''}
+  `;
+}
+
             const mediaUrl = URL.createObjectURL(file);
             const isVideo = file.type.startsWith("video/");
             const title = file.name.replace(/\.[^.]+$/, "") || "Untitled upload";
@@ -2328,6 +2419,12 @@
             }
         }
 
+        function showTakenDown(title) {
+    const overlay = document.getElementById("adminOverlay");
+    if (overlay) overlay.classList.remove("show");
+    alert((title || "This video") + " has been taken down by an admin.");
+}
+
         function openAdminPanel() {
             const list = document.getElementById("adminVideoList");
             const videos = Array.from(document.querySelectorAll("#videoGrid .video-preview"));
@@ -2458,6 +2555,12 @@
                 document.getElementById(
                     "videoFile"
                 );
+
+            const targetName = document.getElementById("channelName").value.trim();
+if (await channelNameTaken(targetName, wamsUser ? wamsUser.id : null)) {
+    alert("That channel name is already in use. Please choose another.");
+    return;
+}
 
             const videoName =
                 document
@@ -3295,11 +3398,113 @@
         }
 
         async function loadWamsProfile() {
-            if (!wamsUser) return;
-            const rows = await sbRequest("/rest/v1/profiles?id=eq." + encodeURIComponent(wamsUser.id) + "&select=id,channel_name,is_admin,is_banned");
-            wamsProfile = rows[0] || null;
-            syncAccountButton();
+    if (!wamsUser) return;
+    const rows = await sbRequest(
+        "/rest/v1/profiles?id=eq." + encodeURIComponent(wamsUser.id) +
+        "&select=id,channel_name,is_admin,is_banned,followers,has_vbadge"
+    );
+    wamsProfile = rows[0] || null;
+    syncAccountButton();
+}
+
+        async function channelNameTaken(name, ignoreId) {
+    const value = String(name || "").trim();
+    if (!value) return true;
+    const rows = await sbRequest(
+        "/rest/v1/profiles?channel_name=eq." + encodeURIComponent(value) +
+        "&select=id"
+    );
+    if (!rows || !rows.length) return false;
+    return rows.some(function(row) {
+        return !ignoreId || row.id !== ignoreId;
+    });
+}
+
+        async function refreshWamsFeed() {
+    if (!configured()) return;
+    try {
+        const query = "/rest/v1/videos?select=*&order=created_at.desc";
+        const videos = await sbRequest(query);
+        const grid = document.getElementById("videoGrid");
+        grid.querySelectorAll(".supabase-video").forEach(function(card){ card.remove(); });
+
+        const visibleVideos = (videos || []).filter(function(v) {
+            return !v.is_deleted && !v.is_hidden && !v.is_banned;
+        });
+
+        const owners = Array.from(new Set(visibleVideos.map(function(v){ return v.owner_id; })));
+        let profiles = [];
+        if (owners.length) {
+            profiles = await sbRequest("/rest/v1/profiles?id=in.(" + owners.map(encodeURIComponent).join(",") + ")&select=id,channel_name,followers,has_vbadge,is_banned");
         }
+
+        const channelNames = Object.fromEntries(
+            profiles.map(function(p){ return [p.id, p.channel_name]; })
+        );
+
+        const channelFlags = Object.fromEntries(
+            profiles.map(function(p){ return [p.id, { followers: Number(p.followers || 0), has_vbadge: !!p.has_vbadge, is_banned: !!p.is_banned }]; })
+        );
+
+        for (const item of visibleVideos) {
+            const profile = channelFlags[item.owner_id] || {};
+            const channel = channelNames[item.owner_id] || "Wams Tube creator";
+            if (profile.is_banned) continue;
+            const card = await makeWamsCard(item, channel, profile);
+            if (card) grid.appendChild(card);
+        }
+
+        searchVideos();
+    } catch (e) {
+        console.warn("Wams Tube feed:", e.message);
+    }
+}
+
+async function makeWamsCard(item, channel, profile) {
+    if (!item || item.is_deleted) return null;
+    let mediaUrl;
+    try { mediaUrl = await getMediaUrl(item.storage_path); } catch (_) { return null; }
+    const card = document.createElement("article");
+    card.className = "video-preview supabase-video";
+    card.dataset.title = item.title;
+    card.dataset.author = channel;
+    card.dataset.videoId = item.id;
+
+    const ownerProfile = profile || {};
+    const displayChannel = ownerProfile.has_vbadge || Number(ownerProfile.followers || 0) > 100
+        ? renderChannelName(channel, Number(ownerProfile.followers || 0), true)
+        : channel;
+
+    card.onclick = function(){ openWamsVideo(item, channel, mediaUrl); };
+    card.innerHTML = `
+        <div class="thumbnail-wrapper">
+            <img class="thumbnail" src="${mediaUrl}" alt="${item.title}">
+        </div>
+        <div class="video-details">
+            <div class="channel-pfp">
+                <img class="video-channel-picture" src="channel-pfp's/prismpfp.jpg" alt="${channel}">
+            </div>
+            <div class="video-info">
+                <h3 class="video-title">${item.title}</h3>
+                <p class="video-author">${displayChannel}</p>
+                <p class="video-stats">${(item.is_short ? "Short • " : "") + (item.visibility === "private" ? "Private • " : "") + "Wams Tube"}</p>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+function syncAccountButton() {
+    const button = document.getElementById("accountButton");
+    button.textContent = wamsUser ? "Sign out" : "Sign in";
+    button.onclick = wamsUser ? signOutWams : openAuth;
+
+    const isAdmin = Boolean(wamsProfile && wamsProfile.is_admin && !wamsProfile.is_banned);
+    const adminEntry = document.getElementById("adminEntry");
+    const adminSidebarEntry = document.getElementById("adminSidebarEntry");
+    if (adminEntry) adminEntry.style.display = isAdmin ? "inline-block" : "none";
+    if (adminSidebarEntry) adminSidebarEntry.style.display = isAdmin ? "flex" : "none";
+}
 
         function syncAccountButton() {
             const button = document.getElementById("accountButton");
@@ -3427,6 +3632,39 @@
         }
 
         async function openWamsVideo(item, channel, mediaUrl) {
+    if (item.is_deleted) { showTakenDown(item.title); return; }
+    stopOtherPlayback();
+    viewedVideoId = item.id;
+    viewedChannelId = item.owner_id;
+
+    const profile = await sbRequest("/rest/v1/profiles?id=eq." + encodeURIComponent(item.owner_id) + "&select=id,is_banned,channel_name,followers,has_vbadge");
+    if (profile && profile[0] && profile[0].is_banned) {
+        alert("This channel has been taken down.");
+        return;
+    }
+
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("watchPage").style.display = "block";
+    document.getElementById("channelPage").style.display = "none";
+
+    document.querySelector(".watch-video-container").innerHTML = "";
+    const media = document.createElement(item.media_type && item.media_type.startsWith("video/") ? "video" : "img");
+    media.src = mediaUrl;
+    media.controls = item.media_type && item.media_type.startsWith("video/");
+    media.autoplay = true;
+    media.playsInline = true;
+    media.style.width = "100%";
+    media.style.height = "100%";
+    media.style.objectFit = "contain";
+    media.style.display = "block";
+
+    document.querySelector(".watch-video-container").appendChild(media);
+    document.getElementById("watchTitle").textContent = item.title;
+    document.getElementById("watchChannel").textContent =
+        (channel || "Wams Tube creator") + " • " + formatNumber(Number(item.views || 0)) + " views";
+}
+
+        async function openWamsVideo(item, channel, mediaUrl) {
             if (item.is_deleted) { showTakenDown(item.title); return; }
             stopOtherPlayback();
             viewedVideoId = item.id;
@@ -3529,57 +3767,164 @@
         };
 
         openAdminPanel = async function() {
-            if (!wamsProfile || !wamsProfile.is_admin) { alert("Admin access only."); return; }
-            const list = document.getElementById("adminVideoList");
-            list.innerHTML = "Loading videos and channels…";
-            document.getElementById("adminOverlay").classList.add("show");
-            try {
-                const videos = await sbRequest("/rest/v1/videos?select=*&order=created_at.desc");
-                const profiles = await sbRequest("/rest/v1/profiles?select=id,channel_name,is_banned&order=channel_name.asc");
-                list.innerHTML = "";
-                const heading = document.createElement("h3"); heading.textContent = "Videos"; list.appendChild(heading);
-                videos.forEach(function(v){
-                    const row = document.createElement("div"); row.className = "admin-video-row";
-                    const name = document.createElement("div"); name.className = "admin-video-name"; name.textContent = v.title + (v.is_deleted ? " (deleted)" : "");
-                    const views = document.createElement("input"); views.className = "admin-stat-input"; views.type = "number"; views.min = "0"; views.value = String(v.admin_view_adjustment || 0); views.title = "Add views"; views.setAttribute("aria-label", "Add views");
-                    const likes = document.createElement("input"); likes.className = "admin-stat-input"; likes.type = "number"; likes.min = "0"; likes.value = String(v.admin_like_adjustment || 0); likes.title = "Add likes"; likes.setAttribute("aria-label", "Add likes");
-                    const save = document.createElement("button"); save.className = "admin-takedown"; save.textContent = "Set stats"; save.onclick = async function(){ try { await sbRequest("/rest/v1/videos?id=eq." + v.id, { method:"PATCH", body:JSON.stringify({admin_view_adjustment:Math.max(0,Number(views.value)||0),admin_like_adjustment:Math.max(0,Number(likes.value)||0)}) }); save.textContent="Saved"; } catch(e){alert(e.message);} };
-                    const del = document.createElement("button"); del.className = "admin-takedown"; del.textContent = v.is_deleted ? "Deleted" : "Delete"; del.disabled = v.is_deleted; del.onclick = async function(){ if (!confirm("Delete this video?")) return; try { await sbRequest("/rest/v1/videos?id=eq." + v.id, {method:"PATCH",body:JSON.stringify({is_deleted:true})}); const objectResponse = await fetch(SUPABASE_URL + "/storage/v1/object/" + MEDIA_BUCKET + "/" + v.storage_path.split("/").map(encodeURIComponent).join("/"), {method:"DELETE",headers:supabaseHeaders()}); if (!objectResponse.ok) console.warn("The video record was removed but its stored file could not be deleted."); del.textContent="Deleted"; del.disabled=true; } catch(e){alert(e.message);} };
-                    row.append(name,views,likes,save,del); list.appendChild(row);
-                });
-                const userHeading = document.createElement("h3"); userHeading.textContent = "Channels and account bans"; list.appendChild(userHeading);
-                profiles.forEach(function(p){
-                    const row = document.createElement("div"); row.className="admin-video-row";
-                    const name = document.createElement("div"); name.className="admin-video-name"; name.textContent=p.channel_name + (p.id===wamsUser.id ? " (you)" : "");
-                    const ban = document.createElement("button"); ban.className="admin-takedown"; ban.textContent=p.is_banned ? "Unban" : "Ban"; ban.disabled=p.id===wamsUser.id;
-                    ban.onclick=async function(){ try { await sbRequest("/rest/v1/profiles?id=eq."+p.id,{method:"PATCH",body:JSON.stringify({is_banned:!p.is_banned})}); p.is_banned=!p.is_banned; ban.textContent=p.is_banned?"Unban":"Ban"; } catch(e){alert(e.message);} };
-                    row.append(name,ban); list.appendChild(row);
-                });
-            } catch(e) { list.textContent = e.message; }
-        };
+    if (!wamsProfile || !wamsProfile.is_admin) { alert("Admin access only."); return; }
+    const list = document.getElementById("adminVideoList");
+    list.innerHTML = "Loading videos and channels…";
+    document.getElementById("adminOverlay").classList.add("show");
+
+    try {
+        const videos = await sbRequest("/rest/v1/videos?select=*&order=created_at.desc");
+        const profiles = await sbRequest("/rest/v1/profiles?select=id,channel_name,is_banned,followers,has_vbadge&order=channel_name.asc");
+
+        list.innerHTML = "";
+
+        const heading1 = document.createElement("h3");
+        heading1.textContent = "Videos";
+        list.appendChild(heading1);
+
+        videos.forEach(function(v){
+            const row = document.createElement("div");
+            row.className = "admin-row";
+
+            const main = document.createElement("div");
+            main.className = "admin-row-main";
+
+            const name = document.createElement("div");
+            name.className = "admin-row-name";
+            name.textContent = (v.title || "Untitled video") + (v.is_deleted ? " (deleted)" : "");
+
+            const remarks = document.createElement("div");
+            remarks.style.fontSize = "12px";
+            remarks.style.color = "#606060";
+            remarks.textContent = v.is_deleted ? "Deleted" : (v.visibility === "private" ? "Private" : "Public");
+
+            main.append(name, remarks);
+
+            const actions = document.createElement("div");
+            actions.className = "admin-actions";
+
+            const del = document.createElement("button");
+            del.className = "admin-chip danger";
+            del.textContent = v.is_deleted ? "Deleted" : "Delete video";
+            del.disabled = v.is_deleted;
+            del.onclick = async function() {
+                if (!confirm("Delete this video?")) return;
+                try {
+                    await sbRequest("/rest/v1/videos?id=eq." + v.id, {
+                        method: "PATCH",
+                        body: JSON.stringify({ is_deleted: true })
+                    });
+                    v.is_deleted = true;
+                    del.textContent = "Deleted";
+                    del.disabled = true;
+                } catch (e) { alert(e.message); }
+            };
+
+            actions.appendChild(del);
+            row.append(main, actions);
+            list.appendChild(row);
+        });
+
+        const heading2 = document.createElement("h3");
+        heading2.textContent = "Channels";
+        list.appendChild(heading2);
+
+        profiles.forEach(function(p){
+            const row = document.createElement("div");
+            row.className = "admin-row";
+
+            const main = document.createElement("div");
+            main.className = "admin-row-main";
+
+            const name = document.createElement("div");
+            name.className = "admin-row-name";
+            name.innerHTML = renderChannelName(p.channel_name, Number(p.followers || 0), Boolean(p.has_vbadge));
+
+            const status = document.createElement("div");
+            status.style.fontSize = "12px";
+            status.style.color = "#606060";
+            status.textContent = p.is_banned ? "Banned" : (p.has_vbadge ? "Verified" : "Active");
+
+            main.append(name, status);
+
+            const actions = document.createElement("div");
+            actions.className = "admin-actions";
+
+            const badge = document.createElement("button");
+            badge.className = "admin-chip success";
+            badge.textContent = p.has_vbadge ? "Remove badge" : "Give badge";
+            badge.disabled = p.id === wamsUser.id;
+            badge.onclick = async function() {
+                try {
+                    await sbRequest("/rest/v1/profiles?id=eq." + p.id, {
+                        method: "PATCH",
+                        body: JSON.stringify({ has_vbadge: !p.has_vbadge })
+                    });
+                    p.has_vbadge = !p.has_vbadge;
+                    badge.textContent = p.has_vbadge ? "Remove badge" : "Give badge";
+                } catch (e) { alert(e.message); }
+            };
+
+            const ban = document.createElement("button");
+            ban.className = "admin-chip warn";
+            ban.textContent = p.is_banned ? "Unban channel" : "Ban channel";
+            ban.disabled = p.id === wamsUser.id;
+            ban.onclick = async function() {
+                try {
+                    await sbRequest("/rest/v1/profiles?id=eq." + p.id, {
+                        method: "PATCH",
+                        body: JSON.stringify({ is_banned: !p.is_banned })
+                    });
+                    p.is_banned = !p.is_banned;
+                    ban.textContent = p.is_banned ? "Unban channel" : "Ban channel";
+                    status.textContent = p.is_banned ? "Banned" : (p.has_vbadge ? "Verified" : "Active");
+                } catch (e) { alert(e.message); }
+            };
+
+            actions.append(badge, ban);
+            row.append(main, actions);
+            list.appendChild(row);
+        });
+
+    } catch (e) {
+        list.textContent = e.message;
+    }
+};
 
         openChannel = async function() {
-            if (!wamsUser) { openAuth(); return; }
-            stopOtherPlayback();
-            if (!wamsProfile) await loadWamsProfile();
-            document.getElementById("homePage").style.display = "none";
-            document.getElementById("watchPage").style.display = "none";
-            document.getElementById("channelPage").style.display = "block";
-            document.querySelector(".channel-name").textContent = wamsProfile.channel_name;
-            document.querySelector(".channel-handle").textContent = "@" + wamsProfile.channel_name.toLowerCase().replace(/[^a-z0-9_]/g, "");
-            document.querySelector(".subscribe-button").style.display = "none";
-            try {
-                const followers = await sbRequest("/rest/v1/channel_follows?channel_id=eq." + wamsUser.id + "&select=follower_id");
-                document.querySelector(".subscriber-count").textContent = formatNumber(followers.length) + (followers.length === 1 ? " subscriber" : " subscribers");
-                const videos = await sbRequest("/rest/v1/videos?owner_id=eq." + wamsUser.id + "&select=*&order=created_at.desc");
-                const content = document.querySelector(".channel-content");
-                content.innerHTML = "";
-                const ownGrid = document.createElement("div"); ownGrid.className = "video-grid";
-                for (const video of videos) {
-                    const card = await makeWamsCard(video, wamsProfile.channel_name);
-                    if (card) ownGrid.appendChild(card);
-                }
-                content.appendChild(ownGrid);
+    if (!wamsUser) { openAuth(); return; }
+    stopOtherPlayback();
+    if (!wamsProfile) await loadWamsProfile();
+
+    const content = document.querySelector(".channel-content");
+    content.innerHTML = "";
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("watchPage").style.display = "none";
+    document.getElementById("channelPage").style.display = "block";
+
+    const followers = await sbRequest("/rest/v1/channel_follows?channel_id=eq." + wamsUser.id + "&select=follower_id");
+    const followerTotal = Array.isArray(followers) ? followers.length : 0;
+
+    document.querySelector(".channel-name").innerHTML =
+        renderChannelName(wamsProfile.channel_name, followerTotal, Boolean(wamsProfile.has_vbadge));
+
+    document.querySelector(".channel-handle").textContent =
+        "@" + (wamsProfile.channel_name || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
+
+    document.querySelector(".subscriber-count").textContent =
+        formatNumber(followerTotal) + (followerTotal === 1 ? " subscriber" : " subscribers");
+
+    const videos = await sbRequest("/rest/v1/videos?owner_id=eq." + wamsUser.id + "&select=*&order=created_at.desc");
+    const ownGrid = document.createElement("div");
+    ownGrid.className = "video-grid";
+
+    for (const video of videos.filter(function(v){ return !v.is_deleted; })) {
+        const card = await makeWamsCard(video, wamsProfile.channel_name, wamsProfile);
+        if (card) ownGrid.appendChild(card);
+    }
+
+    content.appendChild(ownGrid);
+};
                 if (!videos.length) {
                     const empty = document.createElement("div"); empty.className = "empty-channel";
                     empty.innerHTML = '<div class="empty-channel-title">This channel has no videos</div><div class="empty-channel-text">Videos uploaded to this channel will appear here.</div>';
