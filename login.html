@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body data-auth-mode="login">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button auth-home-link" href="index.html">Home</a>
+    </header>
+    <main class="auth-page">
+        <section class="auth-box auth-standalone">
+            <h1 class="auth-heading" id="authHeading">Sign in to Wams Tube</h1>
+            <p class="auth-help" id="authHelp">Use your @mtps.us email to like, comment, and follow channels.</p>
+            <label class="upload-label" for="authEmail">School email</label>
+            <input class="upload-input" id="authEmail" type="email" autocomplete="email" placeholder="you@mtps.us">
+            <label class="upload-label" for="authPassword">Password</label>
+            <input class="upload-input" id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+            <div id="signupChannelField" style="display:none">
+                <label class="upload-label" for="signupChannel">Channel name</label>
+                <input class="upload-input" id="signupChannel" maxlength="40" placeholder="Choose your channel name">
+            </div>
+            <p class="auth-error" id="authError" role="alert"></p>
+            <div class="auth-actions">
+                <button id="authSubmit" type="button" onclick="submitAuth()">Sign in</button>
+                <a class="auth-secondary" href="signup.html">Create account</a>
+            </div>
+            <p class="auth-setup-note">DO NOT USE YOUR SCHOOL PASSWORD OR AUTOMATIC ACCOUNT DELETION</p>
+        </section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

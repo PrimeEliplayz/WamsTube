@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7041b8">
+    <title>Owner Panel - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="site-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+</head>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button auth-home-link" href="index.html">Home</a>
+    </header>
+
+    <main class="home-page admin-page owner-page">
+        <h1>WamsTube Owner Panel</h1>
+        <p class="admin-warning" role="status">Checking owner access…</p>
+        <p id="ownerPageMessage" class="admin-message" role="status" aria-live="polite"></p>
+
+        <section class="admin-box owner-panel" id="ownerPanel" hidden aria-labelledby="ownerPanelTitle">
+            <div class="admin-section-heading">
+                <div>
+                    <p class="owner-eyebrow"><span class="material-symbols-rounded" aria-hidden="true">manage_accounts</span> OWNER ACCESS ONLY</p>
+                    <h2 id="ownerPanelTitle">Owner controls</h2>
+                    <p>Owner governance and site-wide service controls. Administrator moderation tools are in the separate Admin panel.</p>
+                </div>
+            </div>
+
+            <div class="owner-category">
+                <h3>Platform availability</h3>
+                <p>Lock the public site during maintenance or an incident. Add a clear reason for visitors.</p>
+                <label class="upload-label" for="lockdownReason">Lockdown reason shown to visitors</label>
+                <textarea id="lockdownReason" class="upload-input" maxlength="500" rows="3" placeholder="Planned maintenance — we’ll be back soon."></textarea>
+                <div class="admin-actions">
+                    <button id="toggleSiteLockdown" type="button" class="owner-lock-button"><span class="material-symbols-rounded" aria-hidden="true">vpn_lock</span><span>Lock down site</span></button>
+                </div>
+                <p id="lockdownStatus" class="admin-result-count" role="status" aria-live="polite">Checking site status…</p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Site operations</h3>
+                <p>Pause or resume new video uploads independently of the full site lockdown.</p>
+                <div class="admin-actions">
+                    <button id="toggleOwnerUploads" type="button">Disable uploads</button>
+                    <button id="refreshOwnerDashboard" type="button">Refresh owner dashboard</button>
+                </div>
+                <p id="ownerOperationsStatus" class="admin-result-count" role="status" aria-live="polite">Checking platform operations…</p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Games catalog</h3>
+                <p>Add HTTPS game websites to the Games page. Enter an embed URL when the site provides a separate iframe-compatible address; otherwise the website URL is used. Websites may block embedding. Use the close/reopen control on each game to cover its player with a closure notice.</p>
+                <form id="ownerGameForm">
+                    <input id="ownerGameId" type="hidden">
+                    <label class="upload-label" for="ownerGameTitle">Game title</label>
+                    <input id="ownerGameTitle" class="upload-input" maxlength="80" required placeholder="Game name">
+                    <label class="upload-label" for="ownerGameWebsiteUrl">Website URL</label>
+                    <input id="ownerGameWebsiteUrl" class="upload-input" type="url" maxlength="2048" required placeholder="https://example.com/game">
+                    <label class="upload-label" for="ownerGameEmbedUrl">Embed URL (optional)</label>
+                    <input id="ownerGameEmbedUrl" class="upload-input" type="url" maxlength="2048" placeholder="https://example.com/embed/game">
+                    <label class="upload-label" for="ownerGameDescription">Description (optional)</label>
+                    <input id="ownerGameDescription" class="upload-input" maxlength="300" placeholder="A short description">
+                    <label class="upload-label" for="ownerGameControls">Controls (optional)</label>
+                    <input id="ownerGameControls" class="upload-input" maxlength="300" placeholder="Keyboard, mouse, or touch controls">
+                    <div class="admin-actions">
+                        <button id="saveOwnerGame" type="submit">Add game</button>
+                        <button id="cancelOwnerGameEdit" type="button" hidden>Cancel edit</button>
+                    </div>
+                </form>
+                <p id="ownerGamesStatus" class="admin-result-count" role="status" aria-live="polite">Loading games catalog…</p>
+                <div id="ownerGamesList" class="owner-audit-log" aria-live="polite"></div>
+                <h4>Plus member suggestions</h4>
+                <p>Approving a suggestion adds it to the Games page immediately.</p>
+                <p id="ownerGameSuggestionsStatus" class="admin-result-count" role="status" aria-live="polite">Loading suggestions…</p>
+                <div id="ownerGameSuggestions" class="owner-audit-log" aria-live="polite"></div>
+            </div>
+
+            <div class="owner-category">
+                <h3>Platform analytics</h3>
+                <p>Private, read-only platform health totals for active owners.</p>
+                <div class="owner-metrics" id="ownerMetrics" aria-live="polite">
+                    <article><strong id="ownerMetricChannels">—</strong><span>Channels</span></article>
+                    <article><strong id="ownerMetricActive">—</strong><span>Active accounts</span></article>
+                    <article><strong id="ownerMetricBanned">—</strong><span>Banned accounts</span></article>
+                    <article><strong id="ownerMetricReview">—</strong><span>Under review</span></article>
+                    <article><strong id="ownerMetricOwners">—</strong><span>Owners</span></article>
+                    <article><strong id="ownerMetricVideos">—</strong><span>Videos</span></article>
+                    <article><strong id="ownerMetricViews">—</strong><span>Recorded views</span></article>
+                    <article><strong id="ownerMetricEngagement">—</strong><span>Comments + likes</span></article>
+                    <article><strong id="ownerMetricSubscriptions">—</strong><span>Subscriptions</span></article>
+                    <article><strong id="ownerMetricReports">—</strong><span>Pending reports</span></article>
+                </div>
+                <p id="ownerMetricsUpdated" class="admin-result-count" role="status"></p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Owner access</h3>
+                <p>Choose trusted accounts to grant or remove Owner access. Owners cannot remove their own access, and the final active owner cannot be removed.</p>
+                <label class="upload-label" for="ownerAccountSelect">Channel</label>
+                <select id="ownerAccountSelect" class="upload-input"><option value="">Loading channels…</option></select>
+                <div class="admin-actions">
+                    <button id="grantOwnerAccess" type="button">Grant Owner access</button>
+                    <button id="removeOwnerAccess" type="button" class="danger">Remove Owner access</button>
+                </div>
+                <p id="ownerAccessStatus" class="admin-result-count" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Public site announcement</h3>
+                <p>Publish a site-wide owner notice, separate from administrator inbox messages and What’s New posts.</p>
+                <label class="upload-label" for="ownerAnnouncementTitle">Announcement title</label>
+                <input id="ownerAnnouncementTitle" class="upload-input" maxlength="120" placeholder="A note from the owners">
+                <label class="upload-label" for="ownerAnnouncementBody">Message</label>
+                <textarea id="ownerAnnouncementBody" class="upload-input" maxlength="1000" rows="3" placeholder="Share a service update with visitors"></textarea>
+                <div class="admin-actions">
+                    <button id="publishOwnerAnnouncement" type="button">Publish announcement</button>
+                    <button id="clearOwnerAnnouncement" type="button" class="danger">Remove announcement</button>
+                </div>
+                <p id="ownerAnnouncementStatus" class="admin-result-count" role="status" aria-live="polite">Checking announcement…</p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Channel availability</h3>
+                <p>Temporarily close an individual channel. Visitors see your message and the cloud-lock icon until you reopen it.</p>
+                <label class="upload-label" for="closureChannelSelect">Channel</label>
+                <select id="closureChannelSelect" class="upload-input"><option value="">Choose a channel…</option></select>
+                <label class="upload-label" for="closureChannelMessage">Message shown to visitors</label>
+                <textarea id="closureChannelMessage" class="upload-input" maxlength="500" rows="3" placeholder="This channel is temporarily unavailable."></textarea>
+                <div class="admin-actions">
+                    <button id="closeSelectedChannel" type="button" class="owner-lock-button"><span class="material-symbols-rounded" aria-hidden="true">cloud_lock</span><span>Close channel</span></button>
+                    <button id="reopenSelectedChannel" type="button">Reopen channel</button>
+                </div>
+                <p id="channelClosureStatus" class="admin-result-count" role="status" aria-live="polite">Choose a channel to view its status.</p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Manage subscriptions</h3>
+                <p>Subscribe a selected active account to a channel. This owner action is recorded in the activity log.</p>
+                <label class="upload-label" for="subscriptionAccountSelect">Account to subscribe</label>
+                <select id="subscriptionAccountSelect" class="upload-input"><option value="">Choose an account…</option></select>
+                <label class="upload-label" for="subscriptionChannelSelect">Channel to subscribe to</label>
+                <select id="subscriptionChannelSelect" class="upload-input"><option value="">Choose a channel…</option></select>
+                <div class="admin-actions">
+                    <button id="ownerSubscribeAccount" type="button">Subscribe account</button>
+                </div>
+                <p id="ownerSubscriptionStatus" class="admin-result-count" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Owner activity log</h3>
+                <p>Review recent owner-only changes to ownership, site availability, and public notices.</p>
+                <div id="ownerAuditLog" class="owner-audit-log" aria-live="polite">Loading owner activity…</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="owner-panel.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

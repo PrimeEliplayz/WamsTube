@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - WamsTube Plus</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="achievement-body">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html" aria-label="WamsTube home">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button" href="plus.html">WamsTube Plus</a>
+    </header>
+    <main class="achievement-page">
+        <header class="achievement-heading">
+            <p class="achievement-eyebrow">WAMSTUBE PLUS REWARDS</p>
+            <h1>Achievements</h1>
+            <p>Celebrate your channel milestones. Complete an achievement, claim its badge, and collect Wams Bucks.</p>
+        </header>
+        <section class="achievement-wallet" aria-label="Wams Bucks balance">
+            <span class="material-symbols-rounded" aria-hidden="true">account_balance_wallet</span>
+            <span>Your Wams Bucks</span><strong id="achievementBalance">Loading…</strong>
+        </section>
+        <p id="achievementStatus" class="achievement-status" role="status" aria-live="polite">Loading achievements…</p>
+        <a class="achievement-signin" id="achievementSignIn" href="login.html" hidden>Sign in to claim rewards</a>
+        <section id="achievementGrid" class="achievement-grid" aria-label="Achievement list"></section>
+        <p class="achievement-note">Each achievement can be claimed once. Bucks are in-site points with no cash value. Your achievement badges are displayed on your channel.</p>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="achievements.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

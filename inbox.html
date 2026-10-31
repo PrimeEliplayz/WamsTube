@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="inbox.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="inbox-body">
+    <header class="top-bar inbox-top-bar">
+        <a class="site-brand" href="index.html">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button auth-home-link" href="index.html">Home</a>
+    </header>
+    <main class="inbox-page">
+        <div class="inbox-heading-row">
+            <div>
+                <p class="inbox-eyebrow">WAMSTUBE</p>
+                <h1>Notifications</h1>
+                <p class="inbox-subtitle">Updates about your channel and activity.</p>
+            </div>
+            <button class="inbox-mark-all" id="inboxMarkAll" type="button">Mark all as read</button>
+        </div>
+        <div class="inbox-tabs" role="tablist" aria-label="Notification filter">
+            <button class="inbox-tab active" type="button" data-filter="all">All</button>
+            <button class="inbox-tab" type="button" data-filter="unread">Unread</button>
+        </div>
+        <p class="inbox-status" id="inboxStatus" role="status" aria-live="polite">Loading your inbox…</p>
+        <section class="inbox-list" id="inboxList" aria-label="Your notifications"></section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="inbox.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

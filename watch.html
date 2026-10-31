@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Watch - WamsTube</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+
+<body>
+    <main class="watch-page">
+        <button
+            class="watch-back"
+            id="watchBackButton"
+            type="button"
+        >
+            Back
+        </button>
+
+        <div class="watch-layout">
+            <div class="watch-main">
+        <div class="watch-video-container">
+            <div class="watch-loading">
+                Loading video...
+            </div>
+        </div>
+
+        <div class="watch-title-row">
+            <h1 class="watch-title" id="watchTitle">
+                Loading video...
+            </h1>
+            <span class="watch-duration" id="watchDuration" aria-label="Video duration"></span>
+        </div>
+
+        <p class="watch-channel" id="watchChannel">
+            Loading channel information...
+        </p>
+        <p class="watch-description" id="watchDescription" hidden></p>
+
+        <section class="plus-player-tools" id="plusPlayerTools" aria-label="WamsTube Plus player tools" hidden>
+            <strong>WamsTube Plus player tools</strong>
+            <label for="plusPlaybackSpeed">Playback speed</label>
+            <select id="plusPlaybackSpeed" aria-label="Playback speed">
+                <option value="0.5">0.5×</option>
+                <option value="0.75">0.75×</option>
+                <option value="1" selected>Normal</option>
+                <option value="1.25">1.25×</option>
+                <option value="1.5">1.5×</option>
+                <option value="1.75">1.75×</option>
+                <option value="2">2×</option>
+            </select>
+            <button class="plus-player-button" id="plusPictureInPicture" type="button">Mini player</button>
+            <button class="plus-player-button" id="plusTheaterMode" type="button" aria-pressed="false">Theater mode</button>
+            <button class="plus-player-button" id="plusLoopVideo" type="button" aria-pressed="false">Loop off</button>
+            <button class="plus-player-button" id="plusDownloadVideo" type="button">Download video</button>
+            <button class="plus-player-button" id="plusShareVideo" type="button">Share video</button>
+            <span id="plusPlayerStatus" role="status" aria-live="polite"></span>
+        </section>
+
+        <section
+            class="watch-engagement"
+            id="watchEngagement"
+            hidden
+            aria-label="Video actions and comments"
+        >
+            <div class="watch-action-row">
+                <div class="watch-channel-owner">
+                    <div
+                        class="watch-channel-avatar"
+                        id="watchChannelAvatar"
+                        aria-hidden="true"
+                    >
+                        W
+                    </div>
+
+                    <div class="watch-channel-identity">
+                        <strong id="watchChannelName">
+                            Channel
+                        </strong>
+
+                        <span id="watchSubscriberCount">
+                            0 subscribers
+                        </span>
+                    </div>
+
+                    <button
+                        class="watch-subscribe-button"
+                        id="watchSubscribeButton"
+                        type="button"
+                    >
+                        Subscribe
+                    </button>
+                </div>
+
+                <div class="watch-video-actions">
+                    <button
+                        class="watch-like-button"
+                        id="watchLikeButton"
+                        type="button"
+                        aria-pressed="false"
+                    >
+                        <span
+                            class="material-symbols-rounded"
+                            aria-hidden="true"
+                        >
+                            thumb_up
+                        </span>
+
+                        <span id="watchLikeCount">
+                            0
+                        </span>
+                    </button>
+
+                    <button
+                        class="watch-donate-button"
+                        id="watchDonateButton"
+                        type="button"
+                        hidden
+                    >
+                        <span class="material-symbols-rounded" aria-hidden="true">volunteer_activism</span>
+                        Donate
+                    </button>
+
+                    <button
+                        class="watch-report-toggle"
+                        id="watchReportToggle"
+                        type="button"
+                        title="Report video"
+                    >
+                        <span
+                            class="material-symbols-rounded"
+                            aria-hidden="true"
+                        >
+                            flag
+                        </span>
+
+                        <span>Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="watch-wallet-tools">
+                <div>
+                    <strong id="watchWalletBalance">Wams Bucks wallet</strong>
+                    <span>Earn 10 Wams Bucks each day.</span>
+                </div>
+                <button class="watch-claim-button" id="watchDailyClaim" type="button">Claim daily 10</button>
+            </div>
+
+            <p
+                class="watch-engagement-status"
+                id="watchEngagementStatus"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <section
+                class="watch-comments"
+                aria-labelledby="watchCommentsTitle"
+            >
+                <h2 id="watchCommentsTitle">
+                    <span id="watchCommentCount">0</span>
+                    Comments
+                </h2>
+
+                <form
+                    id="watchCommentForm"
+                    class="watch-comment-form"
+                >
+                    <div
+                        class="watch-comment-avatar"
+                        id="watchCommentAvatar"
+                        aria-hidden="true"
+                    >
+                        ?
+                    </div>
+
+                    <div class="watch-comment-compose">
+                        <textarea
+                            id="watchCommentInput"
+                            maxlength="1000"
+                            rows="1"
+                            placeholder="Add a comment..."
+                            aria-label="Write a comment"
+                            required
+                        ></textarea>
+
+                        <div class="watch-comment-form-actions">
+                            <span id="watchCommentAuthHint">
+                                Sign in to join the conversation.
+                            </span>
+
+                            <button
+                                type="submit"
+                                id="watchCommentSubmit"
+                            >
+                                Comment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div
+                    class="watch-comment-list"
+                    id="watchCommentList"
+                    aria-live="polite"
+                ></div>
+            </section>
+        </section>
+
+        <dialog class="watch-donate-dialog" id="watchDonateDialog" aria-labelledby="watchDonateTitle">
+            <form id="watchDonateForm">
+                <h2 id="watchDonateTitle">Send Wams Bucks</h2>
+                <p id="watchDonateChannel">Support this verified creator.</p>
+                <label for="watchDonateAmount">Amount</label>
+                <div class="watch-donate-amount-row">
+                    <input id="watchDonateAmount" type="number" min="1" max="1000" step="1" value="10" required>
+                    <span>Wams Bucks</span>
+                </div>
+                <p class="watch-donate-note">Your donation goes to the creator and gives them 30 days of WamsTube Plus.</p>
+                <p class="watch-donate-status" id="watchDonateStatus" role="status" aria-live="polite"></p>
+                <div class="watch-donate-actions">
+                    <button class="watch-donate-cancel" id="watchDonateCancel" type="button">Cancel</button>
+                    <button class="watch-donate-confirm" id="watchDonateConfirm" type="submit">Donate</button>
+                </div>
+            </form>
+        </dialog>
+
+        <section
+            class="watch-takedown-notice"
+            id="takedownNotice"
+            hidden
+        >
+            <h2>Video taken down</h2>
+
+            <p>
+                <strong>Reason:</strong>
+                <span id="takedownReason"></span>
+            </p>
+
+            <p>
+                <strong>Taken down by:</strong>
+                <span id="takedownModerator"></span>
+            </p>
+        </section>
+            </div>
+
+            <aside class="watch-recommendations" aria-labelledby="watchRecommendationsTitle">
+                <h2 id="watchRecommendationsTitle">Up next</h2>
+                <div class="watch-recommendation-list" id="watchRecommendationList" aria-live="polite">
+                    <p class="watch-recommendations-loading">Loading videos…</p>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="plus-features.js"></script>
+    <script src="watch.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

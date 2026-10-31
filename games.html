@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111827">
+    <title>Games - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="site-theme.css">
+    <link rel="stylesheet" href="games.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+</head>
+<body class="game-room-body">
+    <header class="game-room-header">
+        <a class="game-room-brand" href="index.html">
+            <img src="download.jpeg" alt="">
+            <span>WamsTube <small>Games</small></span>
+        </a>
+        <a class="game-room-home" href="index.html"><span class="material-symbols-rounded" aria-hidden="true">home</span> Home</a>
+    </header>
+
+    <main class="games-page">
+        <section class="games-intro">
+            <p class="games-eyebrow">ARCADE</p>
+            <h1>Take a game break</h1>
+            <p>Play games shared by the owners. Games open here when the website allows embedding, or you can open the original website.</p>
+        </section>
+
+        <section class="game-suggestion-panel" aria-labelledby="gameSuggestionTitle">
+            <div>
+                <p class="games-eyebrow">WAMSTUBE PLUS</p>
+                <h2 id="gameSuggestionTitle">Suggest a game</h2>
+                <p id="gameSuggestionAccess" role="status" aria-live="polite">Checking WamsTube Plus access…</p>
+            </div>
+            <form id="gameSuggestionForm" hidden>
+                <label for="suggestGameTitle">Game title</label>
+                <input id="suggestGameTitle" maxlength="80" required placeholder="Game name">
+                <label for="suggestGameWebsite">Website URL</label>
+                <input id="suggestGameWebsite" type="url" maxlength="2048" required placeholder="https://example.com/game">
+                <label for="suggestGameEmbed">Embed URL (optional)</label>
+                <input id="suggestGameEmbed" type="url" maxlength="2048" placeholder="https://example.com/embed/game">
+                <label for="suggestGameDescription">Description (optional)</label>
+                <input id="suggestGameDescription" maxlength="300" placeholder="A short description">
+                <label for="suggestGameControls">Controls (optional)</label>
+                <input id="suggestGameControls" maxlength="300" placeholder="Keyboard, mouse, or touch controls">
+                <button class="game-tool-button game-suggestion-submit" type="submit">Send for owner review</button>
+            </form>
+            <p id="gameSuggestionStatus" role="status" aria-live="polite"></p>
+            <div id="myGameSuggestions" class="my-game-suggestions" aria-live="polite"></div>
+        </section>
+
+        <div class="games-layout">
+            <nav class="games-library" aria-label="Choose a game" id="gamesLibrary"></nav>
+
+            <section class="games-play-area" aria-label="Game player">
+                <div class="games-toolbar">
+                    <div class="games-selected-copy">
+                        <h2 id="selectedGameTitle">Loading games…</h2>
+                        <p id="selectedGameDescription"></p>
+                    </div>
+                    <div class="games-controls">
+                        <a class="game-tool-button games-open-link" id="openGameLink" href="#" target="_blank" rel="noopener noreferrer" hidden>
+                            <span class="material-symbols-rounded" aria-hidden="true">open_in_new</span> Open website
+                        </a>
+                        <button class="game-tool-button" id="restartGame" type="button" disabled>
+                            <span class="material-symbols-rounded" aria-hidden="true">refresh</span> Reload game
+                        </button>
+                        <button class="game-tool-button" id="wideGame" type="button" aria-pressed="false">
+                            <span class="material-symbols-rounded" aria-hidden="true">aspect_ratio</span> Theater
+                        </button>
+                        <button class="game-tool-button game-fullscreen-button" id="fullscreenGame" type="button">
+                            <span class="material-symbols-rounded" aria-hidden="true">fullscreen</span> Fullscreen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="game-stage" id="gameStage">
+                    <div class="game-stage-overlay" id="gameStageOverlay" role="status" aria-live="polite" hidden>
+                        <span class="material-symbols-rounded game-stage-overlay-icon" id="gameStageOverlayIcon" aria-hidden="true">lock</span>
+                        <h2 id="gameStageOverlayTitle">Sign in to play</h2>
+                        <p id="gameStageOverlayMessage">Sign in to your account to play games.</p>
+                        <a class="game-tool-button game-overlay-signin" id="gameSignInLink" href="login.html">Sign in</a>
+                    </div>
+                    <iframe
+                        id="gameFrame"
+                        title="Game player"
+                        sandbox="allow-scripts allow-forms allow-pointer-lock allow-popups"
+                        referrerpolicy="no-referrer"
+                        allow="fullscreen; gamepad"
+                        allowfullscreen
+                        src="about:blank"
+                    ></iframe>
+                </div>
+
+                <p class="game-help" id="gameHelp" aria-live="polite"></p>
+                <p class="games-footnote">Tip: click inside the game first so keyboard controls work. Press Esc to leave fullscreen.</p>
+            </section>
+        </div>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="games.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

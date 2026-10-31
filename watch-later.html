@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Later - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body data-browse-page="watch-later">
+    <header class="top-bar"><a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a><a class="account-button browse-home" href="index.html">Home</a></header>
+    <main class="home-page browse-page"><div class="browse-heading"><h1>Watch later</h1><button class="browse-tool-button" id="clearCollection" type="button">Clear list</button></div><div class="browse-smart-tools" id="watchLaterPlusTools" hidden><button class="browse-tool-button" id="watchLaterCreateFolder" type="button">New folder</button><label for="watchLaterFolderFilter">Folder</label><select id="watchLaterFolderFilter"><option value="all">All folders</option></select><label for="watchLaterSort">Sort</label><select id="watchLaterSort"><option value="saved">Recently saved</option><option value="title">Title</option><option value="channel">Channel</option><option value="oldest">Oldest saved</option></select></div><p class="browse-status" id="browseStatus" role="status" aria-live="polite"></p><section class="video-grid" id="browseVideoGrid"></section><div class="empty-channel" id="browseEmpty"><div class="empty-channel-title">Nothing saved yet</div><div class="empty-channel-text">Choose “Watch later” on any video card to save it here on this device.</div></div></main>
+    <script src="supabase-config.js"></script><script src="auth.js"></script><script src="script.js"></script><script src="browse.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

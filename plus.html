@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WamsTube Plus checkout</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="plus-page-body">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html" aria-label="WamsTube home">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button plus-home-link" href="index.html">Back to WamsTube</a>
+    </header>
+
+    <main class="plus-page">
+        <section class="plus-hero">
+            <div class="plus-brand-lockup" aria-label="WamsTube Plus">
+                <span class="plus-play-mark material-symbols-rounded" aria-hidden="true">play_arrow</span>
+                <span>WamsTube <strong>PLUS</strong></span>
+            </div>
+            <p class="plus-eyebrow">YOUR CHANNEL, WITH A LITTLE EXTRA</p>
+            <h1>WamsTube <span>Plus</span></h1>
+            <p class="plus-intro">Pick a prepaid plan with the features that fit you. Lifetime unlocks every Plus feature currently available.</p>
+            <a class="studio-launch-link" href="studio.html"><span class="material-symbols-rounded" aria-hidden="true">video_settings</span> Open WamsTube Studio</a>
+
+            <section class="plus-checkout" aria-labelledby="checkout-heading">
+                <h2 id="checkout-heading">Choose your Plus plan</h2>
+                <label class="plus-plan-label" for="plusPlanSelect">Membership length</label>
+                <select class="plus-plan-select" id="plusPlanSelect">
+                    <option value="day">1 day — 10 Wams Bucks</option>
+                    <option value="week">1 week — 35 Wams Bucks</option>
+                    <option value="month" selected>1 month — 100 Wams Bucks</option>
+                    <option value="year">1 year — 900 Wams Bucks</option>
+                    <option value="lifetime">Lifetime — 5,000 Wams Bucks</option>
+                </select>
+                <p class="plus-price"><strong id="plusPlanPrice">100</strong> Wams Bucks <span id="plusPlanDuration">/ 1 month</span></p>
+                <p class="plus-plan-includes" id="plusPlanIncludes">Includes playback tools, captions and trimming, creator analytics, and subscriber-only videos.</p>
+                <div class="plus-wallet-line"><span>Your balance</span><strong id="wamsBalance">Loading…</strong></div>
+                <section class="plus-loan-panel" aria-labelledby="loan-heading">
+                    <h3 id="loan-heading">Borrow Wams Bucks</h3>
+                    <p>Borrow up to 1,000 Bucks per request from the <strong>wams@mtps.us</strong> account. Borrowed Bucks become a balance you owe back to that account. No interest is added.</p>
+                    <div class="plus-loan-summary"><span>You owe</span><strong id="wamsLoanOwed">Loading…</strong></div>
+                    <label class="plus-plan-label" for="wamsBorrowAmount">Amount</label>
+                    <input class="plus-loan-input" id="wamsBorrowAmount" type="number" min="1" max="1000" step="1" value="10" inputmode="numeric">
+                    <div class="plus-loan-actions">
+                        <button class="plus-loan-button" id="wamsBorrowButton" type="button" disabled>Borrow Bucks</button>
+                        <button class="plus-loan-button plus-loan-repay" id="wamsRepayButton" type="button" disabled>Repay Bucks</button>
+                    </div>
+                    <p class="plus-loan-status" id="wamsLoanStatus" role="status" aria-live="polite"></p>
+                </section>
+                <p class="plus-renewal-note">Plans are prepaid and never auto-renew. Lower plans include a smaller set of Plus tools; Lifetime unlocks every Plus feature available on WamsTube. Future Wams Bucks spending is routed to wams@mtps.us. Wams Bucks are in-site points with no cash value.</p>
+                <button class="plus-join-button" id="plusCheckoutButton" type="button" disabled>Loading checkout…</button>
+                <button class="plus-cancel-button" id="plusCancelButton" type="button" hidden>Cancel plan · refund 30%</button>
+                <p class="plus-status" id="plus-status" role="status" aria-live="polite">Checking your account and Wams Bucks balance…</p>
+                <a class="plus-signin-link" id="plusSignIn" href="login.html" hidden>Sign in to check out</a>
+            </section>
+            <div class="plus-badge-preview"><span class="channel-badge badge-premium">Plus Member</span><span>Added to your channel while membership is active</span></div>
+        </section>
+
+        <section class="plus-benefits" aria-labelledby="plus-benefits-heading">
+            <h2 id="plus-benefits-heading">Plus features by plan</h2>
+            <p class="plus-benefits-intro">Access to currently available tools grows with your plan: animated GIF profile art and playback tools on Day, Studio editing on Week, analytics and subscriber-only publishing on Month, and creator monetization on Year. Lifetime unlocks every feature available today. Items marked Coming soon are not yet active.</p>
+            <div class="plus-benefit-grid">
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">workspace_premium</span><span class="plus-feature-status">Available</span><h3>Plus Member badge</h3><p>A colorful badge appears on your channel while your membership is active.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">payments</span><span class="plus-feature-status">Available</span><h3>Pay with Wams Bucks</h3><p>Use your in-site Bucks balance at checkout; no external payment details are collected.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">calendar_month</span><span class="plus-feature-status">Available</span><h3>Flexible prepaid plans</h3><p>Choose a day, week, month, year, or lifetime membership. None auto-renew.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">stars</span><span class="plus-feature-status">Available</span><h3>Wams Bucks rewards</h3><p>Earn daily activity rewards, Bucks for new subscribers, eligible video-like rewards, and claimable achievement bonuses.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">block</span><span class="plus-feature-status">Coming soon</span><h3>Ad-free viewing</h3><p>Enjoy videos without advertising interruptions.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">download</span><span class="plus-feature-status">Day and up</span><h3>Download videos</h3><p>Download supported WamsTube uploads from the watch page. Browser and creator permissions may affect saving.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">high_quality</span><span class="plus-feature-status">Coming soon</span><h3>Higher video quality</h3><p>Access enhanced playback quality when a video supports it.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">graphic_eq</span><span class="plus-feature-status">Coming soon</span><h3>Background listening</h3><p>Keep audio playing while you browse other pages.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">picture_in_picture_alt</span><span class="plus-feature-status">Day and up</span><h3>Mini player and theater mode</h3><p>Use picture-in-picture or expand the watch page into a wider, distraction-reduced theater layout.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">palette</span><span class="plus-feature-status">Coming soon</span><h3>Custom channel themes</h3><p>Choose colors and accents for your channel page.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">image</span><span class="plus-feature-status">Day and up</span><h3>Animated profile art</h3><p>Use GIFs for your channel profile picture and banner while Plus is active. Static banners keep the full crop editor; animated banners preserve the original GIF and use a centered cover crop.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">emoji_events</span><span class="plus-feature-status">Coming soon</span><h3>Exclusive badges</h3><p>Unlock additional profile badge styles for Plus members.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">mood</span><span class="plus-feature-status">Coming soon</span><h3>Custom reaction emojis</h3><p>Use a Plus emoji set in supported community interactions.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">playlist_play</span><span class="plus-feature-status">Day and up</span><h3>Expanded playlists</h3><p>Save up to 500 videos in each browser-based playlist, compared with 20 on standard accounts.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">history</span><span class="plus-feature-status">Day and up</span><h3>Longer watch history</h3><p>Keep up to 1,000 watched videos in this browser instead of 100.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">tune</span><span class="plus-feature-status">Day and up</span><h3>Advanced recommendations</h3><p>Plus recommendations can prioritize channels you follow and hide videos already in your local watch history using your Content preferences.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">notifications_active</span><span class="plus-feature-status">Coming soon</span><h3>Creator notification controls</h3><p>Choose more precisely which channel updates reach you.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">schedule</span><span class="plus-feature-status">Coming soon</span><h3>Scheduled uploads</h3><p>Prepare videos in advance and choose when they go public.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">analytics</span><span class="plus-feature-status">Month and up</span><h3>Creator analytics</h3><p>See unique recorded views, likes, comments, and subscriber totals for your channel in Studio.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">edit_note</span><span class="plus-feature-status">Coming soon</span><h3>Comment tools</h3><p>Get extra options to manage and organize channel comments.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">video_library</span><span class="plus-feature-status">Month and up</span><h3>Subscriber-only videos</h3><p>Publish selected videos for your signed-in subscribers. Database row and storage policies restrict access.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">forum</span><span class="plus-feature-status">Coming soon</span><h3>Members-only posts</h3><p>Post updates for a selected audience on your channel.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">live_tv</span><span class="plus-feature-status">Coming soon</span><h3>Live chat highlights</h3><p>Make selected live chat messages easier to spot.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">volunteer_activism</span><span class="plus-feature-status">Coming soon</span><h3>Donation alerts</h3><p>Customize on-screen alerts for Wams Bucks video donations.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">share</span><span class="plus-feature-status">Day and up</span><h3>Quick video sharing</h3><p>Share a watch link with your device’s share sheet or copy it to your clipboard.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">closed_caption</span><span class="plus-feature-status">Week and up</span><h3>Studio captions and trim</h3><p>Add WebVTT captions and set playback start/end points before publishing or while editing an upload.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">speed</span><span class="plus-feature-status">Day and up</span><h3>Playback controls</h3><p>Adjust speed from 0.5× to 2×, loop a video, and resume your last position on this browser.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">search</span><span class="plus-feature-status">Coming soon</span><h3>Search filters</h3><p>Use extra filters to find the videos you want faster.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">bookmark</span><span class="plus-feature-status">Day and up</span><h3>Smart watch-later lists</h3><p>Organize saved videos into custom folders and sort your saved list. Folders are stored on this device.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">support_agent</span><span class="plus-feature-status">Coming soon</span><h3>Priority support</h3><p>Get a dedicated route for membership and account questions.</p></article>
+                <article class="plus-benefit-card plus-feature-available"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span><span class="plus-feature-status">Available</span><h3>Higher Upload Limit</h3><p>Increase your upload limit from 100MB to 500MB, giving you more room for larger videos.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">lightbulb</span><span class="plus-feature-status">Coming soon</span><h3>Suggesting Ideas</h3><p>Have the ability to suggest ideas to the platform Moderators & Admins.</p></article>
+                <article class="plus-benefit-card"><span class="material-symbols-rounded" aria-hidden="true">no_adult_content</span><span class="plus-feature-status">Coming soon</span><h3>Block videos</h3><p>Have the ability to block inapropprite content if need (Not visible to yourself, others can see the video unless they block it too).</p></article>
+
+
+
+            </div>
+        </section>
+        <p class="plus-fine-print">Wams Bucks are in-site points with no cash value and cannot be purchased or withdrawn. Rewards are subject to anti-abuse limits.</p>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="plus.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

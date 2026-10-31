@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wams Bucks Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="bucks-store-body">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html" aria-label="WamsTube home">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button" href="my-wallet.html">My Wallet</a>
+    </header>
+    <main class="bucks-store-page">
+        <header class="bucks-store-heading">
+            <span class="material-symbols-rounded bucks-store-icon" aria-hidden="true">storefront</span>
+            <p class="achievement-eyebrow">WAMSTUBE STORE</p>
+            <h1>Wams Bucks Store</h1>
+            <p>Wams Bucks are in-game points for WamsTube. They have no cash value and cannot be bought with real money.</p>
+        </header>
+
+        <section class="game-exchange-card" aria-labelledby="store-earn-title">
+            <div class="store-section-heading">
+                <span class="material-symbols-rounded" aria-hidden="true">stars</span>
+                <div><h2 id="store-earn-title">Earn Wams Bucks</h2><p>Complete achievements to earn Bucks for use on WamsTube.</p></div>
+            </div>
+            <a class="achievement-launch-link" href="achievements.html">View Achievements</a>
+            <a class="achievement-launch-link" href="my-wallet.html">Open My Wallet</a>
+        </section>
+
+        <section class="store-gift-redeem" aria-labelledby="gift-redeem-title">
+            <div class="store-section-heading">
+                <span class="material-symbols-rounded" aria-hidden="true">redeem</span>
+                <div><h2 id="gift-redeem-title">Redeem a Wams Bucks gift card</h2><p>Enter an admin-created gift card code to add Bucks to your signed-in account.</p></div>
+            </div>
+            <label class="upload-label" for="giftCardCode">Gift card code</label>
+            <div class="store-gift-redeem-row"><input id="giftCardCode" class="upload-input" maxlength="64" autocomplete="off" placeholder="Enter gift card code"><button id="redeemGiftCard" type="button">Redeem gift card</button></div>
+            <p id="giftCardStatus" class="store-checkout-status" role="status" aria-live="polite"></p>
+        </section>
+        <p class="bucks-store-note">Game USD has no real-world value and cannot be bought, withdrawn, transferred, or redeemed for cash. You can earn it by exchanging Wams Bucks, gaining subscribers, or receiving an administrator grant. Visit <a href="achievements.html">Achievements</a> to earn Wams Bucks.</p>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="bucks-store.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

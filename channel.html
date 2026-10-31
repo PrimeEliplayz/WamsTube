@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Channel - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="channel-page-body">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+        <a class="account-button" href="index.html">Home</a>
+    </header>
+<main class="home-page channel-page">
+    <section class="channel-banner" id="channelBanner" aria-label="Channel banner">
+        <span class="channel-banner-back"></span><span class="channel-banner-front"></span>
+        <div class="channel-banner-content"><span class="channel-banner-mark">▶</span><strong id="channelBannerTitle">YOUR CHANNEL</strong><span class="channel-banner-tagline">MAKE • WATCH • SHARE</span></div>
+        <div class="channel-banner-tools">
+            <label class="channel-banner-upload" id="channelBannerUpload" for="channelBannerFile" hidden>Change banner</label>
+            <input id="channelBannerFile" type="file" accept="image/*" hidden>
+            <p id="channelBannerStatus" role="status" aria-live="polite"></p>
+        </div>
+    </section>
+    <section class="channel-header-simple">
+        <div class="channel-picture-area">
+            <img
+                class="large-channel-picture"
+                id="channelPicture"
+                src="channel-pfp's/prismpfp.jpg"
+                alt="Channel profile picture"
+            >
+            <label class="channel-picture-upload" id="channelPictureUpload" for="channelPictureFile" hidden>
+                Change picture
+            </label>
+            <input id="channelPictureFile" type="file" accept="image/*" hidden>
+            <p class="channel-picture-status" id="channelPictureStatus" role="status"></p>
+        </div>
+
+        <div>
+            <h1 class="channel-name-line" id="channelName">Loading your channel…</h1>
+            <div class="channel-badges" id="channelBadges" aria-label="Channel badges"></div>
+            <div class="channel-meta-line"><p class="watch-channel" id="channelHandle"></p><span aria-hidden="true">·</span><p class="watch-channel" id="channelSubscribers"></p><span aria-hidden="true">·</span><p class="watch-channel" id="channelVideoCount">0 videos</p></div>
+            <p class="channel-description" id="channelDescription">Welcome to this channel — videos from the Wams community.</p>
+            <div class="channel-header-actions">
+                <button class="channel-subscribe-button" id="channelSubscribeButton" type="button" hidden>Subscribe</button>
+                <button class="channel-manage-button" id="channelTransferButton" type="button" hidden>Transfer channel</button>
+            </div>
+            <p class="channel-transfer-status" id="channelTransferStatus" role="status"></p>
+            <section class="channel-monetization" id="channelMonetization" hidden>
+                <h2>Monetization</h2>
+                <label class="channel-monetization-toggle" for="channelMonetizationEnabled">
+                    <input id="channelMonetizationEnabled" type="checkbox">
+                    <span>Allow Wams Bucks donations</span>
+                </label>
+                <p id="channelMonetizationStatus" role="status">Verified channels can enable donations and earn 5 Wams Bucks for every 10 views.</p>
+            </section>
+        </div>
+    </section>
+
+    <nav class="channel-tabs" aria-label="Channel sections">
+        <a class="is-current" href="#channelHome">Home</a>
+        <a href="#channelVideosHeading">Videos</a>
+        <a href="shorts.html">Shorts</a>
+        <a href="playlists.html">Playlists</a>
+        <button type="button" aria-label="Search channel videos" onclick="document.getElementById('channelVideoSearch').focus()"><span class="material-symbols-rounded" aria-hidden="true">search</span></button>
+    </nav>
+    <section class="channel-content" id="channelHome">
+        <div class="channel-video-heading-row">
+            <h2 id="channelVideosHeading">Videos</h2>
+            <input id="channelVideoSearch" type="search" placeholder="Search channel videos" aria-label="Search channel videos">
+        </div>
+        <section class="video-grid" id="videoGrid" aria-label="Channel videos"></section>
+        <div class="empty-channel">
+            <span class="material-symbols-rounded" aria-hidden="true">video_library</span>
+            <div class="empty-channel-title">This channel has no videos yet</div>
+            <div class="empty-channel-text">When this creator shares videos, they’ll show up here.</div>
+        </div>
+    </section>
+    <details class="channel-settings-panel" id="channelSettingsPanel" hidden>
+        <summary>Channel settings · Manage your videos</summary>
+        <p>Delete your uploads permanently from your channel.</p>
+        <button class="channel-settings-refresh" id="refreshChannelSettingsVideos" type="button">Refresh list</button>
+        <div id="channelSettingsVideoList" class="channel-settings-video-list" aria-live="polite">Loading your videos…</div>
+    </details>
+</main>
+
+<dialog class="banner-crop-dialog" id="bannerCropDialog" aria-labelledby="bannerCropTitle">
+    <div class="banner-crop-heading">
+        <div><h2 id="bannerCropTitle">Customize banner art</h2><p id="bannerCropHelp">Drag to reposition. The center guide shows what remains visible across devices.</p></div>
+        <button type="button" id="bannerCropClose" aria-label="Close banner cropper">×</button>
+    </div>
+    <div class="banner-crop-frame" id="bannerCropFrame" aria-label="Banner crop preview">
+        <img id="bannerCropImage" alt="Banner crop preview" draggable="false">
+        <div class="banner-crop-safe-area"><span>Visible on all devices</span></div>
+    </div>
+    <label class="banner-crop-zoom-label" for="bannerCropZoom">Zoom</label>
+    <input id="bannerCropZoom" type="range" min="1" max="3" step="0.01" value="1">
+    <div class="banner-crop-actions">
+        <button type="button" id="bannerCropCancel">Cancel</button>
+        <button type="button" id="bannerCropSave">Select</button>
+    </div>
+</dialog>
+
+<section class="channel-closed-notice" id="channelClosedNotice" hidden role="status" aria-live="polite">
+    <span class="material-symbols-rounded channel-closed-icon" aria-hidden="true">cloud_lock</span>
+    <h1>This channel is closed</h1>
+    <p id="channelClosedMessage">The owner has temporarily closed this channel.</p>
+    <a class="channel-closed-home" href="index.html">Back to WamsTube</a>
+</section>
+
+<dialog class="badge-info-dialog" id="badgeInfoDialog" aria-labelledby="badgeInfoTitle">
+    <h2 id="badgeInfoTitle"></h2>
+    <p id="badgeInfoDescription"></p>
+    <button class="account-button" id="badgeInfoClose" type="button">Close</button>
+</dialog>
+
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

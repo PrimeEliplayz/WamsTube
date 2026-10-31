@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="bucks-store-body">
+    <header class="top-bar">
+        <a class="site-brand" href="index.html" aria-label="WamsTube home">
+            <img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo">
+            <span>Wams Tube</span>
+        </a>
+    </header>
+    <main class="wallet-page">
+        <a class="achievement-launch-link" href="index.html">Home</a>
+        <header class="bucks-store-heading">
+            <span class="material-symbols-rounded bucks-store-icon" aria-hidden="true">account_balance_wallet</span>
+            <p class="achievement-eyebrow">YOUR ACCOUNT</p>
+            <h1>My Wallet</h1>
+            <p>Your Wams Bucks and Game USD balances. Game USD is fictional in-game currency only and has no real-world value.</p>
+        </header>
+        <p id="walletStatus" class="wallet-status" role="status" aria-live="polite">Loading wallet…</p>
+        <div id="walletSignIn" class="wallet-signin" hidden>
+            <p>Sign in to view your balances and wallet activity.</p>
+            <a class="achievement-launch-link" href="login.html">Sign in</a>
+        </div>
+        <section id="walletContent" hidden>
+            <div class="wallet-balance-grid">
+                <article class="wallet-balance-card bucks"><span class="material-symbols-rounded" aria-hidden="true">stars</span><p>Wams Bucks</p><strong id="walletBucksBalance">—</strong><a href="achievements.html">Earn Bucks</a></article>
+                <article class="wallet-balance-card game-usd"><span class="material-symbols-rounded" aria-hidden="true">payments</span><p>Game USD · fictional</p><strong id="walletGameUsdBalance">—</strong><a href="#walletExchange">Exchange Bucks</a></article>
+            </div>
+            <section id="walletExchange" class="game-exchange-card" aria-labelledby="exchange-title">
+                <div class="store-section-heading">
+                    <span class="material-symbols-rounded" aria-hidden="true">swap_horiz</span>
+                    <div><h2 id="exchange-title">Exchange Bucks for Game USD</h2><p>100 Wams Bucks = $1.00 Game USD. Exchanges are one-way and stay on WamsTube.</p></div>
+                </div>
+                <label class="upload-label" for="exchangeBucksAmount">Wams Bucks to exchange</label>
+                <div class="store-gift-redeem-row"><input id="exchangeBucksAmount" class="upload-input" type="number" min="100" max="1000000" step="100" inputmode="numeric" value="100"><button id="exchangeBucksButton" type="button">Exchange Bucks</button></div>
+                <p id="exchangePreview" class="game-exchange-preview">You will receive $1.00 Game USD.</p>
+                <p id="exchangeStatus" class="store-checkout-status" role="status" aria-live="polite"></p>
+            </section>
+            <section class="wallet-cosmetics" aria-labelledby="wallet-cosmetics-title">
+                <div class="store-section-heading">
+                    <span class="material-symbols-rounded" aria-hidden="true">palette</span>
+                    <div><h2 id="wallet-cosmetics-title">200 Sitewide Themes</h2><p>Unlock a color-and-pattern theme with fictional Game USD, then equip it to personalize your home feed, video pages, channel, Studio, and wallet.</p></div>
+                </div>
+                <label class="upload-label" for="walletCosmeticSearch">Find a site theme</label>
+                <input id="walletCosmeticSearch" class="upload-input" type="search" placeholder="Search 200 themes…" autocomplete="off">
+                <p id="walletCosmeticStatus" class="store-checkout-status" role="status" aria-live="polite"></p>
+                <div id="walletCosmeticGrid" class="wallet-cosmetic-grid" aria-live="polite"></div>
+            </section>
+            <section class="wallet-earn-card" aria-labelledby="wallet-earn-title">
+                <h2 id="wallet-earn-title">How to earn Game USD</h2>
+                <ul>
+                    <li>Exchange 100 Wams Bucks for $1.00 Game USD.</li>
+                    <li>Get a new subscriber to earn $0.10 Game USD.</li>
+                    <li>An administrator may grant Game USD to your account.</li>
+                </ul>
+                <p>Game USD cannot be bought with real money, withdrawn, transferred, or redeemed for cash.</p>
+            </section>
+            <section class="wallet-history" aria-labelledby="wallet-history-title">
+                <h2 id="wallet-history-title">Recent wallet activity</h2>
+                <div id="walletActivity" class="wallet-activity-list"></div>
+            </section>
+        </section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="my-wallet.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

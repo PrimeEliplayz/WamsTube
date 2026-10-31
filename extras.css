@@ -1,0 +1,300 @@
+/* Channel profile, achievement rewards, and administrator-created badge styling. */
+.channel-page-body { min-height: 100vh; background: #0f0f0f; color: #f1f1f1; }
+.channel-page-body .top-bar { background: #0f0f0f; color: #f1f1f1; box-shadow: 0 1px 0 #292929; }
+.channel-page-body .site-brand { color: #f1f1f1; }
+.channel-page-body .account-button { border-color: #3c3c3c; background: #272727; color: #f1f1f1; }
+.channel-page-body .account-button:hover { background: #3a3a3a; }
+.channel-page { width: 100%; max-width: 1660px; padding: 84px 18px 50px; margin: 0 auto; }
+.channel-banner { position: relative; display: grid; height: clamp(150px, 18vw, 260px); place-items: center; overflow: hidden; isolation: isolate; border-radius: 22px; background: #141d3b; background-position: center; background-size: cover; }
+.channel-banner.has-custom-banner::before, .channel-banner.has-custom-banner::after, .channel-banner.has-custom-banner .channel-banner-back, .channel-banner.has-custom-banner .channel-banner-front { display: none; }
+.channel-banner-tools { position: absolute; z-index: 2; top: 14px; right: 14px; display: grid; justify-items: end; gap: 5px; }
+.channel-banner-upload { padding: 9px 14px; border: 1px solid #ffffff70; border-radius: 20px; background: #111c; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; backdrop-filter: blur(8px); }
+.channel-banner-upload:hover { background: #000d; }
+.channel-banner-upload[hidden] { display: none; }
+.channel-banner-upload[aria-disabled="true"] { opacity: .65; cursor: wait; }
+.channel-banner-tools p { margin: 0; color: #fff; font-size: 11px; font-weight: 600; text-align: right; text-shadow: 0 1px 4px #000; }
+.channel-banner::before, .channel-banner::after { position: absolute; inset: -50%; z-index: -1; content: ""; }
+.channel-banner::before { background: repeating-conic-gradient(from 10deg at 48% 55%, transparent 0 8deg, rgba(0, 89, 255, .95) 8deg 18deg, transparent 18deg 28deg, rgba(0, 211, 236, .65) 28deg 33deg, transparent 33deg 43deg); transform: rotate(-12deg) scale(1.4); }
+.channel-banner::after { inset: -20%; border: 5px solid #f3e546; border-radius: 43%; transform: rotate(-18deg); box-shadow: 0 0 0 30px rgba(12, 92, 255, .38), inset 0 0 0 38px rgba(0, 134, 255, .35); }
+.channel-banner-back, .channel-banner-front { position: absolute; z-index: -1; width: 70%; height: 100%; border: 3px solid rgba(4, 222, 246, .8); border-radius: 50%; transform: rotate(15deg); }
+.channel-banner-back { left: -20%; top: 12%; box-shadow: 0 0 0 18px rgba(0, 92, 255, .6), 0 0 0 38px rgba(16, 53, 201, .8); }
+.channel-banner-front { right: -20%; top: -35%; border-color: rgba(255, 225, 41, .95); box-shadow: 0 0 0 20px rgba(0, 111, 255, .72); }
+.channel-banner-content { display: flex; align-items: center; gap: 17px; padding: 14px 26px; color: white; text-align: center; text-shadow: 0 4px 15px #06112b; }
+.channel-banner-content strong { font-family: Fredoka, Arial, sans-serif; font-size: clamp(23px, 4vw, 54px); font-weight: 700; letter-spacing: -.025em; }
+.channel-banner-mark { color: #00d9e8; font-size: 35px; text-shadow: 5px 5px #fa4454; }
+.channel-banner-tagline { display: none; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
+.channel-header-simple { display: flex; max-width: none; align-items: center; gap: 24px; padding: 32px 8px 30px; margin: 0; border: 0; }
+.channel-picture-area { align-self: flex-start; }
+.large-channel-picture { width: clamp(128px, 15vw, 238px); height: clamp(128px, 15vw, 238px); border: 3px solid #05d2e3; }
+.channel-page .channel-header-simple > div:last-child { min-width: 0; flex: 1; }
+.channel-name-line { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 0 0 9px !important; color: #f1f1f1; font-family: Fredoka, Arial, sans-serif; font-size: clamp(30px, 4vw, 46px) !important; line-height: 1.1; }
+.channel-badges { margin: 0 0 10px; }
+.channel-meta-line { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: #aaa; }
+.channel-meta-line .watch-channel { margin: 0; color: #aaa; font-size: 14px; }
+.channel-description { max-width: 760px; margin: 16px 0; color: #c2c2c2; font-size: 15px; line-height: 1.5; }
+.channel-header-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.channel-subscribe-button, .channel-manage-button { min-height: 42px; padding: 0 22px; border: 0; border-radius: 22px; background: #f1f1f1; color: #0f0f0f; font-size: 15px; font-weight: 700; cursor: pointer; }
+.channel-subscribe-button:hover { background: #d8d8d8; }
+.channel-subscribe-button.is-subscribed, .channel-manage-button { background: #272727; color: #f1f1f1; }
+.channel-subscribe-button:disabled, .channel-manage-button:disabled { opacity: .6; cursor: wait; }
+.channel-transfer-status { min-height: 18px; margin: 8px 0 0; color: #bdbdbd; font-size: 12px; }
+.channel-monetization { border-color: #383838; background: #191919; }
+.channel-monetization h2, .channel-monetization-toggle { color: #f1f1f1; }
+.channel-monetization p { color: #aaa; }
+.channel-tabs { position: sticky; top: 70px; z-index: 100; display: flex; align-items: center; gap: clamp(18px, 4vw, 48px); min-height: 54px; border-bottom: 1px solid #333; background: rgba(15, 15, 15, .96); backdrop-filter: blur(12px); }
+.channel-tabs a, .channel-tabs button { position: relative; display: inline-flex; min-height: 54px; align-items: center; border: 0; background: transparent; color: #aaa; font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.channel-tabs a:hover, .channel-tabs button:hover, .channel-tabs a.is-current { color: #f1f1f1; }
+.channel-tabs a.is-current::after { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; border-radius: 3px 3px 0 0; background: #f1f1f1; content: ""; }
+.channel-tabs .material-symbols-rounded { font-size: 22px; }
+.channel-content { min-height: 220px; padding: 24px 4px 40px; }
+.channel-video-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.channel-video-heading-row h2 { margin: 0; color: #f1f1f1; font-size: 21px; }
+.channel-video-heading-row input { width: min(270px, 50%); min-height: 36px; padding: 0 12px; border: 1px solid #444; border-radius: 18px; background: #181818; color: #f1f1f1; }
+.channel-page .video-grid { grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); }
+.channel-page .video-author, .channel-page .video-stats { color: #aaa; }
+.channel-page .video-title { color: #f1f1f1; }
+.channel-page .empty-channel { padding: 68px 20px; color: #f1f1f1; }
+.channel-page .empty-channel .material-symbols-rounded { color: #777; font-size: 48px; }
+.channel-page .empty-channel-text { color: #aaa; }
+.channel-page .empty-channel[hidden] { display: none; }
+.badge-rainbow { background: linear-gradient(110deg, #ff0033, #ffb000, #39a852, #1684e8, #9b42c4, #ff0033); background-size: 300% 100%; animation: badge-rainbow-shift 4s linear infinite; }
+.badge-gradient-animated { background-size: 220% 100%; animation: badge-rainbow-shift 4s ease infinite; }
+@keyframes badge-rainbow-shift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+.achievement-body { min-height: 100vh; background: #f7f6fb; }
+.achievement-body .top-bar { position: sticky; }
+.achievement-page { width: min(100% - 36px, 1080px); padding: 38px 0 60px; margin: 0 auto; }
+.achievement-heading { padding: 30px 28px; border-radius: 18px; background: radial-gradient(circle at 86% 18%, #f2dfff 0, transparent 30%), linear-gradient(120deg, #fff, #f5f0ff); }
+.achievement-eyebrow { margin: 0 0 8px; color: #7041b8; font-size: 11px; font-weight: 800; letter-spacing: .13em; }
+.achievement-heading h1 { margin: 0 0 10px; font-family: Fredoka, Arial, sans-serif; font-size: clamp(34px, 6vw, 48px); letter-spacing: -.03em; }
+.achievement-heading > p:last-child { max-width: 650px; margin: 0; color: #62606a; line-height: 1.55; }
+.achievement-wallet { display: flex; min-height: 64px; align-items: center; gap: 10px; padding: 0 18px; margin: 18px 0 8px; border: 1px solid #e9e2f4; border-radius: 12px; background: white; }
+.achievement-wallet .material-symbols-rounded { color: #7041b8; font-size: 25px; }
+.achievement-wallet strong { margin-left: auto; color: #59369a; }
+.achievement-status { min-height: 20px; color: #606060; font-size: 13px; }
+.achievement-signin { display: inline-flex; min-height: 36px; align-items: center; padding: 0 15px; margin-bottom: 12px; border-radius: 18px; background: #7041b8; color: #fff; font-size: 12px; font-weight: 700; text-decoration: none; }
+.achievement-signin[hidden] { display: none; }
+.achievement-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.achievement-card { display: flex; min-width: 0; align-items: center; gap: 14px; padding: 17px; border: 1px solid #e6e3eb; border-radius: 13px; background: #fff; box-shadow: 0 2px 8px #1c123008; }
+.achievement-card.is-ready { border-color: #c3b1e3; background: #fcfaff; }
+.achievement-card.is-claimed { border-color: #c6e2ce; background: #f7fcf8; }
+.achievement-icon { display: grid; width: 48px; height: 48px; flex: 0 0 auto; place-items: center; border-radius: 14px; background: #eee8f8; color: #7041b8; font-size: 27px; }
+.achievement-card.is-claimed .achievement-icon { background: #e3f2e6; color: #268044; }
+.achievement-copy { min-width: 0; flex: 1; }
+.achievement-copy h2 { margin: 0 0 5px; font-size: 15px; }
+.achievement-copy p { margin: 0 0 8px; color: #666; font-size: 12px; line-height: 1.4; }
+.achievement-reward { color: #7041b8; font-size: 11px; font-weight: 800; }
+.achievement-claim { min-height: 34px; flex: 0 0 auto; padding: 0 12px; border: 0; border-radius: 18px; background: #7041b8; color: white; font-size: 11px; font-weight: 700; cursor: pointer; }
+.achievement-claim:disabled { background: #e8e7eb; color: #777; cursor: default; }
+.achievement-card.is-claimed .achievement-claim { background: #e3f2e6; color: #268044; }
+.achievement-note { margin-top: 20px; color: #777; font-size: 12px; line-height: 1.5; }
+.achievement-launch-link { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 16px; margin-top: 11px; border-radius: 22px; background: #7041b8; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; }
+.achievement-launch-link:hover { background: #59369a; }
+.achievement-launch-link .material-symbols-rounded { font-size: 19px; }
+.bucks-store-body { min-height: 100vh; background: #f7f6fb; }
+.bucks-store-body .top-bar { position: sticky; }
+.bucks-store-page { width: min(100% - 36px, 900px); padding: 38px 0 60px; margin: 0 auto; }
+.bucks-store-heading { padding: 34px 30px; border-radius: 18px; background: radial-gradient(circle at 86% 18%, #d9f6ed 0, transparent 32%), linear-gradient(120deg, #fff, #f1fbf7); }
+.bucks-store-icon { display: inline-grid; width: 54px; height: 54px; place-items: center; margin-bottom: 18px; border-radius: 16px; background: #e0f4e9; color: #17834f; font-size: 30px; }
+.bucks-store-heading h1 { margin: 0 0 10px; font-family: Fredoka, Arial, sans-serif; font-size: clamp(34px, 6vw, 48px); letter-spacing: -.03em; }
+.bucks-store-heading > p:last-child { margin: 0; color: #62606a; line-height: 1.55; }
+.bucks-store-note { margin-top: 20px; color: #777; font-size: 12px; line-height: 1.6; }
+.bucks-store-note a { color: #59369a; font-weight: 700; }
+.custom-badge-preview { display: flex; min-height: 50px; align-items: center; }
+.custom-badge-preview .channel-badge { cursor: default; }
+.store-checkout [hidden], #storeGiftAmountField[hidden], #storeDiscountTypeField[hidden], #storeDiscountValueField[hidden] { display: none !important; }
+.store-checkout { padding: 24px; margin-top: 18px; border: 1px solid #e6e3eb; border-radius: 16px; background: #fff; box-shadow: 0 5px 20px #2417350b; }
+.store-gift-redeem { padding: 22px 24px; margin-top: 16px; border: 1px solid #cfe8d8; border-radius: 16px; background: linear-gradient(120deg, #fff, #f3fbf5); }
+.store-section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.store-section-heading > .material-symbols-rounded { color: #17834f; font-size: 30px; }
+.store-section-heading h2 { margin: 0 0 5px; font-family: Fredoka, Arial, sans-serif; font-size: 23px; }
+.store-section-heading p { margin: 0; color: #64616a; font-size: 12px; line-height: 1.5; }
+.store-stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 22px; }
+.store-stepper span { padding: 10px 7px; border-radius: 20px; background: #f1eff4; color: #777; font-size: 12px; font-weight: 700; text-align: center; }
+.store-stepper span.is-current { background: #7041b8; color: #fff; }
+.store-stepper span.is-complete { background: #e5f4e9; color: #277746; }
+.store-step h2 { margin: 0 0 9px; font-family: Fredoka, Arial, sans-serif; font-size: 24px; }
+.store-step > p { color: #64616a; font-size: 13px; line-height: 1.55; }
+.store-pack-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.store-pack { display: grid; min-height: 132px; align-content: center; gap: 5px; padding: 15px; border: 1px solid #e1dce9; border-radius: 13px; cursor: pointer; }
+.store-pack:has(input:checked) { border-color: #7041b8; box-shadow: 0 0 0 2px #7041b822; }
+.store-pack input { accent-color: #7041b8; }
+.store-pack strong { color: #59369a; font-size: 25px; }
+.store-pack span { font-weight: 700; }
+.store-pack small { color: #777; font-size: 10px; }
+.store-checkout-hint { margin: 7px 0 0 !important; color: #777 !important; font-size: 11px !important; }
+.store-age-check { display: flex; align-items: center; gap: 9px; margin-top: 18px; color: #333; font-size: 13px; }
+.store-age-check input { width: 18px; height: 18px; accent-color: #7041b8; }
+.store-payment-notice { display: flex; align-items: flex-start; gap: 12px; padding: 16px; margin: 17px 0; border: 1px solid #f0d7a6; border-radius: 12px; background: #fffaf0; color: #715b34; font-size: 13px; line-height: 1.5; }
+.store-payment-notice .material-symbols-rounded { color: #a56b0c; }
+.store-gift-redeem-row { display: flex; gap: 9px; }
+.store-gift-redeem-row .upload-input { flex: 1; }
+.store-gift-redeem-row button, .store-step-actions button, .store-pay-button { min-height: 40px; padding: 0 16px; border: 0; border-radius: 22px; background: #7041b8; color: #fff; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.store-gift-redeem-row button:disabled { opacity: .6; cursor: wait; }
+.store-pay-button:disabled { background: #e8e7eb; color: #777; cursor: not-allowed; }
+.store-step-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 20px; margin-top: 18px; border-top: 1px solid #eeeaf2; }
+.store-step-actions #storeBack { background: #efedf2; color: #333; }
+.store-step-actions button[hidden] { display: none; }
+.store-checkout-status { min-height: 18px; color: #7041b8; font-size: 12px; }
+.store-gift-purchase { display: flex; align-items: center; gap: 15px; padding: 19px; margin-top: 16px; border: 1px solid #e6e3eb; border-radius: 14px; background: white; }
+.store-gift-purchase > .material-symbols-rounded { color: #7041b8; font-size: 30px; }
+.store-gift-purchase div { flex: 1; }
+.store-gift-purchase h2 { margin: 0 0 5px; font-size: 16px; }
+.store-gift-purchase p { margin: 0; color: #666; font-size: 12px; line-height: 1.5; }
+.store-gift-purchase button { min-height: 36px; padding: 0 12px; border: 0; border-radius: 18px; background: #e8e7eb; color: #777; font: inherit; font-size: 11px; font-weight: 700; }
+@media (max-width: 700px) {
+    .channel-page { padding: 76px 12px 36px; }
+    .channel-banner { height: 155px; border-radius: 14px; }
+    .channel-banner-content { flex-wrap: wrap; justify-content: center; gap: 6px 12px; }
+    .channel-banner-content strong { width: 100%; font-size: 28px; }
+    .channel-banner-tagline { display: inline; }
+    .channel-header-simple { align-items: flex-start; gap: 15px; padding: 25px 2px; }
+    .channel-picture-area { margin-top: 3px; }
+    .large-channel-picture { width: 90px; height: 90px; }
+    .channel-name-line { font-size: 27px !important; }
+    .channel-meta-line .watch-channel { font-size: 12px; }
+    .channel-description { margin: 10px 0; font-size: 13px; }
+    .channel-tabs { top: 62px; gap: 25px; overflow-x: auto; }
+    .channel-tabs a, .channel-tabs button { flex: 0 0 auto; font-size: 13px; }
+    .channel-content { padding-top: 18px; }
+    .channel-video-heading-row { align-items: flex-start; flex-direction: column; }
+    .channel-video-heading-row input { width: 100%; }
+    .channel-page .video-grid { grid-template-columns: 1fr; }
+    .achievement-page { width: min(100% - 24px, 1080px); padding-top: 22px; }
+    .achievement-heading { padding: 24px 19px; }
+    .achievement-grid { grid-template-columns: 1fr; }
+    .achievement-card { gap: 10px; padding: 13px; }
+    .achievement-icon { width: 40px; height: 40px; font-size: 23px; }
+    .achievement-copy h2 { font-size: 14px; }
+    .achievement-claim { padding: 0 10px; }
+    .store-checkout { padding: 17px; }
+    .store-stepper { gap: 4px; }
+    .store-stepper span { padding: 8px 3px; font-size: 10px; }
+    .store-pack-grid { grid-template-columns: 1fr; }
+    .store-pack { min-height: auto; grid-template-columns: auto 1fr; align-items: center; }
+    .store-pack input { grid-row: span 2; }
+    .store-pack strong { font-size: 20px; }
+    .store-pack small { grid-column: 2; }
+    .store-gift-redeem-row, .store-gift-purchase { align-items: stretch; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .badge-rainbow, .badge-gradient-animated { animation: none; }
+}
+
+.game-exchange-card, .wallet-earn-card, .wallet-history { padding: 22px 24px; margin-top: 18px; border: 1px solid #e6e3eb; border-radius: 16px; background: #fff; box-shadow: 0 5px 20px #2417350b; }
+.game-exchange-preview { color: #59369a; font-size: 14px; font-weight: 700; }
+.game-exchange-card button { min-height: 40px; padding: 0 16px; border: 0; border-radius: 22px; background: #7041b8; color: white; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.game-exchange-card button:disabled { opacity: .55; cursor: not-allowed; }
+.wallet-page { width: min(100% - 36px, 900px); padding: 38px 0 60px; margin: 0 auto; }
+.wallet-status { min-height: 20px; margin: 16px 0 8px; color: #606060; font-size: 13px; }
+.wallet-signin { padding: 18px; border: 1px solid #e6e3eb; border-radius: 14px; background: white; }
+.wallet-signin[hidden], #walletContent[hidden] { display: none !important; }
+.wallet-balance-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.wallet-balance-card { display: grid; min-height: 190px; align-content: start; gap: 8px; padding: 22px; border: 1px solid #e6e3eb; border-radius: 16px; background: white; }
+.wallet-balance-card .material-symbols-rounded { color: #7041b8; font-size: 30px; }
+.wallet-balance-card.game-usd .material-symbols-rounded { color: #16834f; }
+.wallet-balance-card p { margin: 0; color: #666; font-size: 13px; }
+.wallet-balance-card strong { font-family: Fredoka, Arial, sans-serif; font-size: clamp(28px, 5vw, 40px); }
+.wallet-balance-card a { width: fit-content; color: #59369a; font-size: 12px; font-weight: 700; text-decoration: none; }
+.wallet-earn-card h2, .wallet-history h2 { margin: 0 0 12px; font-family: Fredoka, Arial, sans-serif; font-size: 22px; }
+.wallet-earn-card ul { padding-left: 22px; color: #444; font-size: 13px; line-height: 1.8; }
+.wallet-earn-card p { margin: 12px 0 0; color: #777; font-size: 12px; line-height: 1.5; }
+.wallet-activity-list { display: grid; gap: 9px; }
+.wallet-activity-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 0; border-top: 1px solid #eeeaf2; }
+.wallet-activity-item > div { display: grid; gap: 5px; min-width: 0; }
+.wallet-activity-item strong { color: #333; font-size: 13px; overflow-wrap: anywhere; }
+.wallet-activity-item span { color: #777; font-size: 11px; }
+.wallet-activity-item b { flex: 0 0 auto; font-size: 13px; }
+.wallet-activity-item b.is-credit { color: #18834b; }
+.wallet-activity-item b.is-debit { color: #a53e48; }
+.wallet-empty { color: #777; font-size: 13px; }
+@media (max-width: 700px) {
+    .game-exchange-card, .wallet-earn-card, .wallet-history, .wallet-cosmetics { padding: 17px; }
+    .wallet-page { width: min(100% - 24px, 900px); padding-top: 22px; }
+    .wallet-balance-grid { grid-template-columns: 1fr; }
+}
+.wallet-cosmetics { padding: 22px 24px; margin-top: 18px; border: 1px solid #e6e3eb; border-radius: 16px; background: #fff; box-shadow: 0 5px 20px #2417350b; }
+.wallet-cosmetics > .upload-input { margin-bottom: 8px; }
+.wallet-cosmetic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-height: 720px; padding: 3px; overflow: auto; }
+.wallet-cosmetic-card { position: relative; display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; padding: 13px; border: 1px solid #e6e3eb; border-radius: 12px; background: #fff; }
+.wallet-cosmetic-card > div { display: grid; min-width: 0; gap: 4px; }
+.wallet-cosmetic-card h3 { margin: 0; font-size: 13px; }
+.wallet-cosmetic-card p { margin: 0; color: #777; font-size: 11px; line-height: 1.4; }
+.wallet-cosmetic-card strong { color: #59369a; font-size: 11px; }
+.wallet-cosmetic-card button { flex: 0 0 auto; min-height: 34px; padding: 0 12px; border: 0; border-radius: 18px; background: #7041b8; color: #fff; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+.wallet-cosmetic-card button:disabled { background: #e8e7eb; color: #777; cursor: default; }
+.wallet-cosmetic-card button.is-equipped { background: #e5f4e9; color: #277746; }
+.wallet-cosmetic-card[data-palette] { border-left: 4px solid hsl(var(--cosmetic-hue, 270) 68% 48%); }
+.wallet-cosmetic-card[data-pattern="0"] { background-image: linear-gradient(130deg, hsl(var(--cosmetic-hue, 270) 70% 95%), white 75%); }
+.wallet-cosmetic-card[data-pattern="1"] { background-image: repeating-linear-gradient(45deg, hsl(var(--cosmetic-hue, 270) 70% 93%) 0 2px, white 2px 12px); }
+.wallet-cosmetic-card[data-pattern="2"] { background-image: radial-gradient(hsl(var(--cosmetic-hue, 270) 70% 75%) 1.5px, white 2px); background-size: 14px 14px; }
+.wallet-cosmetic-card[data-pattern="3"] { background-image: repeating-linear-gradient(90deg, white 0 12px, hsl(var(--cosmetic-hue, 270) 70% 93%) 12px 14px); }
+.wallet-cosmetic-card[data-pattern="4"] { background-image: repeating-linear-gradient(0deg, white 0 12px, hsl(var(--cosmetic-hue, 270) 70% 93%) 12px 14px); }
+.wallet-cosmetic-card[data-pattern="5"] { background-image: repeating-linear-gradient(135deg, white 0 10px, hsl(var(--cosmetic-hue, 270) 70% 90%) 10px 12px, white 12px 20px); }
+.wallet-cosmetic-card[data-pattern="6"] { background-image: radial-gradient(ellipse at top left, hsl(var(--cosmetic-hue, 270) 70% 85%), white 75%); }
+.wallet-cosmetic-card[data-pattern="7"] { background-image: conic-gradient(from 35deg at 80% 50%, white, hsl(var(--cosmetic-hue, 270) 70% 88%), white 35%); }
+.wallet-cosmetic-card[data-pattern="8"] { background-image: repeating-radial-gradient(circle at 0 0, white 0 8px, hsl(var(--cosmetic-hue, 270) 70% 90%) 9px 10px); }
+.wallet-cosmetic-card[data-pattern="9"] { background-image: linear-gradient(30deg, white 45%, hsl(var(--cosmetic-hue, 270) 70% 88%) 46% 48%, white 49% 65%, hsl(var(--cosmetic-hue, 270) 70% 88%) 66% 68%, white 69%); }
+.wallet-page[data-wallet-pattern] .wallet-balance-card { position: relative; overflow: hidden; isolation: isolate; border-color: var(--wallet-accent); }
+.wallet-page[data-wallet-pattern] .wallet-balance-card::after { position: absolute; z-index: -1; inset: 0; opacity: .12; content: ""; pointer-events: none; }
+.wallet-page[data-wallet-pattern] .wallet-balance-card .material-symbols-rounded,
+.wallet-page[data-wallet-pattern] .wallet-balance-card a { color: var(--wallet-accent); }
+.wallet-page[data-wallet-pattern] .wallet-balance-card.game-usd { background-color: color-mix(in srgb, var(--wallet-accent) 8%, white); }
+.wallet-page[data-wallet-pattern="0"] .wallet-balance-card::after { background: linear-gradient(135deg, var(--wallet-accent), transparent 65%); }
+.wallet-page[data-wallet-pattern="1"] .wallet-balance-card::after { background: repeating-linear-gradient(45deg, var(--wallet-accent) 0 2px, transparent 2px 12px); }
+.wallet-page[data-wallet-pattern="2"] .wallet-balance-card::after { background: radial-gradient(var(--wallet-accent) 1.5px, transparent 2px); background-size: 14px 14px; }
+.wallet-page[data-wallet-pattern="3"] .wallet-balance-card::after { background: repeating-linear-gradient(90deg, transparent 0 12px, var(--wallet-accent) 12px 14px); }
+.wallet-page[data-wallet-pattern="4"] .wallet-balance-card::after { background: repeating-linear-gradient(0deg, transparent 0 12px, var(--wallet-accent) 12px 14px); }
+.wallet-page[data-wallet-pattern="5"] .wallet-balance-card::after { background: repeating-linear-gradient(135deg, transparent 0 10px, var(--wallet-accent) 10px 12px, transparent 12px 20px); }
+.wallet-page[data-wallet-pattern="6"] .wallet-balance-card::after { background: radial-gradient(ellipse at top left, var(--wallet-accent), transparent 75%); }
+.wallet-page[data-wallet-pattern="7"] .wallet-balance-card::after { background: conic-gradient(from 35deg at 80% 50%, transparent, var(--wallet-accent), transparent 35%); }
+.wallet-page[data-wallet-pattern="8"] .wallet-balance-card::after { background: repeating-radial-gradient(circle at 0 0, transparent 0 8px, var(--wallet-accent) 9px 10px); }
+.wallet-page[data-wallet-pattern="9"] .wallet-balance-card::after { background: linear-gradient(30deg, transparent 45%, var(--wallet-accent) 46% 48%, transparent 49% 65%, var(--wallet-accent) 66% 68%, transparent 69%); }
+@media (max-width: 700px) {
+    .wallet-cosmetic-grid { grid-template-columns: 1fr; max-height: 580px; }
+    .wallet-cosmetic-card { padding: 11px; }
+}
+
+/* Channel owner controls and YouTube-style banner crop guide. */
+.channel-banner.has-custom-banner .channel-banner-content { display: none; }
+.channel-settings-panel { padding: 18px; margin: 16px 0 24px; border: 1px solid #343434; border-radius: 12px; background: #181818; color: #f1f1f1; }
+.channel-settings-panel[hidden] { display: none !important; }
+.channel-settings-panel summary { cursor: pointer; font-size: 15px; font-weight: 700; }
+.channel-settings-panel > p { color: #aaa; font-size: 13px; }
+.channel-settings-refresh, .channel-settings-delete { min-height: 34px; padding: 0 13px; border: 0; border-radius: 18px; background: #343434; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.channel-settings-video-list { display: grid; gap: 5px; margin-top: 12px; color: #aaa; font-size: 13px; }
+.channel-settings-video-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid #333; }
+.channel-settings-video-row > div { display: grid; min-width: 0; gap: 5px; }
+.channel-settings-video-row strong { overflow: hidden; color: #f1f1f1; text-overflow: ellipsis; white-space: nowrap; }
+.channel-settings-video-row small { color: #aaa; }
+.channel-settings-delete { flex: 0 0 auto; background: #b3261e; }
+.channel-settings-delete:disabled, .channel-settings-refresh:disabled { opacity: .6; cursor: wait; }
+.banner-crop-dialog { width: min(900px, calc(100% - 28px)); max-width: none; max-height: calc(100vh - 32px); padding: 22px; overflow: auto; border: 0; border-radius: 16px; background: #202124; color: #f1f1f1; box-shadow: 0 18px 60px #0008; }
+.banner-crop-dialog::backdrop { background: #000b; }
+.banner-crop-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
+.banner-crop-heading h2 { margin: 0 0 6px; font-size: 21px; }
+.banner-crop-heading p { margin: 0; color: #bdbdbd; font-size: 13px; line-height: 1.45; }
+.banner-crop-heading button { width: 36px; height: 36px; flex: 0 0 auto; border: 0; border-radius: 50%; background: #383838; color: white; font-size: 25px; cursor: pointer; }
+.banner-crop-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: #111; cursor: grab; touch-action: none; user-select: none; }
+.banner-crop-frame:active { cursor: grabbing; }
+.banner-crop-frame > img { position: absolute; max-width: none; max-height: none; pointer-events: none; user-select: none; }
+.banner-crop-safe-area { position: absolute; top: 50%; left: 50%; width: 60.4%; height: 29.4%; display: grid; place-items: center; border: 2px dashed #fff; box-shadow: 0 0 0 999px #0006; transform: translate(-50%, -50%); pointer-events: none; }
+.banner-crop-safe-area span { padding: 5px 8px; border-radius: 4px; background: #0009; color: #fff; font-size: clamp(9px, 1.5vw, 13px); font-weight: 700; text-align: center; }
+.banner-crop-zoom-label { display: block; margin: 17px 0 7px; color: #ddd; font-size: 13px; font-weight: 700; }
+#bannerCropZoom { width: 100%; accent-color: #3ea6ff; }
+.banner-crop-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; }
+.banner-crop-actions button { min-height: 38px; padding: 0 17px; border: 0; border-radius: 20px; background: #3b3b3b; color: #fff; font-weight: 700; cursor: pointer; }
+.banner-crop-actions #bannerCropSave { background: #3ea6ff; color: #0f0f0f; }
+.banner-crop-actions button:disabled { opacity: .6; cursor: wait; }
+.channel-closed-notice { min-height: calc(100vh - 70px); display: grid; align-content: center; justify-items: center; padding: 40px 20px; margin-top: 70px; background: #0f0f0f; color: #f1f1f1; text-align: center; }
+.channel-closed-notice[hidden] { display: none !important; }
+.channel-closed-icon { color: #a9b5c4; font-size: clamp(64px, 12vw, 112px); }
+.channel-closed-notice h1 { margin: 15px 0 8px; font-size: clamp(25px, 5vw, 38px); }
+.channel-closed-notice p { max-width: 560px; color: #bdbdbd; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+.channel-closed-home { display: inline-flex; min-height: 40px; align-items: center; padding: 0 17px; margin-top: 12px; border-radius: 22px; background: #272727; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; }
+@media (max-width: 600px) {
+    .channel-settings-panel { padding: 14px; }
+    .channel-settings-video-row { align-items: flex-start; }
+    .channel-settings-video-row strong { max-width: 50vw; }
+    .banner-crop-dialog { padding: 16px; }
+    .banner-crop-safe-area span { max-width: 90%; }
+}

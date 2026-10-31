@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administrator Console - WamsTube</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html">
+            <img
+                class="site-brand-logo"
+                src="download.jpeg"
+                alt="WamsTube logo"
+            >
+            <span>Wams Tube</span>
+        </a>
+
+        <a class="account-button auth-home-link" href="index.html">
+            Home
+        </a>
+    </header>
+
+    <main class="home-page admin-page">
+        <h1>WamsTube Administrator Console</h1>
+
+        <p class="admin-warning" role="status">
+            Checking administrator access…
+        </p>
+
+        <p
+            id="adminMessage"
+            class="admin-message"
+            role="status"
+            aria-live="polite"
+        ></p>
+
+        <h2 class="admin-category-heading">Platform overview & operations</h2>
+        <section
+            class="admin-stats"
+            id="adminStats"
+            aria-label="Platform overview"
+        >
+            <article>
+                <strong id="statChannels">—</strong>
+                <span>Channels</span>
+            </article>
+
+            <article>
+                <strong id="statBanned">—</strong>
+                <span>Banned</span>
+            </article>
+
+            <article>
+                <strong id="statVideos">—</strong>
+                <span>Videos</span>
+            </article>
+
+            <article>
+                <strong id="statPublic">—</strong>
+                <span>Public</span>
+            </article>
+
+            <article>
+                <strong id="statPrivate">—</strong>
+                <span>Private</span>
+            </article>
+
+            <article>
+                <strong id="statRemoved">—</strong>
+                <span>Taken down</span>
+            </article>
+
+            <article>
+                <strong id="statShorts">—</strong>
+                <span>Shorts</span>
+            </article>
+
+            <article>
+                <strong id="statComments">—</strong>
+                <span>Comments</span>
+            </article>
+
+            <article>
+                <strong id="statLikes">—</strong>
+                <span>Likes</span>
+            </article>
+
+            <article>
+                <strong id="statFollows">—</strong>
+                <span>Subscriptions</span>
+            </article>
+
+            <article>
+                <strong id="statViews">—</strong>
+                <span>Recorded views</span>
+            </article>
+
+            <article>
+                <strong id="statVerified">—</strong>
+                <span>Verified channels</span>
+            </article>
+
+            <article>
+                <strong id="statReports">—</strong>
+                <span>Reports</span>
+            </article>
+
+            <article>
+                <strong id="statPendingReports">—</strong>
+                <span>Pending reports</span>
+            </article>
+
+            <article>
+                <strong id="statSuspicious">—</strong>
+                <span>Accounts under suspicion</span>
+            </article>
+        </section>
+
+        <div class="admin-toolbar">
+            <button id="refreshAdmin" type="button">
+                Refresh dashboard
+            </button>
+
+            <button id="exportVideos" type="button">
+                Export videos CSV
+            </button>
+
+            <button id="exportChannels" type="button">
+                Export channels CSV
+            </button>
+
+            <button id="exportComments" type="button">
+                Export comments CSV
+            </button>
+
+            <button id="exportReports" type="button">
+                Export reports CSV
+            </button>
+        </div>
+
+        <h2 class="admin-category-heading">Site controls & communications</h2>
+        <section class="admin-box admin-standalone">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Upload controls</h2>
+                    <p id="uploadSettingStatus" role="status">Checking upload availability…</p>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <button id="toggleUploadsButton" type="button" disabled>
+                    Disable uploads
+                </button>
+            </div>
+        </section>
+
+        <section class="admin-box admin-standalone" id="adminInboxSection">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Send an inbox message</h2>
+                    <p>Send an important announcement to one channel or everyone.</p>
+                </div>
+            </div>
+            <label class="upload-label" for="inboxRecipient">Recipient</label>
+            <select id="inboxRecipient" class="upload-input">
+                <option value="all">All channels</option>
+            </select>
+            <label class="upload-label" for="inboxMessageTitle">Subject</label>
+            <input id="inboxMessageTitle" class="upload-input" maxlength="120" placeholder="Message subject">
+            <label class="upload-label" for="inboxMessageBody">Message</label>
+            <textarea id="inboxMessageBody" class="upload-input" maxlength="2000" rows="5" placeholder="Write an announcement for the inbox"></textarea>
+            <div class="admin-actions">
+                <button id="sendInboxMessage" type="button">Send important message</button>
+            </div>
+        </section>
+
+        <section class="admin-box admin-standalone" id="adminWhatsNewSection">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>What’s New posts</h2>
+                    <p>Publish site updates with an optional image. Posts appear on the public What’s New page.</p>
+                </div>
+            </div>
+            <label class="upload-label" for="whatsNewTitle">Post title</label>
+            <input id="whatsNewTitle" class="upload-input" maxlength="120" placeholder="What’s new?">
+            <label class="upload-label" for="whatsNewBody">Update</label>
+            <textarea id="whatsNewBody" class="upload-input" maxlength="5000" rows="5" placeholder="Share an update with everyone"></textarea>
+            <label class="upload-label" for="whatsNewImage">Optional image</label>
+            <input id="whatsNewImage" class="upload-input" type="file" accept="image/*">
+            <div class="admin-actions">
+                <button id="publishWhatsNew" type="button">Publish update</button>
+            </div>
+            <p id="whatsNewAdminStatus" class="admin-result-count" role="status" aria-live="polite"></p>
+            <div id="whatsNewAdminList" class="admin-video-list"></div>
+        </section>
+
+        <section class="admin-box admin-standalone" id="activityRiskSection">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Activity spike review</h2>
+                    <p>Hourly indicators compare the last hour with the prior 23-hour baseline. Spikes are review signals only; they do not automatically restrict accounts.</p>
+                </div>
+                <button id="refreshActivitySpikes" type="button">Check now</button>
+            </div>
+            <p id="activityRiskStatus" class="admin-result-count" role="status">Waiting for administrator verification…</p>
+            <div id="activitySpikeList" class="admin-video-list"></div>
+        </section>
+
+        <h2 class="admin-category-heading">Safety & content moderation</h2>
+        <section class="admin-box admin-standalone">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Video studio</h2>
+                    <p>
+                        Search, filter, edit and moderate videos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-filter-grid">
+                <label>
+                    Search videos
+                    <input
+                        id="videoSearch"
+                        class="upload-input"
+                        type="search"
+                        placeholder="Title or channel"
+                    >
+                </label>
+
+                <label>
+                    Visibility
+                    <select
+                        id="videoVisibilityFilter"
+                        class="upload-input"
+                    >
+                        <option value="all">
+                            All visibility
+                        </option>
+                        <option value="public">
+                            Public
+                        </option>
+                        <option value="private">
+                            Private
+                        </option>
+                    </select>
+                </label>
+
+                <label>
+                    Status
+                    <select
+                        id="videoStatusFilter"
+                        class="upload-input"
+                    >
+                        <option value="all">
+                            All videos
+                        </option>
+                        <option value="active">
+                            Active
+                        </option>
+                        <option value="removed">
+                            Taken down
+                        </option>
+                        <option value="shorts">
+                            Shorts
+                        </option>
+                        <option value="regular">
+                            Regular videos
+                        </option>
+                    </select>
+                </label>
+
+                <label>
+                    Sort
+                    <select
+                        id="videoSort"
+                        class="upload-input"
+                    >
+                        <option value="newest">
+                            Newest first
+                        </option>
+                        <option value="oldest">
+                            Oldest first
+                        </option>
+                        <option value="title">
+                            Title A–Z
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="admin-actions">
+                <button id="selectAllVideos" type="button">
+                    Select visible
+                </button>
+
+                <button id="clearVideoSelection" type="button">
+                    Clear selection
+                </button>
+
+                <button id="bulkRemoveVideos" type="button">
+                    Take down selected
+                </button>
+
+                <button id="bulkRestoreVideos" type="button">
+                    Restore selected
+                </button>
+
+                <button
+                    id="bulkDeleteVideos"
+                    type="button"
+                    class="danger"
+                >
+                    Permanently delete selected
+                </button>
+            </div>
+
+            <p
+                id="videoResultCount"
+                class="admin-result-count"
+            ></p>
+
+            <div
+                id="adminVideoList"
+                class="admin-video-list"
+            ></div>
+        </section>
+
+        <section
+            class="admin-box admin-standalone"
+            id="adminReportsSection"
+        >
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Video reports</h2>
+                    <p>
+                        Review reports and take down videos when a report is accepted.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-filter-grid">
+                <label>
+                    Search reports
+                    <input
+                        id="reportSearch"
+                        class="upload-input"
+                        type="search"
+                        placeholder="Video, reason, details, or reporter"
+                    >
+                </label>
+
+                <label>
+                    Report status
+                    <select
+                        id="reportStatusFilter"
+                        class="upload-input"
+                    >
+                        <option value="pending">
+                            Pending
+                        </option>
+                        <option value="all">
+                            All reports
+                        </option>
+                        <option value="accepted">
+                            Accepted
+                        </option>
+                        <option value="rejected">
+                            Rejected
+                        </option>
+                    </select>
+                </label>
+
+                <label>
+                    Sort
+                    <select
+                        id="reportSort"
+                        class="upload-input"
+                    >
+                        <option value="newest">
+                            Newest first
+                        </option>
+                        <option value="oldest">
+                            Oldest first
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="admin-actions">
+                <button id="selectAllReports" type="button">
+                    Select visible
+                </button>
+
+                <button id="clearReportSelection" type="button">
+                    Clear selection
+                </button>
+
+                <button
+                    id="bulkAcceptReports"
+                    type="button"
+                    class="danger"
+                >
+                    Accept selected and take down
+                </button>
+
+                <button id="bulkRejectReports" type="button">
+                    Reject selected
+                </button>
+            </div>
+
+            <p
+                id="reportResultCount"
+                class="admin-result-count"
+            ></p>
+
+            <div
+                id="adminReportList"
+                class="admin-video-list"
+            ></div>
+        </section>
+
+        <h2 class="admin-category-heading">Creator tools & account management</h2>
+        <section class="admin-box admin-standalone" id="adminStoreCodesSection">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Gift cards and coupons</h2>
+                    <p>Create redeemable in-game Wams Bucks gift cards or coupon codes. Real-money sales remain unavailable until hosted checkout is connected.</p>
+                </div>
+            </div>
+            <div class="admin-filter-grid">
+                <label>Code<input id="storeCodeValue" class="upload-input" maxlength="64" autocomplete="off" placeholder="WAMS-GIFT-ABCD"></label>
+                <label>Code type<select id="storeCodeType" class="upload-input"><option value="gift_card">Gift card</option><option value="coupon">Coupon</option></select></label>
+                <label id="storeGiftAmountField">Gift-card value (Wams Bucks)<input id="storeGiftAmount" class="upload-input" type="number" min="1" max="1000000" step="1" value="100"></label>
+                <label id="storeDiscountTypeField" hidden>Coupon discount<select id="storeDiscountType" class="upload-input"><option value="fixed_cents">Fixed amount (cents)</option><option value="percent">Percent off</option></select></label>
+                <label id="storeDiscountValueField" hidden>Discount amount<input id="storeDiscountValue" class="upload-input" type="number" min="1" max="1000000" step="1" value="10"></label>
+                <label>Maximum redemptions<input id="storeCodeMaxUses" class="upload-input" type="number" min="1" max="100000" step="1" value="1"></label>
+            </div>
+            <div class="admin-actions"><button id="createStoreCode" type="button">Create code</button></div>
+            <p id="storeCodeStatus" class="admin-result-count" role="status"></p>
+        </section>
+
+        <section class="admin-box admin-standalone" id="adminCustomBadgesSection">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Custom channel badge creator</h2>
+                    <p>Create a badge with your own colors and animation, then grant it from the channel directory.</p>
+                </div>
+            </div>
+            <div class="admin-filter-grid">
+                <label>Badge name<input id="customBadgeName" class="upload-input" maxlength="32" placeholder="Community Star"></label>
+                <label>Badge key<input id="customBadgeKey" class="upload-input" maxlength="24" placeholder="community_star"></label>
+                <label>Animation<select id="customBadgeStyle" class="upload-input"><option value="solid">Solid color</option><option value="gradient">Animated gradient</option><option value="rainbow">Rainbow animation</option></select></label>
+                <label>First color<input id="customBadgeColor" class="upload-input" type="color" value="#7c3aed"></label>
+                <label>Second color<input id="customBadgeColor2" class="upload-input" type="color" value="#ec4899"></label>
+                <label>Third color<input id="customBadgeColor3" class="upload-input" type="color" value="#f59e0b"></label>
+            </div>
+            <label class="upload-label" for="customBadgeDescription">Description</label>
+            <input id="customBadgeDescription" class="upload-input" maxlength="160" placeholder="What this badge recognizes">
+            <div class="admin-actions"><button id="createCustomBadge" type="button">Create badge</button></div>
+            <p id="customBadgeStatus" class="admin-result-count" role="status"></p>
+            <div id="customBadgePreview" class="custom-badge-preview"><span class="channel-badge">Badge preview</span></div>
+        </section>
+
+        <section class="admin-box admin-standalone">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Channel directory</h2>
+                    <p>
+                        Manage accounts, verification, and channel badges.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-filter-grid">
+                <label>
+                    Search channels
+                    <input
+                        id="channelSearch"
+                        class="upload-input"
+                        type="search"
+                        placeholder="Channel name"
+                    >
+                </label>
+
+                <label>
+                    Account status
+                    <select
+                        id="channelStatusFilter"
+                        class="upload-input"
+                    >
+                        <option value="all">
+                            All channels
+                        </option>
+                        <option value="active">
+                            Active
+                        </option>
+                        <option value="banned">
+                            Banned
+                        </option>
+                        <option value="suspected">
+                            Under suspicion
+                        </option>
+                        <option value="verified">
+                            Verified
+                        </option>
+                        <option value="admins">
+                            Admins
+                        </option>
+                    </select>
+                </label>
+
+                <label>
+                    Sort
+                    <select
+                        id="channelSort"
+                        class="upload-input"
+                    >
+                        <option value="newest">
+                            Newest first
+                        </option>
+                        <option value="oldest">
+                            Oldest first
+                        </option>
+                        <option value="name">
+                            Name A–Z
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="admin-actions">
+                <button id="selectAllChannels" type="button">
+                    Select visible
+                </button>
+
+                <button id="clearChannelSelection" type="button">
+                    Clear selection
+                </button>
+
+                <button id="bulkBanChannels" type="button">
+                    Ban selected
+                </button>
+
+                <button id="bulkUnbanChannels" type="button">
+                    Unban selected
+                </button>
+
+                <button id="exportSelectedChannels" type="button">
+                    Export selected
+                </button>
+            </div>
+
+            <p
+                id="channelResultCount"
+                class="admin-result-count"
+            ></p>
+
+            <div
+                id="adminChannelList"
+                class="admin-video-list"
+            ></div>
+        </section>
+
+        <section class="admin-box admin-standalone">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Comment moderation</h2>
+                    <p>
+                        Review and remove comments across the site.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-filter-grid">
+                <label>
+                    Search comments
+                    <input
+                        id="commentSearch"
+                        class="upload-input"
+                        type="search"
+                        placeholder="Comment, channel, or video"
+                    >
+                </label>
+
+                <label>
+                    Sort
+                    <select
+                        id="commentSort"
+                        class="upload-input"
+                    >
+                        <option value="newest">
+                            Newest first
+                        </option>
+                        <option value="oldest">
+                            Oldest first
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="admin-actions">
+                <button id="selectAllComments" type="button">
+                    Select visible
+                </button>
+
+                <button id="clearCommentSelection" type="button">
+                    Clear selection
+                </button>
+
+                <button
+                    id="bulkDeleteComments"
+                    type="button"
+                    class="danger"
+                >
+                    Delete selected comments
+                </button>
+            </div>
+
+            <p
+                id="commentResultCount"
+                class="admin-result-count"
+            ></p>
+
+            <div
+                id="adminCommentList"
+                class="admin-video-list"
+            ></div>
+        </section>
+
+        <section class="admin-box admin-standalone">
+            <h2>Moderate a channel by exact name</h2>
+
+            <label
+                class="upload-label"
+                for="adminChannelName"
+            >
+                Channel name
+            </label>
+
+            <input
+                id="adminChannelName"
+                class="upload-input"
+                maxlength="40"
+                placeholder="Channel name"
+            >
+
+            <div class="admin-actions">
+                <button
+                    id="deleteChannelButton"
+                    type="button"
+                    class="danger"
+                >
+                    Delete channel videos
+                </button>
+
+                <button
+                    id="banUserButton"
+                    type="button"
+                >
+                    Ban / unban channel
+                </button>
+
+                <button
+                    id="verifyChannelButton"
+                    type="button"
+                >
+                    Toggle verified badge
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+    <script src="admin-news.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

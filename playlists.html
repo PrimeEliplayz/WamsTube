@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlists - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body data-browse-page="playlists">
+    <header class="top-bar"><a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a><a class="account-button browse-home" href="index.html">Home</a></header>
+    <main class="home-page browse-page"><h1>Playlists</h1><p class="browse-intro">Create playlists and add public videos. Playlists are saved in this browser. Standard playlists hold up to 20 videos; active WamsTube Plus plans raise that limit to 500.</p><form class="browse-playlist-form" id="playlistCreateForm"><label for="playlistName">New playlist</label><input id="playlistName" maxlength="60" placeholder="Playlist name" required><button class="browse-tool-button" type="submit">Create playlist</button></form><div class="browse-playlist-tools"><label for="playlistPicker">Add videos to</label><select id="playlistPicker" aria-label="Choose playlist"></select><button class="browse-tool-button" id="clearCollection" type="button">Delete all playlists</button></div><div class="browse-playlist-list" id="playlistList"></div><p class="browse-status" id="browseStatus" role="status" aria-live="polite"></p><h2>Browse videos to add</h2><section class="video-grid" id="browseVideoGrid"></section><div class="empty-channel" id="browseEmpty" hidden><div class="empty-channel-title">Create a playlist to get started</div><div class="empty-channel-text">Use the controls above to organize videos on this device.</div></div></main>
+    <script src="supabase-config.js"></script><script src="auth.js"></script><script src="script.js"></script><script src="browse.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

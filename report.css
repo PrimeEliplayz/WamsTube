@@ -1,0 +1,55 @@
+.report-page {
+    min-height: 100vh;
+    padding-top: 94px;
+}
+
+.report-card {
+    border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.report-video-context {
+    padding: 11px 13px;
+    margin: 16px 0 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .07);
+    color: inherit;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.report-video-context[hidden],
+.report-form[hidden] {
+    display: none;
+}
+
+.report-status:empty {
+    display: none;
+}
+
+.report-status {
+    line-height: 1.5;
+}
+
+.report-form .report-status {
+    margin-top: 12px;
+}
+
+.report-option:has(input:checked) {
+    border-color: rgba(255, 79, 123, .6);
+    background: rgba(255, 79, 123, .1);
+}
+
+.report-details-label {
+    display: block;
+}
+
+.report-details-label span {
+    float: right;
+}
+
+#reportDetails:focus-visible,
+.report-actions button:focus-visible,
+.report-back-button:focus-visible {
+    outline: 3px solid #ff8eaa;
+    outline-offset: 3px;
+}

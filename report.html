@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report video - WamsTube</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="site-theme.css">
+    <link rel="stylesheet" href="report.css">
+</head>
+
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html">
+            <img
+                class="site-brand-logo"
+                src="download.jpeg"
+                alt="WamsTube logo"
+            >
+
+            <span>Wams Tube</span>
+        </a>
+
+        <a
+            class="account-button"
+            href="index.html"
+        >
+            Home
+        </a>
+    </header>
+
+    <main class="report-page">
+        <section
+            class="report-card"
+            aria-labelledby="reportTitle"
+        >
+            <button
+                class="report-back-button"
+                id="reportBackButton"
+                type="button"
+            >
+                <span
+                    class="material-symbols-rounded"
+                    aria-hidden="true"
+                >
+                    arrow_back
+                </span>
+
+                Back
+            </button>
+
+            <div class="report-heading">
+                <span
+                    class="material-symbols-rounded report-flag-icon"
+                    aria-hidden="true"
+                >
+                    flag
+                </span>
+
+                <div>
+                    <h1 id="reportTitle">
+                        Report a video
+                    </h1>
+
+                    <p id="reportIntro">
+                        Choose the reason that best describes the problem. Reports are reviewed by the WamsTube team.
+                    </p>
+                    <p id="reportVideoContext" class="report-video-context" hidden></p>
+                </div>
+            </div>
+
+            <p id="reportStatus" class="report-status" role="status" aria-live="polite"></p>
+
+            <form id="videoReportForm" class="report-form" hidden>
+                <fieldset class="report-options">
+                    <legend class="sr-only">
+                        Choose a reason
+                    </legend>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Sexual content"
+                            required
+                        >
+
+                        <span>
+                            Sexual content
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Violent or repulsive content"
+                        >
+
+                        <span>
+                            Violent or repulsive content
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Hateful or abusive content"
+                        >
+
+                        <span>
+                            Hateful or abusive content
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Harassment or bullying"
+                        >
+
+                        <span>
+                            Harassment or bullying
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Harmful or dangerous acts"
+                        >
+
+                        <span>
+                            Harmful or dangerous acts
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Child abuse"
+                        >
+
+                        <span>
+                            Child abuse
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Spam or misleading"
+                        >
+
+                        <span>
+                            Spam or misleading
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Copyright issue"
+                        >
+
+                        <span>
+                            Copyright issue
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Privacy issue"
+                        >
+
+                        <span>
+                            Privacy issue
+                        </span>
+                    </label>
+
+                    <label class="report-option">
+                        <input
+                            type="radio"
+                            name="reason"
+                            value="Something else"
+                        >
+
+                        <span>
+                            Something else
+                        </span>
+                    </label>
+                </fieldset>
+
+                <label
+                    class="report-details-label"
+                    for="reportDetails"
+                >
+                    Additional details
+                    <span>Optional</span>
+                </label>
+
+                <textarea
+                    id="reportDetails"
+                    name="details"
+                    maxlength="2000"
+                    rows="5"
+                    placeholder="Add more information about this report..."
+                ></textarea>
+
+                <div class="report-actions">
+                    <button
+                        type="button"
+                        id="reportCancelButton"
+                        class="report-secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="reportSubmitButton"
+                        class="report-primary-button"
+                    >
+                        Submit report
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="report.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

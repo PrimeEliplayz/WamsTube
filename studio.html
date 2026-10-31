@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WamsTube Studio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="studio-body">
+    <header class="studio-topbar">
+        <a class="studio-brand" href="index.html" aria-label="WamsTube home">
+            <img src="download.jpeg" alt="">
+            <span>WamsTube <small>Studio</small></span>
+        </a>
+        <div class="studio-topbar-actions">
+            <a class="studio-top-link" href="plus.html"><span class="material-symbols-rounded" aria-hidden="true">workspace_premium</span> Plus membership</a>
+            <a class="studio-create-link" href="#studioEditor"><span class="material-symbols-rounded" aria-hidden="true">add</span> Create</a>
+            <a class="studio-channel-link" href="channel.html" aria-label="View my channel"><span class="material-symbols-rounded" aria-hidden="true">account_circle</span></a>
+        </div>
+    </header>
+
+    <aside class="studio-sidebar" aria-label="Studio navigation">
+        <a class="studio-sidebar-channel" href="channel.html">
+            <span class="studio-sidebar-avatar"><span class="material-symbols-rounded" aria-hidden="true">account_circle</span></span>
+            <span><strong>Your channel</strong><small>Manage your presence</small></span>
+        </a>
+        <nav class="studio-nav">
+            <a class="studio-nav-item active" href="#studioDashboard"><span class="material-symbols-rounded" aria-hidden="true">dashboard</span>Dashboard</a>
+            <a class="studio-nav-item" href="#studioAnalytics"><span class="material-symbols-rounded" aria-hidden="true">bar_chart</span>Analytics</a>
+            <a class="studio-nav-item" href="#studioEditor"><span class="material-symbols-rounded" aria-hidden="true">video_library</span>Content</a>
+            <a class="studio-nav-item" href="#studioEditor"><span class="material-symbols-rounded" aria-hidden="true">subtitles</span>Captions & editing</a>
+        </nav>
+        <div class="studio-sidebar-footer">
+            <a class="studio-nav-item" href="index.html"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>Back to WamsTube</a>
+            <span class="studio-plus-label"><span class="material-symbols-rounded" aria-hidden="true">workspace_premium</span> Plus creator tools</span>
+        </div>
+    </aside>
+
+    <main class="studio-page" id="studioDashboard">
+        <div class="studio-heading">
+            <div>
+                <p class="studio-eyebrow">CHANNEL DASHBOARD</p>
+                <h1>Welcome to Studio</h1>
+                <p>Manage your videos, track channel performance, and create for your subscribers.</p>
+            </div>
+            <a class="studio-home-link" href="channel.html"><span class="material-symbols-rounded" aria-hidden="true">open_in_new</span> View channel</a>
+        </div>
+        <p class="studio-status" id="studioAccessStatus" role="status" aria-live="polite">Checking your Plus membership…</p>
+        <section class="studio-content" id="studioContent" hidden>
+            <section class="studio-panel" id="studioAnalytics" aria-labelledby="analyticsTitle">
+                <div class="studio-panel-heading">
+                    <div><h2 id="analyticsTitle">Channel analytics</h2><p>Unique signed-in viewers, likes, comments, and subscribers.</p></div>
+                    <button class="studio-secondary-button" id="studioRefresh" type="button">Refresh</button>
+                </div>
+                <div class="studio-metrics">
+                    <article><strong id="studioTotalViews">—</strong><span>Recorded video views</span></article>
+                    <article><strong id="studioTotalLikes">—</strong><span>Video likes</span></article>
+                    <article><strong id="studioTotalComments">—</strong><span>Comments</span></article>
+                    <article><strong id="studioSubscribers">—</strong><span>Subscribers</span></article>
+                </div>
+                <div class="studio-video-list" id="studioAnalyticsList" aria-live="polite"></div>
+            </section>
+
+            <section class="studio-panel" id="studioEditor" aria-labelledby="editorTitle">
+                <div class="studio-panel-heading">
+                    <div><h2 id="editorTitle">Upload and edit</h2><p>Make a new upload or select one of your videos to edit.</p></div>
+                </div>
+                <form id="studioForm">
+                    <input id="studioVideoId" type="hidden">
+                    <label class="studio-label" for="studioFile">Video file <span>Required for a new upload</span></label>
+                    <input class="studio-input" id="studioFile" type="file" accept="video/*,image/*">
+                    <p class="studio-help" id="studioUploadSizeHelp">Maximum file size: 100 MB on a standard account; 500 MB with Plus.</p>
+                    <label class="studio-label" for="studioExistingVideo">Edit an existing video</label>
+                    <select class="studio-input" id="studioExistingVideo"><option value="">Create a new video</option></select>
+                    <label class="studio-label" for="studioTitle">Title</label>
+                    <input class="studio-input" id="studioTitle" maxlength="100" required>
+                    <label class="studio-label" for="studioDescription">Description</label>
+                    <textarea class="studio-input studio-textarea" id="studioDescription" maxlength="5000" rows="4" placeholder="Tell viewers about your video"></textarea>
+                    <label class="studio-label" for="studioVisibility">Who can watch?</label>
+                    <select class="studio-input" id="studioVisibility">
+                        <option value="public">Public</option>
+                        <option value="subscribers">Subscribers only</option>
+                        <option value="private">Private (only you)</option>
+                    </select>
+                    <p class="studio-help">Subscriber-only videos are available to signed-in subscribers of your channel. Database policies protect the video and its media.</p>
+                    <label class="studio-short-toggle"><input id="studioIsShort" type="checkbox"> <span><strong>Publish as a Short</strong><small>Shorts appear in the vertical Shorts feed.</small></span></label>
+
+                    <div class="studio-trim-grid">
+                        <label class="studio-label" for="studioTrimStart">Trim start (seconds)<input class="studio-input" id="studioTrimStart" type="number" min="0" step="0.1" value="0"></label>
+                        <label class="studio-label" for="studioTrimEnd">Trim end (seconds)<input class="studio-input" id="studioTrimEnd" type="number" min="0" step="0.1" placeholder="Video end"></label>
+                    </div>
+                    <p class="studio-help">Non-destructive trim: viewers see only this time range; the original upload stays unchanged. Previewing and final playback honor the cut.</p>
+                    <video class="studio-preview" id="studioPreview" controls playsinline hidden></video>
+                    <img class="studio-preview studio-image-preview" id="studioImagePreview" alt="Studio upload preview" hidden>
+                    <p class="studio-duration" id="studioDuration" role="status" aria-live="polite">Select a video to see its duration.</p>
+                    <div class="studio-trim-actions"><button class="studio-secondary-button" id="studioSetStart" type="button">Set start to preview time</button><button class="studio-secondary-button" id="studioSetEnd" type="button">Set end to preview time</button></div>
+
+                    <label class="studio-label" for="studioCaptions">Captions <span>WebVTT (.vtt), up to 1 MB</span></label>
+                    <textarea class="studio-input studio-textarea studio-caption-editor" id="studioCaptions" rows="8" placeholder="WEBVTT&#10;&#10;00:00:01.000 --> 00:00:03.000&#10;Your caption text"></textarea>
+                    <label class="studio-label studio-file-label" for="studioCaptionFile">Or load a .vtt captions file</label>
+                    <input class="studio-input" id="studioCaptionFile" type="file" accept=".vtt,text/vtt">
+                    <div class="studio-form-actions"><button class="studio-secondary-button" id="studioClear" type="button">Clear editor</button><button class="studio-publish-button" id="studioPublish" type="submit">Publish video</button></div>
+                    <p class="studio-status" id="studioFormStatus" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+        </section>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="studio.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>

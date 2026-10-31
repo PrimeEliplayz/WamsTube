@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body data-browse-page="music">
+    <header class="top-bar"><a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a><a class="account-button browse-home" href="index.html">Home</a></header>
+    <main class="home-page browse-page"><h1>Music</h1><p class="browse-intro">Public videos with music-related words in the title or description.</p><p class="browse-status" id="browseStatus" role="status" aria-live="polite"></p><section class="video-grid" id="browseVideoGrid"></section><div class="empty-channel" id="browseEmpty"><div class="empty-channel-title">No music videos found</div><div class="empty-channel-text">Try uploading a video with music-related words in its title or description.</div></div></main>
+    <script src="supabase-config.js"></script><script src="auth.js"></script><script src="script.js"></script><script src="browse.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>
