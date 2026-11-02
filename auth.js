@@ -442,127 +442,106 @@
     };
 
     window.submitAuth = async function () {
-        const context =
-            window.wamsAuthContext;
-
-        const email =
-            document
-                .getElementById("authEmail")
-                ?.value.trim()
-                .toLowerCase() || "";
-
-        const password =
-            document.getElementById(
-                "authPassword"
-            )?.value || "";
-
-        const error =
-            document.getElementById("authError");
-
-        if (error) {
-            error.textContent = "";
-        }
-
-        if (!/^[^\s@]+@mtps\.us$/.test(email)) {
-            if (error) {
-                error.textContent =
-                    "Use an email ending exactly in @mtps.us.";
-            }
-
-            return;
-        }
-
-        if (!password) {
-            if (error) {
-                error.textContent =
-                    "Enter your password.";
-            }
-
-            return;
-        }
+        const context = window.wamsAuthContext;
+        const error = document.getElementById("authError");
+        const submit = document.getElementById("authSubmit");
+        if (error) error.textContent = "";
 
         if (!context || !context.configured()) {
-            if (error) {
-                error.textContent =
-                    "Add your Supabase project URL and anon key in supabase-config.js first.";
-            }
-
+            if (error) error.textContent = "Add your Supabase project URL and anon key in supabase-config.js first.";
             return;
         }
 
-        try {
-            const path = signupMode
-                ? "/auth/v1/signup"
-                : "/auth/v1/token?grant_type=password";
-
-            const body = {
-                email,
-                password
-            };
-
-            if (signupMode) {
-                body.data = {
-                    channel_name:
-                        document
-                            .getElementById(
-                                "signupChannel"
-                            )
-                            ?.value.trim() ||
-                        email.split("@")[0]
-                };
-            }
-
-            const response = await fetch(
-                context.supabaseUrl + path,
-                {
-                    method: "POST",
-                    headers: {
-                        apikey:
-                            context.supabaseAnonKey,
-                        "Content-Type":
-                            "application/json"
-                    },
-                    body: JSON.stringify(body)
+        const api = async (path, options = {}) => {
+            const method = (options.method || "GET").toUpperCase();
+            const response = await fetch(context.supabaseUrl + path, {
+                ...options,
+                headers: {
+                    apikey: context.supabaseAnonKey,
+                    "Content-Type": "application/json",
+                    ...(options.headers || {})
                 }
-            );
-
-            const data = await response.json();
-
+            });
+            const text = await response.text();
+            let payload = {};
+            try {
+                payload = text ? JSON.parse(text) : {};
+            } catch {
+                payload = {};
+            }
             if (!response.ok) {
+                const detail = payload.msg || payload.message ||
+                    payload.error_description ||
+                    (typeof payload.error === "string" ? payload.error : payload.error?.message) ||
+                    payload.code ||
+                    text.slice(0, 240);
                 throw new Error(
-                    data.msg ||
-                        data.message ||
-                        data.error_description ||
-                        "Authentication failed."
+                    `${method} ${path} failed (HTTP ${response.status})${detail ? `: ${detail}` : "."}`
                 );
             }
+            return payload;
+        };
 
+        try {
+            submit.disabled = true;
+            const email = document.getElementById("authEmail")?.value.trim().toLowerCase() || "";
+            const password = document.getElementById("authPassword")?.value || "";
+            if (!/^[^\s@]+@mtps\.us$/.test(email)) throw new Error("Use an email ending exactly in @mtps.us.");
+            if (!password) throw new Error("Enter your password.");
+
+            submit.textContent = signupMode ? "Creating account…" : "Signing in…";
+            const body = { email, password };
+            const path = signupMode ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password";
+            if (signupMode) {
+                body.data = {
+                    channel_name: document.getElementById("signupChannel")?.value.trim() || email.split("@")[0]
+                };
+            }
+            const data = await api(path, { method: "POST", body: JSON.stringify(body) });
             if (!data.access_token) {
-                if (error) {
-                    error.textContent =
-                        "Check your school email to confirm your account, then sign in.";
-                }
-
+                if (error) error.textContent = "Check your school email to confirm your account, then sign in.";
                 return;
             }
 
-            context.setSession(data);
-
-            const profile =
-                await context.loadProfile();
-
-            window.closeAuth();
-            context.syncAccountButton();
-
-            if (!profile.is_banned) {
-                await window.wamsQuietHoursRefresh?.();
-                await context.refreshFeed();
+            let authenticatedSession = data;
+            if (!signupMode) {
+                let user = data.user;
+                if (!Array.isArray(user?.factors)) {
+                    user = await api("/auth/v1/user", {
+                        headers: { Authorization: `Bearer ${data.access_token}` }
+                    });
+                }
+                const totpFactor = (user.factors || []).find(factor => factor.factor_type === "totp" && factor.status === "verified");
+                if (totpFactor) {
+                    const code = window.prompt("Enter the six-digit code from your authenticator app:");
+                    if (code === null) throw new Error("Two-step verification is required to sign in.");
+                    if (!/^\d{6}$/.test(code.trim())) throw new Error("Enter a valid six-digit authenticator code.");
+                    const factorId = encodeURIComponent(totpFactor.id);
+                    const challenge = await api(`/auth/v1/factors/${factorId}/challenge`, { method: "POST", body: "{}" });
+                    authenticatedSession = await api(`/auth/v1/factors/${factorId}/verify`, {
+                        method: "POST",
+                        body: JSON.stringify({ challenge_id: challenge.id, code: code.trim() })
+                    });
+                }
             }
+
+            await finishAuth(context, authenticatedSession);
         } catch (authError) {
-            if (error) {
-                error.textContent =
-                    authError.message;
-            }
+            if (error) error.textContent = authError.message || "Authentication failed.";
+        } finally {
+            submit.disabled = false;
+            submit.textContent = signupMode ? "Create account" : "Sign in";
         }
     };
+
+    async function finishAuth(context, session) {
+        context.setSession(session);
+        const profile = await context.loadProfile();
+        window.closeAuth();
+        context.syncAccountButton();
+        if (!profile.is_banned) {
+            await window.wamsQuietHoursRefresh?.();
+            await context.refreshFeed();
+        }
+    }
 })();
