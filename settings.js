@@ -316,24 +316,35 @@
     function getTotpQrSource(value) {
         if (typeof value !== "string" || !value.trim()) return "";
         const qr = value.trim();
-        if (qr.startsWith("<svg")) {
-            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qr)}`;
-        }
-        if (/^data:image\/svg\+xml/i.test(qr)) {
+        const svgDataUrl = /^data:image\/svg\+xml/i.test(qr);
+        let svg = qr;
+
+        if (svgDataUrl) {
             const comma = qr.indexOf(",");
-            if (comma < 0 || /;base64,/i.test(qr.slice(0, comma + 1))) return qr;
-            const metadata = qr.slice(0, comma).replace(/;utf-8/i, ";charset=utf-8");
-            let svg = qr.slice(comma + 1);
+            if (comma < 0) return "";
+            const metadata = qr.slice(0, comma);
+            if (/;base64/i.test(metadata)) return qr;
+            svg = qr.slice(comma + 1);
             try {
-                if (svg.startsWith("%")) svg = decodeURIComponent(svg);
+                svg = decodeURIComponent(svg);
             } catch {
-                return qr;
+                // Some providers return a partially encoded SVG; try it as-is.
             }
-            return svg.trim().startsWith("<svg")
-                ? `${metadata},${encodeURIComponent(svg)}`
-                : qr;
         }
-        return qr;
+
+        // Supabase may return raw SVG, encoded SVG, or an SVG data URL. Normalize
+        // all markup forms so characters such as # and spaces cannot break the URL.
+        if (/<svg[\s>]/i.test(svg)) {
+            const start = svg.search(/<svg[\s>]/i);
+            const end = svg.toLowerCase().lastIndexOf("</svg>");
+            if (start < 0 || end < start) return "";
+            const markup = svg.slice(start, end + 6);
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+        }
+
+        // Allow already usable non-SVG image data URLs from compatible providers.
+        if (/^data:image\/(?:png|jpeg|webp);base64,/i.test(qr)) return qr;
+        return "";
     }
 
     totpQrCode?.addEventListener("error", () => {
@@ -387,14 +398,19 @@
             });
             totpFactorId = factor.id;
             const qr = getTotpQrSource(factor.totp?.qr_code);
-            if (totpQrCode && qr) {
+            if (totpQrCode) {
                 totpQrCode.hidden = true;
-                totpQrCode.src = qr;
-                totpQrCode.hidden = false;
+                totpQrCode.removeAttribute("src");
+                if (qr) {
+                    totpQrCode.src = qr;
+                    totpQrCode.hidden = false;
+                }
             }
             if (totpSecret) totpSecret.textContent = factor.totp?.secret || "Check the setup response in Supabase Auth.";
             if (totpSetupArea) totpSetupArea.hidden = false;
-            if (totpStatus) totpStatus.textContent = "Scan the QR code or enter the setup key, then verify a current code.";
+            if (totpStatus) totpStatus.textContent = qr
+                ? "Scan the QR code or enter the setup key, then verify a current code."
+                : "A QR image was not provided. Enter the setup key manually in your authenticator app.";
             totpSetupButton.hidden = true;
         } catch (error) {
             if (totpStatus) {
