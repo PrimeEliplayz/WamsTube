@@ -284,6 +284,37 @@
     let totpFactorId = "";
     let verifiedTotpFactorId = "";
 
+    function getTotpQrSource(value) {
+        if (typeof value !== "string" || !value.trim()) return "";
+        const qr = value.trim();
+        if (qr.startsWith("<svg")) {
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qr)}`;
+        }
+        if (/^data:image\/svg\+xml/i.test(qr)) {
+            const comma = qr.indexOf(",");
+            if (comma < 0 || /;base64,/i.test(qr.slice(0, comma + 1))) return qr;
+            const metadata = qr.slice(0, comma).replace(/;utf-8/i, ";charset=utf-8");
+            let svg = qr.slice(comma + 1);
+            try {
+                if (svg.startsWith("%")) svg = decodeURIComponent(svg);
+            } catch {
+                return qr;
+            }
+            return svg.trim().startsWith("<svg")
+                ? `${metadata},${encodeURIComponent(svg)}`
+                : qr;
+        }
+        return qr;
+    }
+
+    totpQrCode?.addEventListener("error", () => {
+        totpQrCode.hidden = true;
+        if (totpStatus) {
+            totpStatus.textContent = "The QR image could not be displayed. Enter the setup key manually in your authenticator app.";
+            totpStatus.classList.add("is-error");
+        }
+    });
+
     function rememberElevatedSession(data) {
         if (!data?.access_token) return;
         const previous = getSecuritySession() || {};
@@ -326,9 +357,10 @@
                 body: JSON.stringify({ factor_type: "totp", friendly_name: "WamsTube authenticator" })
             });
             totpFactorId = factor.id;
-            const qr = factor.totp?.qr_code || "";
+            const qr = getTotpQrSource(factor.totp?.qr_code);
             if (totpQrCode && qr) {
-                totpQrCode.src = qr.startsWith("<svg") ? `data:image/svg+xml,${encodeURIComponent(qr)}` : qr;
+                totpQrCode.hidden = true;
+                totpQrCode.src = qr;
                 totpQrCode.hidden = false;
             }
             if (totpSecret) totpSecret.textContent = factor.totp?.secret || "Check the setup response in Supabase Auth.";
