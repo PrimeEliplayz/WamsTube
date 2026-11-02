@@ -30,6 +30,7 @@
     const sidebarLockSelect = document.getElementById("sidebarLockButtonSelect");
     const sidebarLockReason = document.getElementById("sidebarLockReason");
     const sidebarLockStatus = document.getElementById("sidebarLockStatus");
+    const sidebarLockedList = document.getElementById("ownerSidebarLockedList");
     let sidebarLocks = [];
     let sidebarLockSetupError = "";
     let lockdownEnabled = false;
@@ -216,6 +217,40 @@
         if (updated) updated.textContent = `Updated ${new Date().toLocaleString()}`;
     }
 
+    function renderSidebarLockedList() {
+        if (!sidebarLockedList) return;
+        sidebarLockedList.replaceChildren();
+        const lockedButtons = sidebarLocks.filter(item => item.enabled);
+        if (!lockedButtons.length) {
+            const empty = document.createElement("p");
+            empty.textContent = sidebarLockSetupError || "No side panel buttons are currently locked.";
+            sidebarLockedList.appendChild(empty);
+            return;
+        }
+
+        lockedButtons.forEach(lock => {
+            const row = document.createElement("article");
+            row.className = "owner-sidebar-locked-row";
+            const copy = document.createElement("div");
+            const option = Array.from(sidebarLockSelect?.options || []).find(item => item.value === lock.button_key);
+            const name = document.createElement("strong");
+            name.textContent = option?.textContent || lock.button_key;
+            const reason = document.createElement("span");
+            reason.textContent = lock.reason || "No visitor message set.";
+            copy.append(name, reason);
+            const unlock = document.createElement("button");
+            unlock.type = "button";
+            unlock.textContent = "Unlock";
+            unlock.addEventListener("click", () => {
+                if (sidebarLockSelect) sidebarLockSelect.value = lock.button_key;
+                renderSidebarButtonLock();
+                saveSidebarButtonLock(false, lock.button_key, unlock);
+            });
+            row.append(copy, unlock);
+            sidebarLockedList.appendChild(row);
+        });
+    }
+
     function renderSidebarButtonLock() {
         if (!sidebarLockSelect) return;
         const key = sidebarLockSelect.value;
@@ -226,17 +261,18 @@
             : "This button is currently available.");
         const unlock = document.getElementById("unlockSidebarButton");
         if (unlock) unlock.disabled = !lock;
+        renderSidebarLockedList();
     }
 
-    async function saveSidebarButtonLock(locked) {
-        const buttonKey = sidebarLockSelect?.value;
+    async function saveSidebarButtonLock(locked, selectedKey = sidebarLockSelect?.value, actionButton = null) {
+        const buttonKey = selectedKey;
         const reason = sidebarLockReason?.value.trim() || "";
         if (!buttonKey) return;
         if (locked && !reason) {
             if (sidebarLockStatus) sidebarLockStatus.textContent = "Enter a custom reason visitors will see.";
             return;
         }
-        const saveButton = document.getElementById(locked ? "lockSidebarButton" : "unlockSidebarButton");
+        const saveButton = actionButton || document.getElementById(locked ? "lockSidebarButton" : "unlockSidebarButton");
         if (saveButton) saveButton.disabled = true;
         if (sidebarLockStatus) sidebarLockStatus.textContent = locked ? "Locking button…" : "Unlocking button…";
         try {
@@ -258,11 +294,12 @@
                 : "Button unlocked.";
         } catch (error) {
             if (sidebarLockStatus) sidebarLockStatus.textContent = `${error.message} Apply the sidebar button locks SQL setup if this feature is not configured.`;
+            if (actionButton) actionButton.disabled = false;
         } finally {
-            if (saveButton) saveButton.disabled = false;
             const current = sidebarLocks.find(item => item.button_key === sidebarLockSelect?.value && item.enabled);
             const unlockButton = document.getElementById("unlockSidebarButton");
             if (unlockButton) unlockButton.disabled = !current;
+            if (!actionButton && saveButton) saveButton.disabled = false;
         }
     }
 
