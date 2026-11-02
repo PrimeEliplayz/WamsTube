@@ -513,15 +513,12 @@
                 }
                 const totpFactor = (user.factors || []).find(factor => factor.factor_type === "totp" && factor.status === "verified");
                 if (totpFactor) {
-                    const code = window.prompt("Enter the six-digit code from your authenticator app:");
-                    if (code === null) throw new Error("Two-step verification is required to sign in.");
-                    if (!/^\d{6}$/.test(code.trim())) throw new Error("Enter a valid six-digit authenticator code.");
-                    const factorId = encodeURIComponent(totpFactor.id);
-                    const challenge = await api(`/auth/v1/factors/${factorId}/challenge`, { method: "POST", body: "{}" });
-                    authenticatedSession = await api(`/auth/v1/factors/${factorId}/verify`, {
-                        method: "POST",
-                        body: JSON.stringify({ challenge_id: challenge.id, code: code.trim() })
-                    });
+                    sessionStorage.setItem("wamsTubePendingTotpLogin", JSON.stringify({
+                        session: data,
+                        factorId: totpFactor.id
+                    }));
+                    window.location.href = "two-factor.html";
+                    return;
                 }
             }
 
@@ -544,4 +541,6 @@
             await context.refreshFeed();
         }
     }
+
+    window.wamsFinishAuth = finishAuth;
 })();
