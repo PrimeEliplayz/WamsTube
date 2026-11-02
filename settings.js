@@ -305,6 +305,7 @@
 
     const totpStatus = document.getElementById("totpStatus");
     const totpSetupButton = document.getElementById("totpSetupButton");
+    const totpRemovePendingButton = document.getElementById("totpRemovePendingButton");
     const totpSetupArea = document.getElementById("totpSetupArea");
     const totpQrCode = document.getElementById("totpQrCode");
     const totpSecret = document.getElementById("totpSecret");
@@ -374,8 +375,12 @@
             verifiedTotpFactorId = verified?.id || "";
             if (totpStatus) totpStatus.textContent = verified
                 ? "Two-step verification is enabled for this account."
-                : pending ? "An unfinished authenticator setup exists. Remove it in Supabase Auth or finish setting it up." : "Two-step verification is not enabled.";
+                : pending ? "An unfinished authenticator setup exists. Remove it here to generate a fresh QR code, or finish setup with the code from your authenticator app." : "Two-step verification is not enabled.";
             if (totpSetupButton) totpSetupButton.hidden = Boolean(verified || pending);
+            if (totpRemovePendingButton) {
+                totpRemovePendingButton.hidden = !pending || Boolean(verified);
+                totpRemovePendingButton.dataset.factorId = pending?.id || "";
+            }
             if (totpDisableForm) totpDisableForm.hidden = !verified;
             return factors;
         } catch (error) {
@@ -387,6 +392,35 @@
             return [];
         }
     }
+
+    totpRemovePendingButton?.addEventListener("click", async () => {
+        const factorId = totpRemovePendingButton.dataset.factorId;
+        if (!factorId) return;
+        totpRemovePendingButton.disabled = true;
+        if (totpStatus) totpStatus.textContent = "Removing unfinished authenticator setup…";
+        try {
+            await securityRequest(`/auth/v1/factors/${encodeURIComponent(factorId)}`, { method: "DELETE" });
+            if (totpSetupArea) totpSetupArea.hidden = true;
+            if (totpQrCode) {
+                totpQrCode.hidden = true;
+                totpQrCode.removeAttribute("src");
+            }
+            if (totpSecret) totpSecret.textContent = "";
+            totpFactorId = "";
+            await loadTotpStatus();
+            if (totpStatus) {
+                totpStatus.textContent = "Unfinished setup removed. You can now generate a fresh QR code.";
+                totpStatus.classList.remove("is-error");
+            }
+        } catch (error) {
+            if (totpStatus) {
+                totpStatus.textContent = error.message || "Could not remove the unfinished authenticator setup.";
+                totpStatus.classList.add("is-error");
+            }
+        } finally {
+            totpRemovePendingButton.disabled = false;
+        }
+    });
 
     totpSetupButton?.addEventListener("click", async () => {
         totpSetupButton.disabled = true;
