@@ -1519,6 +1519,68 @@ body.wams-account-is-banned > *:not(#wamsBannedAccountScreen) {
     display: none !important;
 }
 
+.owner-sidebar-locked-list {
+    display: grid;
+    gap: 8px;
+    margin: 10px 0 18px;
+}
+
+.owner-sidebar-locked-list > p {
+    margin: 0;
+    color: #606060;
+    font-size: 13px;
+}
+
+.owner-sidebar-locked-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 9px;
+    background: #fafafa;
+}
+
+.owner-sidebar-locked-row > div {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+}
+
+.owner-sidebar-locked-row strong {
+    font-size: 14px;
+}
+
+.owner-sidebar-locked-row span {
+    color: #606060;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.owner-sidebar-locked-row button {
+    min-height: 34px;
+    flex: 0 0 auto;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 18px;
+    background: #303030;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.owner-sidebar-locked-row button:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+
+@media (max-width: 600px) {
+    .owner-sidebar-locked-row {
+        align-items: flex-start;
+    }
+}
+
 .wams-banned-account-screen {
     position: fixed;
     z-index: 999999;
