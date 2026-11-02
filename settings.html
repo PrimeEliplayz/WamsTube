@@ -56,6 +56,7 @@
                 <p>Add a time-based one-time password from an authenticator app. You’ll need a current six-digit code to finish setup and to sign in.</p>
                 <p class="settings-security-status" id="totpStatus" role="status" aria-live="polite">Checking authenticator status…</p>
                 <button class="settings-security-button" id="totpSetupButton" type="button">Set up authenticator</button>
+                <button class="settings-security-button settings-security-danger" id="totpRemovePendingButton" type="button" hidden>Remove unfinished setup</button>
                 <div id="totpSetupArea" hidden>
                     <p>Scan this QR code with your authenticator app, or enter the setup key manually.</p>
                     <img id="totpQrCode" alt="Authenticator setup QR code" hidden>
