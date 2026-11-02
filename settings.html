@@ -26,7 +26,7 @@
             <div>
                 <p class="settings-eyebrow">YOUR EXPERIENCE</p>
                 <h1>Settings</h1>
-                <p>Manage 100 preferences across playback, privacy, accessibility, and more. Settings are saved in this browser and are not synced to your account.</p>
+                <p>Manage your experience, preferences, and account security.</p>
             </div>
             <button class="settings-reset" id="settingsReset" type="button">Reset all</button>
         </div>
@@ -36,10 +36,70 @@
             <span id="settingsCount" class="settings-count" aria-live="polite">100 settings</span>
         </div>
         <p class="settings-status" id="settingsStatus" role="status" aria-live="polite">Changes save automatically on this device.</p>
+        <nav class="settings-category-nav" id="settingsCategoryNav" aria-label="Settings categories"></nav>
         <div class="settings-categories" id="settingsCategories"></div>
+        <section class="settings-security" id="settingsSecurity" hidden aria-labelledby="securityHeading">
+            <h2 id="securityHeading">Account security</h2>
+            <p class="settings-security-intro">Your password is sent securely to Supabase for verification and password updates. Supabase hashes and stores it on the server; this page never saves your password.</p>
+            <form id="passwordChangeForm" class="settings-security-form">
+                <label for="currentPassword">Current password</label>
+                <input id="currentPassword" type="password" autocomplete="current-password" required>
+                <label for="newPassword">New password</label>
+                <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+                <button class="settings-security-button" type="submit">Change password</button>
+                <p class="settings-security-status" id="passwordChangeStatus" role="status" aria-live="polite"></p>
+            </form>
+            <article class="settings-security-note">
+                <h3>Authenticator app (TOTP)</h3>
+                <p>Add a time-based one-time password from an authenticator app. You’ll need a current six-digit code to finish setup and to sign in.</p>
+                <p class="settings-security-status" id="totpStatus" role="status" aria-live="polite">Checking authenticator status…</p>
+                <button class="settings-security-button" id="totpSetupButton" type="button">Set up authenticator</button>
+                <div id="totpSetupArea" hidden>
+                    <p>Scan this QR code with your authenticator app, or enter the setup key manually.</p>
+                    <img id="totpQrCode" alt="Authenticator setup QR code" hidden>
+                    <p>Setup key: <code id="totpSecret"></code></p>
+                    <form id="totpVerifyForm" class="settings-security-form">
+                        <label for="totpCode">Six-digit verification code</label>
+                        <input id="totpCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+                        <button class="settings-security-button" type="submit">Verify and enable</button>
+                    </form>
+                </div>
+                <form id="totpDisableForm" class="settings-security-form" hidden>
+                    <label for="totpDisableCode">Current authenticator code to disable 2FA</label>
+                    <input id="totpDisableCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+                    <button class="settings-security-button settings-security-danger" type="submit">Disable authenticator</button>
+                </form>
+            </article>
+            <article class="settings-security-note">
+                <h3>Passcode lock this device</h3>
+                <p>This is a device-only screen lock, not an account password or server-side lock. Your passcode is stored as a salted PBKDF2 hash in this browser. It does not protect your account on other devices.</p>
+                <form id="passcodeSetupForm" class="settings-security-form">
+                    <label for="passcodeValue">New passcode (6–12 digits)</label>
+                    <input id="passcodeValue" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+                    <label for="passcodeConfirm">Confirm passcode</label>
+                    <input id="passcodeConfirm" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+                    <button class="settings-security-button" type="submit">Save device passcode</button>
+                </form>
+                <button class="settings-security-button" id="passcodeLockNow" type="button">Lock this device now</button>
+                <button class="settings-security-button settings-security-danger" id="passcodeRemove" type="button">Remove device passcode</button>
+                <p class="settings-security-status" id="passcodeStatus" role="status" aria-live="polite"></p>
+            </article>
+            <article class="settings-security-note settings-security-danger-zone">
+                <h3>Delete account</h3>
+                <p>This permanently deletes your Supabase login and associated WamsTube database records. Uploaded files in Supabase Storage may need separate cleanup. This cannot be undone. Apply <code>account-security.sql</code> in Supabase before using this control.</p>
+                <form id="deleteAccountForm" class="settings-security-form">
+                    <label for="deleteAccountConfirm">Type DELETE to confirm</label>
+                    <input id="deleteAccountConfirm" autocomplete="off" required>
+                    <button class="settings-security-button settings-security-danger" type="submit">Permanently delete my account</button>
+                </form>
+                <p class="settings-security-status" id="deleteAccountStatus" role="status" aria-live="polite"></p>
+            </article>
+        </section>
     </main>
-    <script src="settings.js"></script>
     <script src="supabase-config.js"></script>
+    <script src="settings.js"></script>
     <script src="site-theme.js"></script>
 </body>
 </html>
