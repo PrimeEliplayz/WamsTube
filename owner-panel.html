@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#7041b8">
     <title>Owner Panel - WamsTube</title>
+    <script>
+        if (!new URLSearchParams(window.location.search).has("embedded")) {
+            window.location.replace("k8m4q2x9.html");
+        }
+    </script>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="extras.css">
     <link rel="stylesheet" href="site-theme.css">
@@ -19,7 +24,7 @@
         <a class="account-button auth-home-link" href="index.html">Home</a>
     </header>
 
-    <main class="home-page admin-page owner-page">
+    <main class="home-page admin-page owner-page" hidden>
         <h1>WamsTube Owner Panel</h1>
         <p class="admin-warning" role="status">Checking owner access…</p>
         <p id="ownerPageMessage" class="admin-message" role="status" aria-live="polite"></p>
@@ -42,6 +47,44 @@
                     <button id="toggleSiteLockdown" type="button" class="owner-lock-button"><span class="material-symbols-rounded" aria-hidden="true">vpn_lock</span><span>Lock down site</span></button>
                 </div>
                 <p id="lockdownStatus" class="admin-result-count" role="status" aria-live="polite">Checking site status…</p>
+            </div>
+
+            <div class="owner-category">
+                <h3>Side panel button locks</h3>
+                <p>Temporarily block a side panel button for visitors and show your custom reason. Active owners and administrators can still use locked links.</p>
+                <label class="upload-label" for="sidebarLockButtonSelect">Side panel button</label>
+                <select id="sidebarLockButtonSelect" class="upload-input">
+                    <option value="index.html">Home</option>
+                    <option value="subscriptions.html">Wams Subscriptions</option>
+                    <option value="plus.html">WamsTube Plus</option>
+                    <option value="achievements.html">Achievements</option>
+                    <option value="bucks-store.html">Wams Bucks Store</option>
+                    <option value="my-wallet.html">My Wallet</option>
+                    <option value="whats-new.html">What’s New</option>
+                    <option value="report.html">Reporting</option>
+                    <option value="games.html">Games</option>
+                    <option value="k8m4q2x9.html">Owner panel</option>
+                    <option value="admin-panel">Admin panel</option>
+                    <option value="channel.html">Your Wams channel</option>
+                    <option value="history.html">History</option>
+                    <option value="playlists.html">Playlists</option>
+                    <option value="watch-later.html">Watch later</option>
+                    <option value="liked-videos.html">Liked videos</option>
+                    <option value="trending.html">Trending</option>
+                    <option value="music.html">Music</option>
+                    <option value="movies.html">Movies</option>
+                    <option value="live.html">Live</option>
+                    <option value="gaming.html">Gaming</option>
+                    <option value="shorts.html">Shorts</option>
+                    <option value="settings.html">Settings</option>
+                </select>
+                <label class="upload-label" for="sidebarLockReason">Reason shown when visitors click the locked button</label>
+                <textarea id="sidebarLockReason" class="upload-input" maxlength="500" rows="3" placeholder="This section is temporarily unavailable."></textarea>
+                <div class="admin-actions">
+                    <button id="lockSidebarButton" type="button" class="owner-lock-button"><span class="material-symbols-rounded" aria-hidden="true">lock</span><span>Lock selected button</span></button>
+                    <button id="unlockSidebarButton" type="button">Unlock selected button</button>
+                </div>
+                <p id="sidebarLockStatus" class="admin-result-count" role="status" aria-live="polite">Loading side panel button locks…</p>
             </div>
 
             <div class="owner-category">
