@@ -254,7 +254,32 @@
         catch { return null; }
     }
 
-    async function securityRequest(path, options = {}, token = getSecuritySession()?.access_token) {
+    async function refreshSecuritySession() {
+        const url = (window.WAMS_SUPABASE_URL || "").replace(/\/$/, "");
+        const anonKey = window.WAMS_SUPABASE_ANON_KEY || "";
+        const session = getSecuritySession();
+        if (!url || !anonKey || !session?.refresh_token) {
+            throw new Error("Your sign-in session expired. Sign out and sign in again, then retry the 2FA action.");
+        }
+
+        const response = await fetch(`${url}/auth/v1/token?grant_type=refresh_token`, {
+            method: "POST",
+            headers: { apikey: anonKey, "Content-Type": "application/json" },
+            body: JSON.stringify({ refresh_token: session.refresh_token })
+        });
+        const text = await response.text();
+        let payload = {};
+        try { payload = text ? JSON.parse(text) : {}; } catch { payload = {}; }
+        if (!response.ok || !payload.access_token) {
+            throw new Error("Your sign-in session expired. Sign out and sign in again, then retry the 2FA action.");
+        }
+
+        const refreshed = { ...session, ...payload, user: payload.user || session.user };
+        localStorage.setItem("wamsTubeSession", JSON.stringify(refreshed));
+        return refreshed.access_token;
+    }
+
+    async function securityRequest(path, options = {}, token = getSecuritySession()?.access_token, canRefresh = true) {
         const url = (window.WAMS_SUPABASE_URL || "").replace(/\/$/, "");
         const anonKey = window.WAMS_SUPABASE_ANON_KEY || "";
         if (!url || !anonKey || !token) throw new Error("Sign in with a configured Supabase account first.");
@@ -267,6 +292,10 @@
                 ...(options.headers || {})
             }
         });
+        if (response.status === 401 && canRefresh) {
+            const refreshedToken = await refreshSecuritySession();
+            return securityRequest(path, options, refreshedToken, false);
+        }
         const text = await response.text();
         let payload = {};
         try { payload = text ? JSON.parse(text) : {}; } catch { payload = {}; }
