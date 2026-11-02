@@ -1876,58 +1876,53 @@ function previewCustomBadge() {
     preview.classList.toggle("badge-gradient-animated", mode === "gradient");
 }
 
+function showAdminNotFound() {
+    window.location.replace("404.html");
+}
+
 async function bootAdmin() {
     const warning = document.querySelector(".admin-warning");
 
     setModerationEnabled(false);
 
-    if (!session?.access_token) {
-        if (warning) {
-            warning.textContent =
-                "Sign in with a Supabase administrator account to use moderation.";
-        }
-
-        notify("You are signed out.");
+    if (!session?.access_token || !session.user?.id) {
+        showAdminNotFound();
         return;
     }
 
     try {
         remoteAdmin = await checkAdmin();
+    } catch {
+        showAdminNotFound();
+        return;
+    }
 
-        if (!remoteAdmin) {
-            if (warning) {
-                warning.textContent =
-                    "This account does not have Supabase administrator access.";
-            }
+    if (!remoteAdmin) {
+        showAdminNotFound();
+        return;
+    }
 
-            notify("Admin access is required.");
-            return;
-        }
+    document.querySelector(".admin-page")?.removeAttribute("hidden");
+    if (warning) {
+        warning.textContent =
+            "Connected to Supabase as an administrator. Changes apply to the shared site.";
+    }
 
-        if (warning) {
-            warning.textContent =
-                "Connected to Supabase as an administrator. Changes apply to the shared site.";
-        }
-
-        setModerationEnabled(true);
-        try {
-            await loadCustomBadgeTypes();
-        } catch (error) {
-            notify(error.message);
-        }
-        try {
-            await loadUploadSetting();
-        } catch (error) {
-            if (uploadSettingStatus) uploadSettingStatus.textContent = error.message;
-            notify(error.message);
-        }
+    setModerationEnabled(true);
+    try {
+        await loadCustomBadgeTypes();
+    } catch (error) {
+        notify(error.message);
+    }
+    try {
+        await loadUploadSetting();
+    } catch (error) {
+        if (uploadSettingStatus) uploadSettingStatus.textContent = error.message;
+        notify(error.message);
+    }
+    try {
         await loadDashboard();
     } catch (error) {
-        if (warning) {
-            warning.textContent =
-                "Could not verify administrator access with Supabase.";
-        }
-
         notify(error.message);
     }
 }
