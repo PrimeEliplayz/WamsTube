@@ -27,6 +27,11 @@
     const ownerGameForm = document.getElementById("ownerGameForm");
     const ownerGamesList = document.getElementById("ownerGamesList");
     const ownerGamesStatus = document.getElementById("ownerGamesStatus");
+    const sidebarLockSelect = document.getElementById("sidebarLockButtonSelect");
+    const sidebarLockReason = document.getElementById("sidebarLockReason");
+    const sidebarLockStatus = document.getElementById("sidebarLockStatus");
+    let sidebarLocks = [];
+    let sidebarLockSetupError = "";
     let lockdownEnabled = false;
     let ownerProfiles = [];
     let announcementEnabled = false;
@@ -154,15 +159,21 @@
     }
 
     async function loadOwnerData() {
-        const [profiles, lockRows, announcements, auditRows, metricsRows, uploadRows] = await Promise.all([
+        const [profiles, lockRows, announcements, auditRows, metricsRows, uploadRows, buttonLockRows] = await Promise.all([
             request("profiles?select=id,channel_name,is_owner,is_admin,is_banned,is_suspected,channel_closed,channel_closed_message&order=channel_name.asc"),
             request("site_lockdown?singleton=eq.true&select=enabled,reason"),
             request("site_announcement?singleton=eq.true&select=enabled,title,body"),
             request("owner_audit_log?select=action,details,created_at&order=created_at.desc&limit=20"),
             request("rpc/owner_platform_metrics", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }),
-            request("platform_settings?setting=eq.uploads_enabled&select=enabled")
+            request("platform_settings?setting=eq.uploads_enabled&select=enabled"),
+            request("site_sidebar_locks?select=button_key,enabled,reason").catch(error => {
+                sidebarLockSetupError = `${error.message} Apply sidebar-button-locks.sql to enable this control.`;
+                return [];
+            })
         ]);
         ownerProfiles = profiles || [];
+        sidebarLocks = buttonLockRows || [];
+        renderSidebarButtonLock();
         renderAccounts();
         renderLockdown(lockRows?.[0]);
         renderAnnouncement(announcements?.[0]);
@@ -203,6 +214,56 @@
         });
         const updated = document.getElementById("ownerMetricsUpdated");
         if (updated) updated.textContent = `Updated ${new Date().toLocaleString()}`;
+    }
+
+    function renderSidebarButtonLock() {
+        if (!sidebarLockSelect) return;
+        const key = sidebarLockSelect.value;
+        const lock = sidebarLocks.find(item => item.button_key === key && item.enabled);
+        if (sidebarLockReason) sidebarLockReason.value = lock?.reason || "";
+        if (sidebarLockStatus) sidebarLockStatus.textContent = sidebarLockSetupError || (lock
+            ? `This button is locked · ${lock.reason || "No reason provided"}`
+            : "This button is currently available.");
+        const unlock = document.getElementById("unlockSidebarButton");
+        if (unlock) unlock.disabled = !lock;
+    }
+
+    async function saveSidebarButtonLock(locked) {
+        const buttonKey = sidebarLockSelect?.value;
+        const reason = sidebarLockReason?.value.trim() || "";
+        if (!buttonKey) return;
+        if (locked && !reason) {
+            if (sidebarLockStatus) sidebarLockStatus.textContent = "Enter a custom reason visitors will see.";
+            return;
+        }
+        const saveButton = document.getElementById(locked ? "lockSidebarButton" : "unlockSidebarButton");
+        if (saveButton) saveButton.disabled = true;
+        if (sidebarLockStatus) sidebarLockStatus.textContent = locked ? "Locking button…" : "Unlocking button…";
+        try {
+            await request("rpc/owner_set_sidebar_button_lock", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ p_button_key: buttonKey, p_locked: locked, p_lock_reason: locked ? reason : null })
+            });
+            const existing = sidebarLocks.find(item => item.button_key === buttonKey);
+            if (existing) {
+                existing.enabled = locked;
+                existing.reason = locked ? reason : null;
+            } else if (locked) {
+                sidebarLocks.push({ button_key: buttonKey, enabled: true, reason });
+            }
+            renderSidebarButtonLock();
+            if (sidebarLockStatus) sidebarLockStatus.textContent = locked
+                ? "Button locked for visitors; your custom reason will be shown when they click it."
+                : "Button unlocked.";
+        } catch (error) {
+            if (sidebarLockStatus) sidebarLockStatus.textContent = `${error.message} Apply the sidebar button locks SQL setup if this feature is not configured.`;
+        } finally {
+            if (saveButton) saveButton.disabled = false;
+            const current = sidebarLocks.find(item => item.button_key === sidebarLockSelect?.value && item.enabled);
+            const unlockButton = document.getElementById("unlockSidebarButton");
+            if (unlockButton) unlockButton.disabled = !current;
+        }
     }
 
     function renderUploadSetting(row) {
@@ -603,21 +664,33 @@
         }
     }
 
+    function showNotFound() {
+        try {
+            const target = window.parent && window.parent !== window ? window.parent : window;
+            target.location.replace("404.html");
+        } catch {
+            window.location.replace("404.html");
+        }
+    }
+
     async function initialize() {
         const warning = document.querySelector(".admin-warning");
+        let accessVerified = false;
         setButtons(false);
         if (!session?.access_token || !session.user?.id) {
-            if (warning) warning.textContent = "Sign in with an approved Owner account to use these controls.";
+            showNotFound();
             return;
         }
         try {
             const profiles = await request(`profiles?id=eq.${encodeURIComponent(session.user.id)}&select=is_owner,is_banned,is_suspected`);
             const profile = profiles?.[0];
             if (!profile?.is_owner || profile.is_banned || profile.is_suspected) {
-                if (warning) warning.textContent = "This account does not have active Owner access.";
+                showNotFound();
                 return;
             }
+            accessVerified = true;
             panel.hidden = false;
+            panel.closest("main")?.removeAttribute("hidden");
             setButtons(true);
             if (warning) warning.textContent = "Verified as an active Owner. These controls are separate from Administrator moderation tools.";
             await loadOwnerData();
@@ -630,7 +703,11 @@
                 if (suggestionsStatus) suggestionsStatus.textContent = `${error.message} Apply the arcade games database migration to enable suggestions.`;
             }
         } catch (error) {
-            if (warning) warning.textContent = `Could not verify Owner access: ${error.message}`;
+            if (!accessVerified) {
+                showNotFound();
+                return;
+            }
+            if (warning) warning.textContent = `Could not load Owner tools: ${error.message}`;
             if (lockdownStatus) lockdownStatus.textContent = error.message;
         }
     }
@@ -661,6 +738,9 @@
     document.getElementById("reopenSelectedChannel")?.addEventListener("click", () => setChannelClosure(false));
     document.getElementById("ownerSubscribeAccount")?.addEventListener("click", subscribeAccountToChannel);
     lockButton?.addEventListener("click", toggleLockdown);
+    sidebarLockSelect?.addEventListener("change", renderSidebarButtonLock);
+    document.getElementById("lockSidebarButton")?.addEventListener("click", () => saveSidebarButtonLock(true));
+    document.getElementById("unlockSidebarButton")?.addEventListener("click", () => saveSidebarButtonLock(false));
     ownerGameForm?.addEventListener("submit", saveOwnerGame);
     document.getElementById("cancelOwnerGameEdit")?.addEventListener("click", clearOwnerGameForm);
     initialize();
