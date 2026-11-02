@@ -742,6 +742,16 @@ margin-top: 0;
 .auth-page { min-height: 100vh; display: grid; place-items: center; padding: 90px 16px 30px; }
 .auth-standalone { width: min(100%, 440px); }
 .auth-heading { margin: 0 0 10px; font-size: 25px; }
+.two-factor-card { border: 1px solid #e8e8e8; text-align: center; }
+.two-factor-icon { display: grid; width: 54px; height: 54px; place-items: center; margin: 0 auto 18px; border-radius: 16px; background: #eef4ff; font-size: 27px; }
+.two-factor-card .auth-help { margin: 0 0 22px; }
+.two-factor-card .upload-label { text-align: left; }
+.two-factor-code { min-height: 54px; font-size: 25px; font-weight: 700; letter-spacing: .35em; text-align: center; }
+.two-factor-status { margin-bottom: 0; text-align: left; }
+.two-factor-status:empty { min-height: 0; }
+.two-factor-actions { justify-content: center; flex-wrap: wrap; }
+.two-factor-cancel { min-height: 40px; padding: 0 16px; border: 1px solid #d3d3d3; border-radius: 20px; background: #fff; color: #333; font-weight: 600; cursor: pointer; }
+.two-factor-actions button:disabled { cursor: wait; opacity: .6; }
 .auth-help,
 .auth-setup-note { color: #606060; font-size: 14px; line-height: 1.5; }
 .auth-actions { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
