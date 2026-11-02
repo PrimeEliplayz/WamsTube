@@ -1,497 +1,105 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Settings - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body class="settings-body">
+    <header class="settings-topbar">
+        <a class="settings-brand" href="index.html" aria-label="WamsTube home">
+            <img src="download.jpeg" alt="">
+            <span>WamsTube</span>
+        </a>
+        <a class="settings-home-link" href="index.html"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span> Back to WamsTube</a>
+    </header>
 
-(() => {
-    const groups = [
-        { title: "Playback", icon: "play_circle", items: [
-            "Autoplay next video", "Start videos muted", "Remember playback position", "Prefer higher video quality", "Use data-saving playback", "Show playback controls", "Skip silent parts", "Enable loop playback", "Use keyboard media shortcuts", "Keep player theater-sized"
-        ] },
-        { title: "Appearance", icon: "palette", items: [
-            "Use dark appearance", "Use compact video cards", "Show video thumbnails", "Show channel avatars", "Show video dates", "Use larger text", "Use reduced motion", "Use high contrast", "Keep sidebar expanded", "Show animations"
-        ] },
-        { title: "Privacy", icon: "lock", items: [
-            "Pause watch history", "Pause search history", "Keep liked videos private", "Keep subscriptions private", "Hide my online activity", "Limit personalized recommendations", "Clear search when leaving", "Hide my channel from suggestions", "Allow channel mentions", "Allow video embeds"
-        ] },
-        { title: "Notifications", icon: "notifications", items: [
-            "New subscriber alerts", "Video like alerts", "Comment like alerts", "New comment alerts", "Creator upload alerts", "Important admin messages", "Inbox badge count", "Quiet notification sounds", "Weekly activity summary", "Product update announcements"
-        ] },
-        { title: "Accessibility", icon: "accessibility_new", items: [
-            "Prefer captions when available", "Show caption background", "Use larger captions", "Use keyboard navigation hints", "Announce page changes to screen readers", "Reduce flashing content", "Use clear focus outlines", "Prefer simple language", "Enable extra-readable spacing", "Keep controls easy to reach"
-        ] },
-        { title: "Search", icon: "manage_search", items: [
-            "Show search suggestions", "Include channels in search", "Include videos in search", "Remember recent searches", "Show spelling suggestions", "Prefer newest search results", "Show video dates in results", "Search descriptions", "Keep search filters", "Open selected result directly"
-        ] },
-        { title: "Content", icon: "video_library", items: [
-            "Show Shorts in recommendations", "Show live videos in recommendations", "Show subscriber-only labels", "Show verified badges", "Show creator badges", "Show video descriptions", "Show community content", "Filter sensitive titles", "Hide videos already watched", "Prioritize subscribed channels"
-        ] },
-        { title: "Data and playback", icon: "data_usage", items: [
-            "Prefer Wi-Fi for high quality", "Preload video previews", "Preload next video", "Use lower quality on slow connections", "Show data-saving reminders", "Pause previews when off screen", "Avoid animated previews", "Load fewer videos at once", "Keep images optimized", "Ask before using mobile data"
-        ] },
-        { title: "Channel", icon: "account_circle", items: [
-            "Show subscriber count on my channel", "Show my public uploads", "Show my public playlists", "Show my channel description", "Allow subscribers-only videos", "Allow video comments by default", "Notify me about new subscribers", "Show channel activity", "Display my Plus badge", "Show monetization status"
-        ] },
-        { title: "General", icon: "tune", items: [
-            "Open links in the same tab", "Confirm before leaving an upload", "Remember this device", "Show helpful tips", "Show keyboard shortcuts", "Use 24-hour time", "Use relative dates", "Keep settings search text", "Show save confirmations", "Send anonymous diagnostics"
-        ] }
-    ];
-
-    const securityCategory = { title: "Security", icon: "security", keywords: "account security password change passcode lock delete account authenticator totp two factor 2fa" };
-    const storageKey = "wamsTubePreferences";
-    const nav = document.getElementById("settingsCategoryNav");
-    const container = document.getElementById("settingsCategories");
-    const securityPanel = document.getElementById("settingsSecurity");
-    const search = document.getElementById("settingsSearch");
-    const status = document.getElementById("settingsStatus");
-    const count = document.getElementById("settingsCount");
-    const reset = document.getElementById("settingsReset");
-    let preferences = loadPreferences();
-    let selectedCategory = groups[0].title;
-
-    function loadPreferences() {
-        try {
-            const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
-            return saved && typeof saved === "object" ? saved : {};
-        } catch {
-            return {};
-        }
-    }
-
-    function savePreferences() {
-        try {
-            localStorage.setItem(storageKey, JSON.stringify(preferences));
-            status.textContent = "All changes saved on this device.";
-            status.classList.remove("is-error");
-        } catch {
-            status.textContent = "Could not save settings. Check this browser's storage permissions.";
-            status.classList.add("is-error");
-        }
-    }
-
-    function matchesGroup(group, query) {
-        return !query || group.title.toLocaleLowerCase().includes(query) ||
-            group.items.some(item => item.toLocaleLowerCase().includes(query));
-    }
-
-    function render() {
-        const query = search.value.trim().toLocaleLowerCase();
-        const available = groups.filter(group => matchesGroup(group, query));
-        const securityMatches = !query || `${securityCategory.title} ${securityCategory.keywords}`.toLocaleLowerCase().includes(query);
-        if (securityMatches) available.push(securityCategory);
-
-        if (!available.some(category => category.title === selectedCategory)) {
-            selectedCategory = available[0]?.title || "";
-        }
-
-        nav.replaceChildren();
-        available.forEach(category => {
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "settings-category-button";
-            button.setAttribute("aria-current", String(category.title === selectedCategory));
-            const icon = document.createElement("span");
-            icon.className = "material-symbols-rounded";
-            icon.setAttribute("aria-hidden", "true");
-            icon.textContent = category.icon;
-            const label = document.createElement("span");
-            label.textContent = category.title;
-            button.append(icon, label);
-            button.addEventListener("click", () => {
-                selectedCategory = category.title;
-                render();
-            });
-            nav.appendChild(button);
-        });
-
-        container.replaceChildren();
-        securityPanel.hidden = selectedCategory !== securityCategory.title;
-        reset.disabled = selectedCategory === securityCategory.title;
-
-        if (selectedCategory === securityCategory.title) {
-            count.textContent = "Account security";
-            return;
-        }
-
-        const group = groups.find(item => item.title === selectedCategory);
-        if (!group) {
-            count.textContent = "0 settings";
-            const empty = document.createElement("p");
-            empty.className = "settings-empty";
-            empty.textContent = "No categories match your search.";
-            container.appendChild(empty);
-            return;
-        }
-
-        const matchingItems = group.items
-            .map((label, itemIndex) => ({ label, itemIndex }))
-            .filter(item => !query || `${group.title} ${item.label}`.toLocaleLowerCase().includes(query));
-        const section = document.createElement("section");
-        section.className = "settings-section";
-        const heading = document.createElement("h2");
-        heading.className = "settings-section-heading";
-        const icon = document.createElement("span");
-        icon.className = "material-symbols-rounded";
-        icon.setAttribute("aria-hidden", "true");
-        icon.textContent = group.icon;
-        const title = document.createElement("span");
-        title.textContent = group.title;
-        heading.append(icon, title);
-        section.appendChild(heading);
-
-        matchingItems.forEach(({ label, itemIndex }) => {
-            const key = `${groups.indexOf(group)}-${itemIndex}`;
-            const row = document.createElement("label");
-            row.className = "settings-row";
-            const copy = document.createElement("span");
-            copy.className = "settings-row-copy";
-            const name = document.createElement("strong");
-            name.textContent = label;
-            const description = document.createElement("small");
-            description.textContent = "Stored in this browser; account sync is not enabled.";
-            copy.append(name, description);
-            const toggle = document.createElement("input");
-            toggle.className = "settings-toggle-input";
-            toggle.type = "checkbox";
-            toggle.checked = preferences[key] ?? defaultValue(groups.indexOf(group), itemIndex);
-            toggle.setAttribute("aria-label", label);
-            const switchUI = document.createElement("span");
-            switchUI.className = "settings-switch";
-            row.append(copy, toggle, switchUI);
-            toggle.addEventListener("change", () => {
-                preferences[key] = toggle.checked;
-                savePreferences();
-            });
-            section.appendChild(row);
-        });
-        container.appendChild(section);
-        count.textContent = `${matchingItems.length} ${matchingItems.length === 1 ? "setting" : "settings"}`;
-    }
-
-    function defaultValue(groupIndex, itemIndex) {
-        if (groupIndex === 2) return itemIndex >= 6;
-        if (groupIndex === 9) return itemIndex !== 9;
-        return true;
-    }
-
-    search.addEventListener("input", render);
-    reset.addEventListener("click", () => {
-        if (!window.confirm("Reset all 100 preferences to their defaults?")) return;
-        preferences = {};
-        savePreferences();
-        render();
-    });
-
-    document.getElementById("passwordChangeForm").addEventListener("submit", async event => {
-        event.preventDefault();
-        const message = document.getElementById("passwordChangeStatus");
-        const currentPassword = document.getElementById("currentPassword").value;
-        const newPassword = document.getElementById("newPassword").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
-        const session = (() => {
-            try { return JSON.parse(localStorage.getItem("wamsTubeSession") || "null"); }
-            catch { return null; }
-        })();
-        const supabaseUrl = (window.WAMS_SUPABASE_URL || "").replace(/\/$/, "");
-        const anonKey = window.WAMS_SUPABASE_ANON_KEY || "";
-        const form = event.currentTarget;
-        const submit = form.querySelector('button[type="submit"]');
-        message.textContent = "";
-        message.classList.remove("is-error");
-
-        if (!session?.user?.email || !session?.access_token || !supabaseUrl || !anonKey) {
-            message.textContent = "Sign in with a configured account before changing your password.";
-            message.classList.add("is-error");
-            return;
-        }
-        if (newPassword.length < 8) {
-            message.textContent = "Choose a password with at least 8 characters.";
-            message.classList.add("is-error");
-            return;
-        }
-        if (newPassword !== confirmPassword) {
-            message.textContent = "The new passwords do not match.";
-            message.classList.add("is-error");
-            return;
-        }
-
-        submit.disabled = true;
-        submit.textContent = "Updating…";
-        try {
-            const verified = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
-                method: "POST",
-                headers: { apikey: anonKey, "Content-Type": "application/json" },
-                body: JSON.stringify({ email: session.user.email, password: currentPassword })
-            });
-            const verifiedData = await verified.json();
-            if (!verified.ok || !verifiedData.access_token) {
-                throw new Error(verifiedData.msg || verifiedData.message || "Current password could not be verified.");
-            }
-
-            const updated = await fetch(`${supabaseUrl}/auth/v1/user`, {
-                method: "PUT",
-                headers: {
-                    apikey: anonKey,
-                    Authorization: `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ password: newPassword })
-            });
-            const updatedData = await updated.json();
-            if (!updated.ok) {
-                throw new Error(updatedData.msg || updatedData.message || "Password update failed.");
-            }
-            form.reset();
-            message.textContent = "Password updated. Supabase stores it as a server-side hash; it is not saved in this browser.";
-        } catch (error) {
-            message.textContent = error.message || "Could not update the password. Please try again.";
-            message.classList.add("is-error");
-        } finally {
-            submit.disabled = false;
-            submit.textContent = "Change password";
-        }
-    });
-
-    function getSecuritySession() {
-        try { return JSON.parse(localStorage.getItem("wamsTubeSession") || "null"); }
-        catch { return null; }
-    }
-
-    async function securityRequest(path, options = {}, token = getSecuritySession()?.access_token) {
-        const url = (window.WAMS_SUPABASE_URL || "").replace(/\/$/, "");
-        const anonKey = window.WAMS_SUPABASE_ANON_KEY || "";
-        if (!url || !anonKey || !token) throw new Error("Sign in with a configured Supabase account first.");
-        const response = await fetch(`${url}${path}`, {
-            ...options,
-            headers: {
-                apikey: anonKey,
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                ...(options.headers || {})
-            }
-        });
-        const text = await response.text();
-        let payload = {};
-        try { payload = text ? JSON.parse(text) : {}; } catch { payload = {}; }
-        if (!response.ok) throw new Error(payload.msg || payload.message || payload.error_description || text || `Request failed (${response.status}).`);
-        return payload;
-    }
-
-    const totpStatus = document.getElementById("totpStatus");
-    const totpSetupButton = document.getElementById("totpSetupButton");
-    const totpSetupArea = document.getElementById("totpSetupArea");
-    const totpQrCode = document.getElementById("totpQrCode");
-    const totpSecret = document.getElementById("totpSecret");
-    const totpVerifyForm = document.getElementById("totpVerifyForm");
-    const totpDisableForm = document.getElementById("totpDisableForm");
-    let totpFactorId = "";
-    let verifiedTotpFactorId = "";
-
-    function rememberElevatedSession(data) {
-        if (!data?.access_token) return;
-        const previous = getSecuritySession() || {};
-        localStorage.setItem("wamsTubeSession", JSON.stringify({
-            ...previous,
-            ...data,
-            user: data.user || previous.user
-        }));
-    }
-
-    async function loadTotpStatus() {
-        try {
-            const user = await securityRequest("/auth/v1/user");
-            const factors = Array.isArray(user.factors) ? user.factors : [];
-            const verified = factors.find(factor => factor.factor_type === "totp" && factor.status === "verified");
-            const pending = factors.find(factor => factor.factor_type === "totp" && factor.status !== "verified");
-            verifiedTotpFactorId = verified?.id || "";
-            if (totpStatus) totpStatus.textContent = verified
-                ? "Two-step verification is enabled for this account."
-                : pending ? "An unfinished authenticator setup exists. Remove it in Supabase Auth or finish setting it up." : "Two-step verification is not enabled.";
-            if (totpSetupButton) totpSetupButton.hidden = Boolean(verified || pending);
-            if (totpDisableForm) totpDisableForm.hidden = !verified;
-            return factors;
-        } catch (error) {
-            if (totpStatus) {
-                totpStatus.textContent = error.message || "Could not load authenticator status.";
-                totpStatus.classList.add("is-error");
-            }
-            if (totpSetupButton) totpSetupButton.disabled = true;
-            return [];
-        }
-    }
-
-    totpSetupButton?.addEventListener("click", async () => {
-        totpSetupButton.disabled = true;
-        if (totpStatus) totpStatus.textContent = "Starting authenticator setup…";
-        try {
-            const factor = await securityRequest("/auth/v1/factors", {
-                method: "POST",
-                body: JSON.stringify({ factor_type: "totp", friendly_name: "WamsTube authenticator" })
-            });
-            totpFactorId = factor.id;
-            const qr = factor.totp?.qr_code || "";
-            if (totpQrCode && qr) {
-                totpQrCode.src = qr.startsWith("<svg") ? `data:image/svg+xml,${encodeURIComponent(qr)}` : qr;
-                totpQrCode.hidden = false;
-            }
-            if (totpSecret) totpSecret.textContent = factor.totp?.secret || "Check the setup response in Supabase Auth.";
-            if (totpSetupArea) totpSetupArea.hidden = false;
-            if (totpStatus) totpStatus.textContent = "Scan the QR code or enter the setup key, then verify a current code.";
-            totpSetupButton.hidden = true;
-        } catch (error) {
-            if (totpStatus) {
-                totpStatus.textContent = error.message || "Could not start authenticator setup.";
-                totpStatus.classList.add("is-error");
-            }
-            totpSetupButton.disabled = false;
-        }
-    });
-
-    totpVerifyForm?.addEventListener("submit", async event => {
-        event.preventDefault();
-        const code = document.getElementById("totpCode").value.trim();
-        if (!totpFactorId || !/^\d{6}$/.test(code)) {
-            if (totpStatus) totpStatus.textContent = "Enter the six-digit code from your authenticator app.";
-            return;
-        }
-        const button = totpVerifyForm.querySelector('button[type="submit"]');
-        button.disabled = true;
-        try {
-            const challenge = await securityRequest(`/auth/v1/factors/${encodeURIComponent(totpFactorId)}/challenge`, { method: "POST", body: "{}" });
-            const verified = await securityRequest(`/auth/v1/factors/${encodeURIComponent(totpFactorId)}/verify`, {
-                method: "POST",
-                body: JSON.stringify({ challenge_id: challenge.id, code })
-            });
-            rememberElevatedSession(verified);
-            totpVerifyForm.reset();
-            if (totpSetupArea) totpSetupArea.hidden = true;
-            if (totpStatus) {
-                totpStatus.textContent = "Two-step verification is enabled.";
-                totpStatus.classList.remove("is-error");
-            }
-            await loadTotpStatus();
-        } catch (error) {
-            if (totpStatus) {
-                totpStatus.textContent = error.message || "Could not verify the authenticator code.";
-                totpStatus.classList.add("is-error");
-            }
-        } finally {
-            button.disabled = false;
-        }
-    });
-
-    totpDisableForm?.addEventListener("submit", async event => {
-        event.preventDefault();
-        const code = document.getElementById("totpDisableCode").value.trim();
-        const button = totpDisableForm.querySelector('button[type="submit"]');
-        if (!verifiedTotpFactorId || !/^\d{6}$/.test(code)) return;
-        button.disabled = true;
-        try {
-            const challenge = await securityRequest(`/auth/v1/factors/${encodeURIComponent(verifiedTotpFactorId)}/challenge`, { method: "POST", body: "{}" });
-            const verified = await securityRequest(`/auth/v1/factors/${encodeURIComponent(verifiedTotpFactorId)}/verify`, {
-                method: "POST",
-                body: JSON.stringify({ challenge_id: challenge.id, code })
-            });
-            rememberElevatedSession(verified);
-            const token = verified.access_token || getSecuritySession()?.access_token;
-            await securityRequest(`/auth/v1/factors/${encodeURIComponent(verifiedTotpFactorId)}`, { method: "DELETE" }, token);
-            totpDisableForm.reset();
-            if (totpStatus) {
-                totpStatus.textContent = "Two-step verification has been disabled.";
-                totpStatus.classList.remove("is-error");
-            }
-            await loadTotpStatus();
-        } catch (error) {
-            if (totpStatus) {
-                totpStatus.textContent = error.message || "Could not disable authenticator verification.";
-                totpStatus.classList.add("is-error");
-            }
-        } finally {
-            button.disabled = false;
-        }
-    });
-
-    loadTotpStatus();
-
-    const passcodeForm = document.getElementById("passcodeSetupForm");
-    const passcodeStatus = document.getElementById("passcodeStatus");
-    passcodeForm.addEventListener("submit", async event => {
-        event.preventDefault();
-        const first = document.getElementById("passcodeValue").value;
-        const second = document.getElementById("passcodeConfirm").value;
-        const session = getSecuritySession();
-        if (!session?.user?.id) {
-            passcodeStatus.textContent = "Sign in before setting a device passcode.";
-            passcodeStatus.classList.add("is-error");
-            return;
-        }
-        if (!/^\d{6,12}$/.test(first) || first !== second) {
-            passcodeStatus.textContent = "Use matching passcodes containing 6–12 digits.";
-            passcodeStatus.classList.add("is-error");
-            return;
-        }
-        try {
-            const salt = crypto.getRandomValues(new Uint8Array(16));
-            const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(first), "PBKDF2", false, ["deriveBits"]);
-            const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" }, material, 256);
-            const encode = bytes => btoa(String.fromCharCode(...bytes));
-            localStorage.setItem("wamsTubePasscodeLock", JSON.stringify({ userId: session.user.id, salt: encode(salt), hash: encode(new Uint8Array(bits)), locked: false }));
-            passcodeForm.reset();
-            passcodeStatus.textContent = "Device passcode saved. Use “Lock this device now” when you want to lock this browser.";
-            passcodeStatus.classList.remove("is-error");
-        } catch {
-            passcodeStatus.textContent = "Could not save the passcode in this browser.";
-            passcodeStatus.classList.add("is-error");
-        }
-    });
-
-    document.getElementById("passcodeLockNow").addEventListener("click", () => {
-        try {
-            const lock = JSON.parse(localStorage.getItem("wamsTubePasscodeLock") || "null");
-            const session = getSecuritySession();
-            if (!lock?.hash || lock.userId !== session?.user?.id) throw new Error("Set a device passcode first.");
-            lock.locked = true;
-            localStorage.setItem("wamsTubePasscodeLock", JSON.stringify(lock));
-            window.location.reload();
-        } catch (error) {
-            passcodeStatus.textContent = error.message || "Could not lock this device.";
-            passcodeStatus.classList.add("is-error");
-        }
-    });
-
-    document.getElementById("passcodeRemove").addEventListener("click", () => {
-        localStorage.removeItem("wamsTubePasscodeLock");
-        passcodeStatus.textContent = "The device passcode was removed from this browser.";
-        passcodeStatus.classList.remove("is-error");
-    });
-
-    document.getElementById("deleteAccountForm").addEventListener("submit", async event => {
-        event.preventDefault();
-        const message = document.getElementById("deleteAccountStatus");
-        const button = event.currentTarget.querySelector('button[type="submit"]');
-        const session = getSecuritySession();
-        if (document.getElementById("deleteAccountConfirm").value.trim() !== "DELETE") {
-            message.textContent = 'Type DELETE exactly to confirm account deletion.';
-            message.classList.add("is-error");
-            return;
-        }
-        if (!session?.access_token) {
-            message.textContent = "Sign in before deleting your account.";
-            message.classList.add("is-error");
-            return;
-        }
-        if (!window.confirm("Permanently delete your account and all associated WamsTube profile data? This cannot be undone.")) return;
-        button.disabled = true;
-        message.textContent = "";
-        try {
-            await securityRequest("/rest/v1/rpc/delete_my_wams_account", { method: "POST", body: "{}" });
-            localStorage.removeItem("wamsTubeSession");
-            localStorage.removeItem("wamsTubePasscodeLock");
-            window.location.href = "login.html";
-        } catch (error) {
-            message.textContent = error.message;
-            message.classList.add("is-error");
-        } finally {
-            button.disabled = false;
-        }
-    });
-
-    render();
-})();
+    <main class="settings-page">
+        <div class="settings-heading">
+            <div>
+                <p class="settings-eyebrow">YOUR EXPERIENCE</p>
+                <h1>Settings</h1>
+                <p>Manage your experience, preferences, and account security.</p>
+            </div>
+            <button class="settings-reset" id="settingsReset" type="button">Reset all</button>
+        </div>
+        <div class="settings-toolbar">
+            <label class="settings-search-label" for="settingsSearch"><span class="material-symbols-rounded" aria-hidden="true">search</span></label>
+            <input id="settingsSearch" type="search" placeholder="Search settings" autocomplete="off">
+            <span id="settingsCount" class="settings-count" aria-live="polite">100 settings</span>
+        </div>
+        <p class="settings-status" id="settingsStatus" role="status" aria-live="polite">Changes save automatically on this device.</p>
+        <nav class="settings-category-nav" id="settingsCategoryNav" aria-label="Settings categories"></nav>
+        <div class="settings-categories" id="settingsCategories"></div>
+        <section class="settings-security" id="settingsSecurity" hidden aria-labelledby="securityHeading">
+            <h2 id="securityHeading">Account security</h2>
+            <p class="settings-security-intro">Your password is sent securely to Supabase for verification and password updates. Supabase hashes and stores it on the server; this page never saves your password.</p>
+            <form id="passwordChangeForm" class="settings-security-form">
+                <label for="currentPassword">Current password</label>
+                <input id="currentPassword" type="password" autocomplete="current-password" required>
+                <label for="newPassword">New password</label>
+                <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+                <button class="settings-security-button" type="submit">Change password</button>
+                <p class="settings-security-status" id="passwordChangeStatus" role="status" aria-live="polite"></p>
+            </form>
+            <article class="settings-security-note">
+                <h3>Authenticator app (TOTP)</h3>
+                <p>Add a time-based one-time password from an authenticator app. You’ll need a current six-digit code to finish setup and to sign in.</p>
+                <p class="settings-security-status" id="totpStatus" role="status" aria-live="polite">Checking authenticator status…</p>
+                <button class="settings-security-button" id="totpSetupButton" type="button">Set up authenticator</button>
+                <div id="totpSetupArea" hidden>
+                    <p>Scan this QR code with your authenticator app, or enter the setup key manually.</p>
+                    <img id="totpQrCode" alt="Authenticator setup QR code" hidden>
+                    <p>Setup key: <code id="totpSecret"></code></p>
+                    <form id="totpVerifyForm" class="settings-security-form">
+                        <label for="totpCode">Six-digit verification code</label>
+                        <input id="totpCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+                        <button class="settings-security-button" type="submit">Verify and enable</button>
+                    </form>
+                </div>
+                <form id="totpDisableForm" class="settings-security-form" hidden>
+                    <label for="totpDisableCode">Current authenticator code to disable 2FA</label>
+                    <input id="totpDisableCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+                    <button class="settings-security-button settings-security-danger" type="submit">Disable authenticator</button>
+                </form>
+            </article>
+            <article class="settings-security-note">
+                <h3>Passcode lock this device</h3>
+                <p>This is a device-only screen lock, not an account password or server-side lock. Your passcode is stored as a salted PBKDF2 hash in this browser. It does not protect your account on other devices.</p>
+                <form id="passcodeSetupForm" class="settings-security-form">
+                    <label for="passcodeValue">New passcode (6–12 digits)</label>
+                    <input id="passcodeValue" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+                    <label for="passcodeConfirm">Confirm passcode</label>
+                    <input id="passcodeConfirm" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+                    <button class="settings-security-button" type="submit">Save device passcode</button>
+                </form>
+                <button class="settings-security-button" id="passcodeLockNow" type="button">Lock this device now</button>
+                <button class="settings-security-button settings-security-danger" id="passcodeRemove" type="button">Remove device passcode</button>
+                <p class="settings-security-status" id="passcodeStatus" role="status" aria-live="polite"></p>
+            </article>
+            <article class="settings-security-note settings-security-danger-zone">
+                <h3>Delete account</h3>
+                <p>This permanently deletes your Supabase login and associated WamsTube database records. Uploaded files in Supabase Storage may need separate cleanup. This cannot be undone. Apply <code>account-security.sql</code> in Supabase before using this control.</p>
+                <form id="deleteAccountForm" class="settings-security-form">
+                    <label for="deleteAccountConfirm">Type DELETE to confirm</label>
+                    <input id="deleteAccountConfirm" autocomplete="off" required>
+                    <button class="settings-security-button settings-security-danger" type="submit">Permanently delete my account</button>
+                </form>
+                <p class="settings-security-status" id="deleteAccountStatus" role="status" aria-live="polite"></p>
+            </article>
+        </section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="settings.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>
