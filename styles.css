@@ -754,6 +754,16 @@ margin-top: 0;
 .two-factor-actions button:disabled { cursor: wait; opacity: .6; }
 .auth-help,
 .auth-setup-note { color: #606060; font-size: 14px; line-height: 1.5; }
+.auth-terms-option { display: flex; align-items: flex-start; gap: 9px; margin-top: 16px; color: #333; font-size: 14px; line-height: 1.5; }
+.auth-terms-option input { flex: 0 0 auto; width: 17px; height: 17px; margin: 1px 0 0; accent-color: #065fd4; }
+.auth-terms-option a { color: #065fd4; }
+.auth-captcha-field { margin-top: 16px; }
+.auth-captcha-field .auth-setup-note { margin: 8px 0 0; font-size: 12px; }
+.terms-card { width: min(100%, 680px); line-height: 1.6; }
+.terms-card h2 { margin: 22px 0 6px; font-size: 17px; }
+.terms-card p { color: #444; font-size: 14px; }
+.terms-card .terms-draft-note { padding: 12px; border-left: 4px solid #d79500; background: #fff8e6; }
+.terms-card .terms-effective-date { margin-top: 24px; color: #666; font-size: 12px; }
 .auth-actions { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
 .auth-secondary { color: #065fd4; font-weight: 600; text-decoration: none; }
 .auth-home-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
