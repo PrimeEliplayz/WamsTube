@@ -553,7 +553,11 @@
 
             submit.textContent = signupMode ? "Creating account…" : "Signing in…";
             const body = { email, password };
-            if (signupMode) body.captcha_token = turnstileToken;
+            if (signupMode) {
+                body.gotrue_meta_security = {
+                    captcha_token: turnstileToken
+                };
+            }
             const path = signupMode ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password";
             if (signupMode) {
                 body.data = {
