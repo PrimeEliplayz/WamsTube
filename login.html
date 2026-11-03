@@ -14,6 +14,7 @@
             <span>Wams Tube</span>
         </a>
         <a class="account-button auth-home-link" href="index.html">Home</a>
+        <button class="account-button" id="accountButton" type="button">Sign in</button>
     </header>
     <main class="auth-page">
         <section class="auth-box auth-standalone">
@@ -27,6 +28,10 @@
                 <label class="upload-label" for="signupChannel">Channel name</label>
                 <input class="upload-input" id="signupChannel" maxlength="40" placeholder="Choose your channel name">
             </div>
+            <div id="signupCaptchaField" class="auth-captcha-field">
+                <div id="signupTurnstile"></div>
+                <p class="auth-setup-note" id="signupCaptchaHelp">Complete the Cloudflare check to sign in.</p>
+            </div>
             <p class="auth-error" id="authError" role="alert"></p>
             <div class="auth-actions">
                 <button id="authSubmit" type="button" onclick="submitAuth()">Sign in</button>
@@ -36,6 +41,7 @@
         </section>
     </main>
     <script src="supabase-config.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=wamsTurnstileLoaded&render=explicit" defer></script>
     <script src="auth.js"></script>
     <script src="supabase-config.js"></script>
     <script src="site-theme.js"></script>
