@@ -561,6 +561,7 @@
             const body = {
                 email,
                 password,
+                captcha_token: turnstileToken,
                 gotrue_meta_security: {
                     captcha_token: turnstileToken
                 }
