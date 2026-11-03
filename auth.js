@@ -7,6 +7,47 @@
 
     const supabaseAnonKey =
         window.WAMS_SUPABASE_ANON_KEY || "";
+    let turnstileWidgetId = null;
+    let turnstileToken = "";
+
+    window.wamsTurnstileLoaded = function () {
+        renderSignupCaptcha();
+    };
+
+    function renderSignupCaptcha() {
+        const container = document.getElementById("signupTurnstile");
+        if (!signupMode || !container) return;
+
+        const siteKey = window.WAMS_TURNSTILE_SITE_KEY || "";
+        const help = document.getElementById("signupCaptchaHelp");
+        if (!siteKey) {
+            if (help) help.textContent = "Account creation is not configured yet: add the Cloudflare Turnstile site key.";
+            return;
+        }
+        if (!window.turnstile) return;
+        if (turnstileWidgetId !== null) return;
+
+        if (help) help.textContent = "Complete the Cloudflare check to create an account.";
+        turnstileWidgetId = window.turnstile.render(container, {
+            sitekey: siteKey,
+            callback(token) {
+                turnstileToken = token;
+            },
+            "expired-callback"() {
+                turnstileToken = "";
+            },
+            "error-callback"() {
+                turnstileToken = "";
+            }
+        });
+    }
+
+    function resetSignupCaptcha() {
+        turnstileToken = "";
+        if (window.turnstile && turnstileWidgetId !== null) {
+            window.turnstile.reset(turnstileWidgetId);
+        }
+    }
 
     function getSavedSession() {
         try {
@@ -388,6 +429,18 @@
                 signupMode ? "block" : "none";
         }
 
+        const termsField = document.getElementById("signupTermsField");
+        const captchaField = document.getElementById("signupCaptchaField");
+        if (termsField) termsField.style.display = signupMode ? "flex" : "none";
+        if (captchaField) captchaField.style.display = signupMode ? "block" : "none";
+        if (!signupMode) {
+            const terms = document.getElementById("signupTerms");
+            if (terms) terms.checked = false;
+            resetSignupCaptcha();
+        } else {
+            renderSignupCaptcha();
+        }
+
         if (submit) {
             submit.textContent = signupMode
                 ? "Create account"
@@ -488,9 +541,19 @@
             const password = document.getElementById("authPassword")?.value || "";
             if (!/^[^\s@]+@mtps\.us$/.test(email)) throw new Error("Use an email ending exactly in @mtps.us.");
             if (!password) throw new Error("Enter your password.");
+            if (signupMode && !document.getElementById("signupTerms")?.checked) {
+                throw new Error("Please agree to the Terms of Service before creating an account.");
+            }
+            if (signupMode && !window.WAMS_TURNSTILE_SITE_KEY) {
+                throw new Error("Cloudflare Turnstile is not configured yet. Add your public site key first.");
+            }
+            if (signupMode && !turnstileToken) {
+                throw new Error("Complete the Cloudflare 'I am human' check before creating an account.");
+            }
 
             submit.textContent = signupMode ? "Creating account…" : "Signing in…";
             const body = { email, password };
+            if (signupMode) body.captcha_token = turnstileToken;
             const path = signupMode ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password";
             if (signupMode) {
                 body.data = {
@@ -526,6 +589,7 @@
         } catch (authError) {
             if (error) error.textContent = authError.message || "Authentication failed.";
         } finally {
+            if (signupMode) resetSignupCaptcha();
             submit.disabled = false;
             submit.textContent = signupMode ? "Create account" : "Sign in";
         }
