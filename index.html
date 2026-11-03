@@ -299,9 +299,9 @@
         <div class="home-hero-art" aria-hidden="true">
             <div class="hero-orbit hero-orbit-one"></div>
             <div class="hero-orbit hero-orbit-two"></div>
-            <div class="hero-play-card"><span class="hero-play-icon">🤫</span><span class="hero-play-caption">YOUR NEXT FAVORITE</span></div>
-            <span class="hero-spark hero-spark-one">🙌</span>
-            <span class="hero-spark hero-spark-two">😎</span>
+            <div class="hero-play-card"><span class="hero-play-icon">▶</span><span class="hero-play-caption">YOUR NEXT FAVORITE</span></div>
+            <span class="hero-spark hero-spark-one">✦</span>
+            <span class="hero-spark hero-spark-two">✳</span>
         </div>
     </section>
 
@@ -493,6 +493,15 @@
             >
         </div>
 
+        <label class="auth-terms-option" id="signupTermsField" style="display:none">
+            <input id="signupTerms" type="checkbox" required>
+            <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>.</span>
+        </label>
+        <div id="signupCaptchaField" class="auth-captcha-field" style="display:none">
+            <div id="signupTurnstile"></div>
+            <p class="auth-setup-note" id="signupCaptchaHelp">Complete the Cloudflare check to create an account.</p>
+        </div>
+
         <p
             class="auth-error"
             id="authError"
@@ -519,6 +528,7 @@
     </section>
 </div>
 <script src="supabase-config.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=wamsTurnstileLoaded&render=explicit" defer></script>
 <script src="auth.js"></script>
 <script src="script.js"></script>
 
