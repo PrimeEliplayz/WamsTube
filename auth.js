@@ -16,18 +16,20 @@
 
     function renderSignupCaptcha() {
         const container = document.getElementById("signupTurnstile");
-        if (!signupMode || !container) return;
+        if (!container) return;
+        const overlay = container.closest(".auth-overlay");
+        if (overlay && !overlay.classList.contains("show")) return;
 
         const siteKey = window.WAMS_TURNSTILE_SITE_KEY || "";
         const help = document.getElementById("signupCaptchaHelp");
         if (!siteKey) {
-            if (help) help.textContent = "Account creation is not configured yet: add the Cloudflare Turnstile site key.";
+            if (help) help.textContent = "Authentication is not configured yet: add the Cloudflare Turnstile site key.";
             return;
         }
         if (!window.turnstile) return;
         if (turnstileWidgetId !== null) return;
 
-        if (help) help.textContent = "Complete the Cloudflare check to create an account.";
+        if (help) help.textContent = "Complete the Cloudflare check to continue.";
         turnstileWidgetId = window.turnstile.render(container, {
             sitekey: siteKey,
             callback(token) {
@@ -431,15 +433,18 @@
 
         const termsField = document.getElementById("signupTermsField");
         const captchaField = document.getElementById("signupCaptchaField");
+        const captchaHelp = document.getElementById("signupCaptchaHelp");
         if (termsField) termsField.style.display = signupMode ? "flex" : "none";
-        if (captchaField) captchaField.style.display = signupMode ? "block" : "none";
+        if (captchaField) captchaField.style.display = "block";
+        if (captchaHelp) captchaHelp.textContent = signupMode
+            ? "Complete the Cloudflare check to create an account."
+            : "Complete the Cloudflare check to sign in.";
         if (!signupMode) {
             const terms = document.getElementById("signupTerms");
             if (terms) terms.checked = false;
-            resetSignupCaptcha();
-        } else {
-            renderSignupCaptcha();
         }
+        resetSignupCaptcha();
+        renderSignupCaptcha();
 
         if (submit) {
             submit.textContent = signupMode
@@ -469,6 +474,7 @@
         }
 
         overlay?.classList.add("show");
+        renderSignupCaptcha();
     };
 
     window.closeAuth = function () {
@@ -544,20 +550,21 @@
             if (signupMode && !document.getElementById("signupTerms")?.checked) {
                 throw new Error("Please agree to the Terms of Service before creating an account.");
             }
-            if (signupMode && !window.WAMS_TURNSTILE_SITE_KEY) {
+            if (!window.WAMS_TURNSTILE_SITE_KEY) {
                 throw new Error("Cloudflare Turnstile is not configured yet. Add your public site key first.");
             }
-            if (signupMode && !turnstileToken) {
-                throw new Error("Complete the Cloudflare 'I am human' check before creating an account.");
+            if (!turnstileToken) {
+                throw new Error("Complete the Cloudflare 'I am human' check before continuing.");
             }
 
             submit.textContent = signupMode ? "Creating account…" : "Signing in…";
-            const body = { email, password };
-            if (signupMode) {
-                body.gotrue_meta_security = {
+            const body = {
+                email,
+                password,
+                gotrue_meta_security: {
                     captcha_token: turnstileToken
-                };
-            }
+                }
+            };
             const path = signupMode ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password";
             if (signupMode) {
                 body.data = {
@@ -593,7 +600,7 @@
         } catch (authError) {
             if (error) error.textContent = authError.message || "Authentication failed.";
         } finally {
-            if (signupMode) resetSignupCaptcha();
+            resetSignupCaptcha();
             submit.disabled = false;
             submit.textContent = signupMode ? "Create account" : "Sign in";
         }
