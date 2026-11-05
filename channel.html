@@ -6,6 +6,8 @@
     <title>Your Channel - WamsTube</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="channel-description.css">
+    <link rel="stylesheet" href="channel-collabs.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
     <link rel="stylesheet" href="site-theme.css">
 </head>
@@ -47,11 +49,29 @@
             <div class="channel-badges" id="channelBadges" aria-label="Channel badges"></div>
             <div class="channel-meta-line"><p class="watch-channel" id="channelHandle"></p><span aria-hidden="true">·</span><p class="watch-channel" id="channelSubscribers"></p><span aria-hidden="true">·</span><p class="watch-channel" id="channelVideoCount">0 videos</p></div>
             <p class="channel-description" id="channelDescription">Welcome to this channel — videos from the Wams community.</p>
+            <div class="channel-description-editor" id="channelDescriptionEditor" hidden>
+                <label for="channelDescriptionInput">Channel description</label>
+                <textarea id="channelDescriptionInput" maxlength="1000" rows="3" placeholder="Tell the school community about this channel"></textarea>
+                <button class="channel-manage-button" id="saveChannelDescription" type="button">Save description</button>
+                <span id="channelDescriptionStatus" role="status" aria-live="polite"></span>
+            </div>
             <div class="channel-header-actions">
                 <button class="channel-subscribe-button" id="channelSubscribeButton" type="button" hidden>Subscribe</button>
                 <button class="channel-manage-button" id="channelTransferButton" type="button" hidden>Transfer channel</button>
             </div>
             <p class="channel-transfer-status" id="channelTransferStatus" role="status"></p>
+            <section class="channel-collabs" id="channelCollabSection" hidden aria-labelledby="channelCollabHeading">
+                <h2 id="channelCollabHeading">Channel collaborations</h2>
+                <p class="channel-collab-intro">Request to collaborate with this channel, or manage requests and collaborators on your channel. Ranks range from commenting (1) to co-managing (10).</p>
+                <div id="channelCollabRequestArea" hidden>
+                    <button class="channel-manage-button" id="channelCollabRequestButton" type="button">Request to collaborate</button>
+                    <p id="channelCollabRequestStatus" role="status" aria-live="polite"></p>
+                </div>
+                <div id="channelCollabManageArea" hidden>
+                    <div id="channelCollabList" aria-live="polite">Loading collaborations…</div>
+                    <p id="channelCollabManageStatus" role="status" aria-live="polite"></p>
+                </div>
+            </section>
             <section class="channel-monetization" id="channelMonetization" hidden>
                 <h2>Monetization</h2>
                 <label class="channel-monetization-toggle" for="channelMonetizationEnabled">
@@ -123,6 +143,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="script.js"></script>
+<script src="channel-collabs.js"></script>
 
     <script src="supabase-config.js"></script>
     <script src="site-theme.js"></script>
