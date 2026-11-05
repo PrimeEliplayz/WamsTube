@@ -26,3 +26,13 @@
 .school-category-filter { display: grid; gap: 5px; color: #555; font-size: 12px; font-weight: 600; }
 .school-category-filter select { min-height: 36px; padding: 0 10px; border: 1px solid #ccc; border-radius: 7px; background: white; }
 @media (max-width: 600px) { .school-section-title-row { align-items: stretch; flex-direction: column; } }
+.community-admin-access { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border: 1px solid #e5e1ee; border-radius: 12px; background: #fbf9ff; }
+.community-admin-access p { margin: 0 0 8px; color: #606060; font-size: 13px; }
+.community-admin-access [role="status"] { margin-top: 7px; }
+.community-admin-access [hidden] { display: none; }
+@media (max-width: 600px) { .community-admin-access { align-items: stretch; flex-direction: column; } }
+.school-announcement-list { display: grid; gap: 10px; }
+.school-announcement-card { display: grid; gap: 6px; padding: 15px 16px; border-left: 4px solid #7041b8; border-radius: 9px; background: #f8f5fc; }
+.school-announcement-card h3, .school-announcement-card p { margin: 0; }
+.school-announcement-card p { color: #4e4e4e; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
+.school-announcement-card time { color: #777; font-size: 11px; }
