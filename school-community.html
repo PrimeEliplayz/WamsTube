@@ -21,6 +21,20 @@
             <p>Find school events, club channels, and this week’s selected videos.</p>
         </header>
         <p class="browse-status" id="schoolCommunityStatus" role="status" aria-live="polite">Loading school community…</p>
+        <section class="community-admin-access" aria-label="Community administrator access">
+            <div id="communityAdminRequestArea">
+                <p>Help manage school events, club listings, weekly highlights, and school-safe playlists.</p>
+                <button class="account-button" id="requestCommunityAdmin" type="button">Request community administrator access</button>
+                <p id="communityAdminRequestMessage" role="status" aria-live="polite"></p>
+            </div>
+            <a class="account-button" id="communityAdminManageLink" href="community-admin.html" hidden>Manage school community</a>
+        </section>
+
+        <section aria-labelledby="schoolAnnouncementsHeading">
+            <h2 id="schoolAnnouncementsHeading">School announcements</h2>
+            <div class="school-announcement-list" id="schoolAnnouncementList"></div>
+            <p class="school-empty" id="schoolAnnouncementsEmpty" hidden>No school announcements have been posted.</p>
+        </section>
 
         <section aria-labelledby="schoolEventsHeading">
             <h2 id="schoolEventsHeading">Upcoming events</h2>
@@ -70,6 +84,7 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="school-community.js"></script>
+    <script src="community-admin-access.js"></script>
     <script src="site-theme.js"></script>
 </body>
 </html>
