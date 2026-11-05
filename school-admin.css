@@ -1,0 +1,8 @@
+#adminSchoolCommunity[hidden] { display: none; }
+.school-admin-form { display: grid; gap: 9px; padding: 15px 0; border-top: 1px solid #e5e5e5; }
+.school-admin-form h3 { margin: 0 0 3px; font-size: 16px; }
+.school-admin-form label { display: grid; gap: 6px; color: #444; font-size: 13px; font-weight: 600; }
+.school-admin-form label input[type="checkbox"] { width: fit-content; }
+.school-admin-form .publish-button { margin: 0; }
+.school-admin-form [data-status] { min-height: 16px; margin: 0; }
+@media (min-width: 900px) { #adminSchoolCommunity { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; } #adminSchoolCommunity > .admin-section-heading { grid-column: 1 / -1; } }
