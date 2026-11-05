@@ -81,6 +81,14 @@
                     <input class="studio-input" id="studioTitle" maxlength="100" required>
                     <label class="studio-label" for="studioDescription">Description</label>
                     <textarea class="studio-input studio-textarea" id="studioDescription" maxlength="5000" rows="4" placeholder="Tell viewers about your video"></textarea>
+                    <label class="studio-label" for="studioCategory">Video category</label>
+                    <select class="studio-input" id="studioCategory">
+                        <option value="school_news">School news</option>
+                        <option value="sports">Sports</option>
+                        <option value="art">Art</option>
+                        <option value="tutorials">Tutorials</option>
+                        <option value="entertainment">Entertainment</option>
+                    </select>
                     <label class="studio-label" for="studioVisibility">Who can watch?</label>
                     <select class="studio-input" id="studioVisibility">
                         <option value="public">Public</option>
@@ -104,7 +112,8 @@
                     <textarea class="studio-input studio-textarea studio-caption-editor" id="studioCaptions" rows="8" placeholder="WEBVTT&#10;&#10;00:00:01.000 --> 00:00:03.000&#10;Your caption text"></textarea>
                     <label class="studio-label studio-file-label" for="studioCaptionFile">Or load a .vtt captions file</label>
                     <input class="studio-input" id="studioCaptionFile" type="file" accept=".vtt,text/vtt">
-                    <div class="studio-form-actions"><button class="studio-secondary-button" id="studioClear" type="button">Clear editor</button><button class="studio-publish-button" id="studioPublish" type="submit">Publish video</button></div>
+                    <div class="studio-form-actions"><button class="studio-secondary-button" id="studioClear" type="button">Clear editor</button><button class="studio-secondary-button" id="studioSaveDraft" type="button">Save draft</button><button class="studio-publish-button" id="studioPublish" type="submit">Publish video</button></div>
+                    <p class="studio-help">Before publishing: only share school-appropriate videos, respect privacy and copyright, and get permission before featuring other students.</p>
                     <p class="studio-status" id="studioFormStatus" role="status" aria-live="polite"></p>
                 </form>
             </section>
