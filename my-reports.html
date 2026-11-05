@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My reports - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="report.css">
+    <link rel="stylesheet" href="my-reports.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a>
+        <a class="account-button" href="index.html">Home</a>
+    </header>
+    <main class="report-page">
+        <section class="report-card" aria-labelledby="myReportsHeading">
+            <h1 id="myReportsHeading">My reports</h1>
+            <p>Track the review status of reports you have submitted.</p>
+            <p id="myReportsStatus" class="report-status" role="status" aria-live="polite">Loading your reports…</p>
+            <div id="myReportsList" class="my-reports-list"></div>
+        </section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="my-reports.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>
