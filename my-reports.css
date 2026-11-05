@@ -1,0 +1,8 @@
+.my-reports-list { display: grid; gap: 12px; margin-top: 16px; }
+.my-report-card { display: grid; gap: 7px; padding: 16px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; }
+.my-report-card h2 { margin: 0; font-size: 17px; }
+.my-report-card p { margin: 0; line-height: 1.45; }
+.my-report-card time, .my-report-reviewed { opacity: .72; font-size: 12px; }
+.my-report-state { width: fit-content; padding: 4px 9px; border-radius: 12px; background: #f4c95d; color: #222; font-size: 12px; font-weight: 700; }
+.my-report-state.is-accepted { background: #96dfaa; }
+.my-report-state.is-rejected { background: #b9c5d6; }
