@@ -18,6 +18,7 @@
     let previewUrl = "";
     let captionPath = null;
     let uploadMaxBytes = 100 * 1024 * 1024;
+    let saveAsDraft = false;
 
     async function request(path, options = {}) {
         if (!apiUrl || !apiKey) throw new Error("Supabase is not configured.");
@@ -230,7 +231,7 @@
 
     async function loadVideos() {
         const params = new URLSearchParams({
-            select: "id,owner_id,title,description,visibility,storage_path,media_type,caption_path,trim_start_seconds,trim_end_seconds,is_short,created_at,is_deleted",
+            select: "id,owner_id,title,description,visibility,storage_path,media_type,caption_path,trim_start_seconds,trim_end_seconds,is_short,created_at,is_deleted,is_draft,category",
             owner_id: `eq.${session.user.id}`,
             is_deleted: "eq.false",
             order: "created_at.desc",
@@ -239,7 +240,7 @@
         videos = await request(`/rest/v1/videos?${params}`);
         const picker = $("studioExistingVideo");
         picker.replaceChildren(new Option("Create a new video", ""));
-        videos.forEach(video => picker.add(new Option(video.title, video.id)));
+        videos.forEach(video => picker.add(new Option(`${video.is_draft ? "Draft · " : ""}${video.title}`, video.id)));
 
         const resultList = $("studioAnalyticsList");
         resultList.replaceChildren();
@@ -324,6 +325,7 @@
         $("studioTitle").value = video?.title || "";
         $("studioDescription").value = video?.description || "";
         $("studioVisibility").value = video?.visibility || "public";
+        $("studioCategory").value = video?.category || "school_news";
         $("studioIsShort").checked = Boolean(video?.is_short);
         $("studioTrimStart").value = video?.trim_start_seconds || 0;
         $("studioTrimEnd").value = video?.trim_end_seconds ?? "";
@@ -389,6 +391,12 @@
     $("studioTrimStart").addEventListener("input", updateDuration);
     $("studioTrimEnd").addEventListener("input", updateDuration);
 
+    $("studioSaveDraft").addEventListener("click", () => {
+        saveAsDraft = true;
+        $("studioForm").requestSubmit();
+        window.setTimeout(() => { saveAsDraft = false; }, 0);
+    });
+
     $("studioClear").addEventListener("click", () => {
         $("studioExistingVideo").value = "";
         $("studioExistingVideo").dispatchEvent(new Event("change"));
@@ -409,6 +417,8 @@
 
     $("studioForm").addEventListener("submit", async event => {
         event.preventDefault();
+        const draft = saveAsDraft;
+        saveAsDraft = false;
         const button = $("studioPublish");
         const file = $("studioFile").files?.[0];
         const title = $("studioTitle").value.trim();
@@ -422,7 +432,8 @@
         const isImage = file ? file.type.startsWith("image/") : (existing?.media_type || "").startsWith("image/");
 
         if (!title) return setStatus("Enter a video title.", true);
-        if (!existing && !file) return setStatus("Choose a video or image to publish.", true);
+        if (!existing && !file) return setStatus("Choose a video or image to save.", true);
+        if (!draft && (!existing || existing.is_draft) && !window.confirm("Community guidelines reminder: share only school-appropriate content, respect privacy and copyright, and make sure you have permission to feature other students. Publish this video now?")) return;
         if (file && (!file.type.startsWith("video/") && !file.type.startsWith("image/"))) return setStatus("Choose a video or image file.", true);
         if (file && file.size > uploadMaxBytes) return setStatus(`This file is too large. Your upload limit is ${uploadMaxBytes / (1024 * 1024)} MB.`, true);
         if (!Number.isFinite(start) || start < 0 || (end !== null && (!Number.isFinite(end) || end <= start))) return setStatus("Trim end must be later than trim start.", true);
@@ -433,8 +444,8 @@
         if (Number.isFinite(duration) && (start >= duration || (end !== null && end > duration))) return setStatus("Trim points must fall within the video duration.", true);
 
         button.disabled = true;
-        button.textContent = existing ? "Saving changes…" : "Publishing…";
-        setStatus("Saving your Studio changes…");
+        button.textContent = draft ? "Saving draft…" : existing && !existing.is_draft ? "Saving changes…" : "Publishing…";
+        setStatus(draft ? "Saving your draft…" : "Saving your Studio changes…");
         let uploadedMedia = null;
         let uploadedCaption = null;
         try {
@@ -462,6 +473,8 @@
                 title: title.slice(0, 100),
                 description: $("studioDescription").value.trim().slice(0, 5000),
                 visibility,
+                category: $("studioCategory").value,
+                is_draft: draft,
                 storage_path: mediaPath,
                 media_type: mediaType,
                 caption_path: nextCaptionPath,
@@ -486,7 +499,7 @@
             if (file && existing?.storage_path) removeObject(existing.storage_path).catch(() => {});
             if (existing?.caption_path && existing.caption_path !== nextCaptionPath) removeObject(existing.caption_path).catch(() => {});
             captionPath = nextCaptionPath;
-            setStatus(existing ? "Video updated successfully." : "Video published successfully.");
+            setStatus(draft ? "Draft saved. Return to Studio whenever you’re ready to finish and publish it." : existing && !existing.is_draft ? "Video updated successfully." : "Video published successfully.");
             $("studioExistingVideo").value = "";
             $("studioForm").reset();
             $("studioTrimStart").value = "0";
