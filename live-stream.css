@@ -1,0 +1,37 @@
+.live-page { display: grid; gap: 22px; max-width: 1180px; }
+.live-heading h1 { margin: 0 0 7px; font-size: clamp(30px, 5vw, 42px); }
+.live-heading > p:last-child, .live-note { color: #666; font-size: 13px; line-height: 1.5; }
+.live-kicker { margin: 0 0 5px; color: #7041b8; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+.live-status { min-height: 20px; color: #666; font-size: 13px; }
+.live-host-panel, .live-chat, .live-stream-card { padding: 18px; border: 1px solid #e3e0e9; border-radius: 14px; background: var(--card-background, #fff); }
+.live-host-panel { display: grid; gap: 10px; max-width: 620px; }
+.live-host-panel h2, .live-active-section h2, .live-chat h2 { margin: 0 0 4px; font-size: 20px; }
+.live-host-panel label { font-size: 13px; font-weight: 700; }
+.live-host-panel input, .live-host-panel select, .live-chat-form input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #cbc7d2; border-radius: 8px; background: var(--card-background, #fff); color: inherit; font: inherit; }
+.live-primary-button, .live-chat-form button { min-height: 40px; padding: 9px 15px; border: 0; border-radius: 8px; background: #7041b8; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.live-primary-button:disabled, .live-chat-form button:disabled, .live-secondary-button:disabled { opacity: .55; cursor: wait; }
+.live-secondary-button { min-height: 37px; padding: 8px 13px; border: 1px solid #ccc; border-radius: 8px; background: #fff; color: #333; font: inherit; font-weight: 600; cursor: pointer; }
+.live-viewer { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, .8fr); gap: 16px; align-items: start; }
+.live-viewer[hidden] { display: none; }
+.live-player-column { display: grid; gap: 10px; }
+.live-player-wrap { position: relative; overflow: hidden; min-height: 220px; border-radius: 14px; background: #111; aspect-ratio: 16 / 9; }
+.live-player-wrap video { width: 100%; height: 100%; object-fit: contain; }
+.live-indicator { position: absolute; top: 12px; left: 12px; display: flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 5px; background: #c62828; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .05em; }
+.live-indicator i { width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+.live-player-column h2 { margin: 0; font-size: 21px; }
+.live-host-name { margin: 0; color: #666; font-size: 13px; }
+.live-chat { display: grid; grid-template-rows: auto minmax(200px, 360px) auto auto; gap: 10px; }
+.live-chat-messages { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; padding: 8px; border-radius: 9px; background: rgba(120, 90, 170, .06); }
+.live-chat-message { overflow-wrap: anywhere; font-size: 13px; line-height: 1.4; }
+.live-chat-message strong { margin-right: 5px; }
+.live-chat-form { display: grid; grid-template-columns: 1fr auto; gap: 7px; }
+.live-chat-form button { min-width: 64px; }
+.live-chat .live-note { margin: 0; }
+.live-stream-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.live-stream-card { display: grid; align-content: start; gap: 8px; }
+.live-stream-card h3 { margin: 0; font-size: 17px; overflow-wrap: anywhere; }
+.live-stream-card p { margin: 0; color: #666; font-size: 13px; }
+.live-stream-card button { width: fit-content; min-height: 36px; padding: 7px 12px; border: 0; border-radius: 7px; background: #7041b8; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.live-stream-card button:disabled { opacity: .55; }
+.live-empty { padding: 14px; border: 1px dashed #d5d5d5; border-radius: 10px; color: #666; font-size: 13px; }
+@media (max-width: 760px) { .live-viewer { grid-template-columns: 1fr; } .live-player-wrap { min-height: 180px; } }
