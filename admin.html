@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="school-admin.css">
     <link rel="stylesheet" href="site-theme.css">
 </head>
 <body>
@@ -146,6 +147,41 @@
         </div>
 
         <h2 class="admin-category-heading">Site controls & communications</h2>
+        <section class="admin-box admin-standalone" id="adminSchoolCommunity" hidden>
+            <div class="admin-section-heading"><div><h2>School community manager</h2><p>Publish events, list club channels, choose weekly highlights, and curate school-safe playlists.</p></div></div>
+            <form id="schoolEventForm" class="school-admin-form">
+                <h3>School event</h3>
+                <input name="title" class="upload-input" maxlength="120" placeholder="Event title" required>
+                <select name="event_type" class="upload-input"><option value="assembly">Assembly</option><option value="game">Game</option><option value="club">Club</option><option value="performance">Performance</option><option value="other">Other</option></select>
+                <input name="starts_at" class="upload-input" type="datetime-local" required>
+                <input name="location" class="upload-input" maxlength="120" placeholder="Location (optional)">
+                <textarea name="description" class="upload-input" maxlength="1000" rows="3" placeholder="Event details"></textarea>
+                <label><input name="is_published" type="checkbox" checked> Publish event</label>
+                <button class="publish-button" type="submit">Save event</button><p class="admin-result-count" data-status></p>
+            </form>
+            <form id="schoolClubForm" class="school-admin-form">
+                <h3>Club channel</h3>
+                <input name="name" class="upload-input" maxlength="80" placeholder="Club name" required>
+                <input name="channel_id" class="upload-input" placeholder="Channel profile UUID (optional)">
+                <textarea name="description" class="upload-input" maxlength="1000" rows="3" placeholder="Club description"></textarea>
+                <button class="publish-button" type="submit">List club</button><p class="admin-result-count" data-status></p>
+            </form>
+            <form id="schoolHighlightForm" class="school-admin-form">
+                <h3>Weekly highlight</h3>
+                <input name="video_id" class="upload-input" placeholder="Public video UUID" required>
+                <label>Week starting (Monday) <input name="week_start" class="upload-input" type="date" required></label>
+                <input name="position" class="upload-input" type="number" min="0" step="1" value="0" aria-label="Display order">
+                <button class="publish-button" type="submit">Add highlight</button><p class="admin-result-count" data-status></p>
+            </form>
+            <form id="schoolPlaylistForm" class="school-admin-form">
+                <h3>School-safe playlist</h3>
+                <input name="title" class="upload-input" maxlength="100" placeholder="Playlist title" required>
+                <select name="audience" class="upload-input"><option value="class">Class</option><option value="club">Club</option><option value="event">School event</option></select>
+                <textarea name="description" class="upload-input" maxlength="1000" rows="2" placeholder="Playlist description"></textarea>
+                <input name="video_ids" class="upload-input" placeholder="Public video UUIDs, comma-separated">
+                <button class="publish-button" type="submit">Publish playlist</button><p class="admin-result-count" data-status></p>
+            </form>
+        </section>
         <section class="admin-box admin-standalone">
             <div class="admin-section-heading">
                 <div>
@@ -681,6 +717,7 @@
     <script src="script.js"></script>
     <script src="admin.js"></script>
     <script src="admin-news.js"></script>
+    <script src="school-admin.js"></script>
     <script src="supabase-config.js"></script>
     <script src="site-theme.js"></script>
 </body>
