@@ -42,6 +42,26 @@
         return card;
     }
 
+    async function loadAnnouncements() {
+        const announcements = await schoolApi("school_announcements?select=id,title,body,created_at&is_published=eq.true&order=created_at.desc&limit=30");
+        const list = document.getElementById("schoolAnnouncementList");
+        list.replaceChildren();
+        announcements.forEach(announcement => {
+            const card = document.createElement("article");
+            card.className = "school-announcement-card";
+            const title = document.createElement("h3");
+            title.textContent = announcement.title;
+            const body = document.createElement("p");
+            body.textContent = announcement.body;
+            const date = document.createElement("time");
+            date.dateTime = announcement.created_at;
+            date.textContent = new Date(announcement.created_at).toLocaleDateString();
+            card.append(title, body, date);
+            list.appendChild(card);
+        });
+        document.getElementById("schoolAnnouncementsEmpty").hidden = announcements.length > 0;
+    }
+
     async function loadEvents() {
         const now = new Date().toISOString();
         const params = new URLSearchParams({
@@ -210,7 +230,7 @@
         renderVideos();
         renderHighlights();
     });
-    Promise.all([loadEvents(), loadClubs(), loadSchoolPlaylists(), loadSchoolVideos(), loadHighlights()])
+    Promise.all([loadAnnouncements(), loadEvents(), loadClubs(), loadSchoolPlaylists(), loadSchoolVideos(), loadHighlights()])
         .then(() => { status.textContent = "School community updated."; })
         .catch(error => {
             console.error("Could not load school community content.", error);
