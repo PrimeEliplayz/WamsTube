@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Community Manager - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="school-community.css">
+    <link rel="stylesheet" href="community-admin.css">
+    <link rel="stylesheet" href="site-theme.css">
+</head>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a>
+        <a class="account-button" href="school-community.html">School community</a>
+    </header>
+    <main class="home-page browse-page community-manager-page">
+        <header class="school-community-heading">
+            <p class="home-section-kicker">LIMITED COMMUNITY ACCESS</p>
+            <h1>School community manager</h1>
+            <p>Publish and moderate school events, club listings, weekly highlights, and school-safe playlists.</p>
+        </header>
+        <p id="communityManagerStatus" class="browse-status" role="status" aria-live="polite">Checking community administrator access…</p>
+        <div id="communityManagerContent" hidden>
+            <section class="community-manager-section">
+                <h2>School announcements</h2>
+                <form id="communityAnnouncementForm" class="community-manager-form">
+                    <input name="id" type="hidden">
+                    <label>Title<input name="title" maxlength="120" required></label>
+                    <label>Announcement<textarea name="body" maxlength="2000" rows="4" required></textarea></label>
+                    <label class="community-manager-check"><input name="is_published" type="checkbox" checked> Publish announcement</label>
+                    <div class="community-manager-actions"><button type="submit">Save announcement</button><button type="button" data-reset="communityAnnouncementForm">Clear form</button></div>
+                    <p data-status role="status"></p>
+                </form>
+                <div id="communityAnnouncementsManageList" class="community-manager-list"></div>
+            </section>
+
+            <section class="community-manager-section">
+                <h2>School events</h2>
+                <form id="communityEventForm" class="community-manager-form">
+                    <input name="id" type="hidden">
+                    <label>Title<input name="title" maxlength="120" required></label>
+                    <label>Type<select name="event_type"><option value="assembly">Assembly</option><option value="game">Game</option><option value="club">Club</option><option value="performance">Performance</option><option value="other">Other</option></select></label>
+                    <label>Starts<input name="starts_at" type="datetime-local" required></label>
+                    <label>Location<input name="location" maxlength="120"></label>
+                    <label>Details<textarea name="description" maxlength="1000" rows="3"></textarea></label>
+                    <label class="community-manager-check"><input name="is_published" type="checkbox" checked> Publish event</label>
+                    <div class="community-manager-actions"><button type="submit">Save event</button><button type="button" data-reset="communityEventForm">Clear form</button></div>
+                    <p data-status role="status"></p>
+                </form>
+                <div id="communityEventsManageList" class="community-manager-list"></div>
+            </section>
+
+            <section class="community-manager-section">
+                <h2>Club channels</h2>
+                <form id="communityClubForm" class="community-manager-form">
+                    <input name="id" type="hidden">
+                    <label>Club name<input name="name" maxlength="80" required></label>
+                    <label>Channel profile UUID (optional)<input name="channel_id"></label>
+                    <label>Description<textarea name="description" maxlength="1000" rows="3"></textarea></label>
+                    <label class="community-manager-check"><input name="is_listed" type="checkbox" checked> List club publicly</label>
+                    <div class="community-manager-actions"><button type="submit">Save club</button><button type="button" data-reset="communityClubForm">Clear form</button></div>
+                    <p data-status role="status"></p>
+                </form>
+                <div id="communityClubsManageList" class="community-manager-list"></div>
+            </section>
+
+            <section class="community-manager-section">
+                <h2>Weekly highlights</h2>
+                <form id="communityHighlightForm" class="community-manager-form">
+                    <label>Public video UUID<input name="video_id" required></label>
+                    <label>Week starting (Monday)<input name="week_start" type="date" required></label>
+                    <label>Display order<input name="position" type="number" min="0" step="1" value="0"></label>
+                    <button type="submit">Add highlight</button><p data-status role="status"></p>
+                </form>
+                <div id="communityHighlightsManageList" class="community-manager-list"></div>
+            </section>
+
+            <section class="community-manager-section">
+                <h2>School-safe playlists</h2>
+                <form id="communityPlaylistForm" class="community-manager-form">
+                    <label>Playlist title<input name="title" maxlength="100" required></label>
+                    <label>Audience<select name="audience"><option value="class">Class</option><option value="club">Club</option><option value="event">School event</option></select></label>
+                    <label>Description<textarea name="description" maxlength="1000" rows="3"></textarea></label>
+                    <label>Public video UUIDs (comma-separated)<input name="video_ids"></label>
+                    <label class="community-manager-check"><input name="is_published" type="checkbox" checked> Publish playlist</label>
+                    <button type="submit">Create playlist</button><p data-status role="status"></p>
+                </form>
+                <div id="communityPlaylistsManageList" class="community-manager-list"></div>
+            </section>
+        </div>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="community-admin.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>
