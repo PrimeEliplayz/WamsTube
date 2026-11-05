@@ -3,16 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7041b8">
     <title>Live - WamsTube</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="browse.css">
     <link rel="stylesheet" href="site-theme.css">
+    <link rel="stylesheet" href="live-stream.css">
 </head>
-<body data-browse-page="live">
-    <header class="top-bar"><a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a><a class="account-button browse-home" href="index.html">Home</a></header>
-    <main class="home-page browse-page"><h1>Live</h1><p class="browse-intro">This project does not yet have a live-stream publishing feature. Videos labeled live or stream are shown below.</p><p class="browse-status" id="browseStatus" role="status" aria-live="polite"></p><section class="video-grid" id="browseVideoGrid"></section><div class="empty-channel" id="browseEmpty"><div class="empty-channel-title">No live-labeled videos found</div><div class="empty-channel-text">Live streaming is not currently supported in WamsTube.</div></div></main>
-    <script src="supabase-config.js"></script><script src="auth.js"></script><script src="script.js"></script><script src="browse.js"></script>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a>
+        <a class="account-button" href="index.html">Home</a>
+    </header>
+    <main class="home-page live-page">
+        <header class="live-heading">
+            <p class="live-kicker">LIVE FROM YOUR COMMUNITY</p>
+            <h1>Go live</h1>
+            <p>Broadcast your camera or screen with your browser. Active Plus members can stream; otherwise, you need at least 20 subscribers. Peer-to-peer streams support up to 10 viewers, and some networks may block direct connections.</p>
+        </header>
+        <p id="liveStatus" class="live-status" role="status" aria-live="polite">Loading live streams…</p>
+
+        <section class="live-host-panel" id="liveHostPanel" aria-labelledby="hostHeading">
+            <h2 id="hostHeading">Start a live stream</h2>
+            <label for="liveTitle">Stream title</label>
+            <input id="liveTitle" maxlength="100" placeholder="What are you sharing?" autocomplete="off">
+            <label for="liveSource">Broadcast source</label>
+            <select id="liveSource">
+                <option value="camera">Camera and microphone</option>
+                <option value="screen">Share your screen (microphone if available)</option>
+            </select>
+            <p class="live-note">Your browser will ask for camera or screen permission. Only share school-appropriate content and avoid showing private information or other students without permission.</p>
+            <button class="live-primary-button" id="startLiveButton" type="button">Start streaming</button>
+        </section>
+
+        <section class="live-viewer" id="liveViewer" hidden aria-label="Live stream player and chat">
+            <div class="live-player-column">
+                <div class="live-player-wrap">
+                    <video id="liveVideo" autoplay playsinline controls></video>
+                    <span class="live-indicator" id="liveIndicator"><i></i> LIVE</span>
+                </div>
+                <h2 id="liveStreamTitle"></h2>
+                <p id="liveStreamHost" class="live-host-name"></p>
+                <button class="live-secondary-button" id="leaveLiveButton" type="button">Leave stream</button>
+            </div>
+            <section class="live-chat" aria-labelledby="liveChatHeading">
+                <h2 id="liveChatHeading">Live chat</h2>
+                <div id="liveChatMessages" class="live-chat-messages" aria-live="polite"></div>
+                <form id="liveChatForm" class="live-chat-form">
+                    <label class="sr-only" for="liveChatInput">Write a chat message</label>
+                    <input id="liveChatInput" maxlength="500" placeholder="Say something…" autocomplete="off">
+                    <button type="submit">Send</button>
+                </form>
+                <p class="live-note">Be kind, keep it school-appropriate, and don’t share personal information.</p>
+            </section>
+        </section>
+
+        <section class="live-active-section" aria-labelledby="activeLivesHeading">
+            <h2 id="activeLivesHeading">Live now</h2>
+            <div id="liveStreamList" class="live-stream-list"></div>
+            <p class="live-empty" id="liveEmpty" hidden>No one is live right now. Start a stream and invite your community.</p>
+        </section>
+    </main>
     <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="live-stream.js"></script>
     <script src="site-theme.js"></script>
 </body>
 </html>
