@@ -102,6 +102,7 @@ function createVideoCard(video, channelName, mediaUrl, verified, canDelete = fal
     card.dataset.videoId = video.id;
     card.dataset.title = video.title;
     card.dataset.author = channelName;
+    card.dataset.category = video.category || "";
 
     const thumbnail = document.createElement("div");
     thumbnail.className = "thumbnail-wrapper";
@@ -279,16 +280,16 @@ async function renderSupabaseVideos() {
                 }
             }
         }
-        let query = "videos?select=id,owner_id,title,visibility,storage_path,caption_path,media_type,is_short,is_deleted,takedown_reason,takedown_by,created_at&order=created_at.desc&limit=24";
+        let query = "videos?select=id,owner_id,title,visibility,storage_path,caption_path,media_type,is_short,is_deleted,is_draft,category,takedown_reason,takedown_by,created_at&order=created_at.desc&limit=24";
         if (channelPage) {
             if (!ownerId) {
                 if (emptyState) emptyState.textContent = "Sign in to see your channel and uploads.";
                 return;
             }
-            query += `&owner_id=eq.${encodeURIComponent(ownerId)}`;
+            query += `&owner_id=eq.${encodeURIComponent(ownerId)}&is_draft=eq.false`;
             if (!isOwnChannel) query += "&or=(visibility.eq.public,visibility.eq.subscribers)&is_deleted=eq.false";
         } else {
-            query += "&visibility=eq.public&is_deleted=eq.false";
+            query += "&visibility=eq.public&is_deleted=eq.false&is_draft=eq.false";
         }
         const videos = await supabaseRequest(`/rest/v1/${query}`);
         const ids = [...new Set(videos.map(video => video.owner_id))];
@@ -418,7 +419,7 @@ async function loadChannelHeader() {
     }
     if (pictureUpload && isOwnChannel) pictureUpload.hidden = false;
     try {
-        const profiles = await supabaseRequest(`/rest/v1/profiles?id=eq.${encodeURIComponent(profileId)}&select=id,channel_name,avatar_path,banner_path,admin_verified,plus_expires_at,plus_plan,monetization_enabled,is_suspected,is_admin,channel_closed,channel_closed_message`);
+        const profiles = await supabaseRequest(`/rest/v1/profiles?id=eq.${encodeURIComponent(profileId)}&select=id,channel_name,channel_description,avatar_path,banner_path,admin_verified,plus_expires_at,plus_plan,monetization_enabled,is_suspected,is_admin,channel_closed,channel_closed_message`);
         if (!profiles || !profiles.length) throw new Error("Your Supabase profile could not be found.");
         const profile = profiles[0];
         if (channelSettingsPanel && isOwnChannel) {
@@ -450,6 +451,33 @@ async function loadChannelHeader() {
         }
         if (heading) heading.textContent = profile.channel_name;
         if (handle) handle.textContent = `@${profile.channel_name}`;
+        const description = document.getElementById("channelDescription");
+        const descriptionEditor = document.getElementById("channelDescriptionEditor");
+        const descriptionInput = document.getElementById("channelDescriptionInput");
+        const descriptionSave = document.getElementById("saveChannelDescription");
+        const descriptionStatus = document.getElementById("channelDescriptionStatus");
+        if (description) description.textContent = profile.channel_description || "Welcome to this channel — videos from the Wams community.";
+        if (descriptionEditor && isOwnChannel) descriptionEditor.hidden = false;
+        if (descriptionInput) descriptionInput.value = profile.channel_description || "";
+        descriptionSave?.addEventListener("click", async () => {
+            if (!session?.access_token || !isOwnChannel) return;
+            descriptionSave.disabled = true;
+            if (descriptionStatus) descriptionStatus.textContent = "Saving…";
+            try {
+                const value = descriptionInput.value.trim().slice(0, 1000);
+                await supabaseRequest(`/rest/v1/profiles?id=eq.${encodeURIComponent(profile.id)}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json", Prefer: "return=minimal" },
+                    body: JSON.stringify({ channel_description: value })
+                });
+                if (description) description.textContent = value || "Welcome to this channel — videos from the Wams community.";
+                if (descriptionStatus) descriptionStatus.textContent = "Description saved.";
+            } catch (error) {
+                if (descriptionStatus) descriptionStatus.textContent = error.message || "Could not save the description.";
+            } finally {
+                descriptionSave.disabled = false;
+            }
+        });
         const videosHeading = document.getElementById("channelVideosHeading");
         if (videosHeading) videosHeading.textContent = isOwnChannel ? "Your videos" : `${profile.channel_name}'s videos`;
         document.title = `${profile.channel_name} - WamsTube`;
