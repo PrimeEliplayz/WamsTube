@@ -330,7 +330,7 @@ async function loadDashboard() {
     ] = await Promise.all([
         allRows(
             "videos",
-            "id,title,owner_id,storage_path,visibility,is_short,is_deleted,takedown_reason,takedown_by,created_at"
+            "id,title,owner_id,storage_path,visibility,is_short,is_deleted,is_featured,takedown_reason,takedown_by,created_at"
         ),
 
         allRows(
@@ -530,6 +530,8 @@ function renderVideos() {
                 pendingReports ? "admin-report-attention" : ""
             ),
 
+            button(video.is_featured ? "Unpin homepage feature" : "Pin to homepage", () => setFeaturedVideo(video)),
+
             button(
                 "Delete permanently",
                 () => deleteVideo(video),
@@ -540,6 +542,20 @@ function renderVideos() {
         row.append(selection, info, actions);
         adminVideoList.appendChild(row);
     });
+}
+
+async function setFeaturedVideo(video) {
+    try {
+        await api("rpc/set_featured_video", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ target_video: video.is_featured ? null : video.id })
+        });
+        notify(video.is_featured ? "Homepage feature removed." : `“${video.title}” is now the homepage feature.`);
+        await loadDashboard();
+    } catch (error) {
+        notify(error.message || "Could not update the homepage feature. Apply school-community.sql first.");
+    }
 }
 
 async function patchVideo(video, patch) {
