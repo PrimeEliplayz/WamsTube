@@ -6,7 +6,9 @@
 <title>WamsTube</title>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="homepage-featured.css">
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -211,6 +213,11 @@
     <div class="sidebar-section">
         <div class="sidebar-heading">Explore</div>
 
+        <button class="sidebar-item" onclick="window.location.href='school-community.html'">
+            <span class="material-symbols-rounded">event</span>
+            <span>School community</span>
+        </button>
+
         <button
             class="sidebar-item"
             onclick="window.location.href='trending.html'"
@@ -305,8 +312,14 @@
         </div>
     </section>
 
+    <section class="featured-home-section" id="featuredHomeSection" hidden aria-labelledby="featuredHomeHeading">
+        <div class="home-section-heading"><div><p class="home-section-kicker">PICKED FOR THE COMMUNITY</p><h2 id="featuredHomeHeading">Featured video</h2></div></div>
+        <section class="video-grid" id="featuredHomeGrid" aria-label="Featured video"></section>
+    </section>
+
     <nav class="home-topics" aria-label="Explore videos">
         <a class="home-topic is-selected" href="index.html">All</a>
+        <a class="home-topic" href="school-community.html"><span class="material-symbols-rounded" aria-hidden="true">event</span> School community</a>
         <a class="home-topic" href="trending.html"><span class="material-symbols-rounded" aria-hidden="true">local_fire_department</span> Trending</a>
         <a class="home-topic" href="music.html"><span class="material-symbols-rounded" aria-hidden="true">music_note</span> Music</a>
         <a class="home-topic" href="gaming.html"><span class="material-symbols-rounded" aria-hidden="true">sports_esports</span> Gaming</a>
@@ -405,6 +418,7 @@
                 class="upload-error"
                 id="uploadError"
             ></div>
+            <p class="upload-size-help">Community reminder: post school-appropriate content, respect privacy and copyright, and get permission before featuring other students.</p>
 
             <button
                 class="publish-button"
@@ -531,6 +545,8 @@
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=wamsTurnstileLoaded&render=explicit" defer></script>
 <script src="auth.js"></script>
 <script src="script.js"></script>
+<script src="community-reminder.js"></script>
+<script src="featured-home.js"></script>
 
     <script src="supabase-config.js"></script>
     <script src="site-theme.js"></script>
