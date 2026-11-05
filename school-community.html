@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Community - WamsTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="site-theme.css">
+    <link rel="stylesheet" href="school-community.css">
+</head>
+<body>
+    <header class="top-bar">
+        <a class="site-brand" href="index.html"><img class="site-brand-logo" src="download.jpeg" alt="WamsTube logo"><span>Wams Tube</span></a>
+        <a class="account-button" href="index.html">Home</a>
+    </header>
+    <main class="home-page browse-page school-community-page">
+        <header class="school-community-heading">
+            <p class="home-section-kicker">YOUR SCHOOL, ON WAMSTUBE</p>
+            <h1>School community</h1>
+            <p>Find school events, club channels, and this week’s selected videos.</p>
+        </header>
+        <p class="browse-status" id="schoolCommunityStatus" role="status" aria-live="polite">Loading school community…</p>
+
+        <section aria-labelledby="schoolEventsHeading">
+            <h2 id="schoolEventsHeading">Upcoming events</h2>
+            <div class="school-event-grid" id="schoolEventList"></div>
+            <p class="school-empty" id="schoolEventsEmpty" hidden>No upcoming events have been posted yet.</p>
+        </section>
+
+        <section aria-labelledby="schoolClubsHeading">
+            <h2 id="schoolClubsHeading">Club channels</h2>
+            <div class="school-club-grid" id="schoolClubList"></div>
+            <p class="school-empty" id="schoolClubsEmpty" hidden>No club channels have been listed yet.</p>
+        </section>
+
+        <section aria-labelledby="schoolVideosHeading">
+            <div class="school-section-title-row">
+                <div><h2 id="schoolVideosHeading">Videos around school</h2><p>Browse school news, sports, art, tutorials, and entertainment.</p></div>
+                <label class="school-category-filter" for="schoolCategoryFilter">Category
+                    <select id="schoolCategoryFilter">
+                        <option value="all">All school videos</option>
+                        <option value="school_news">School news</option>
+                        <option value="sports">Sports</option>
+                        <option value="art">Art</option>
+                        <option value="tutorials">Tutorials</option>
+                        <option value="entertainment">Entertainment</option>
+                    </select>
+                </label>
+            </div>
+            <section class="video-grid" id="schoolVideoGrid" aria-label="School videos"></section>
+            <p class="school-empty" id="schoolVideosEmpty" hidden>No public videos are available in this category yet.</p>
+        </section>
+
+        <section aria-labelledby="schoolPlaylistsHeading">
+            <h2 id="schoolPlaylistsHeading">School-safe playlists</h2>
+            <p class="school-section-intro">Shared collections curated for classes, clubs, and school events.</p>
+            <div class="school-playlist-list" id="schoolPlaylistList"></div>
+            <p class="school-empty" id="schoolPlaylistsEmpty" hidden>No school playlists have been published yet.</p>
+        </section>
+
+        <section aria-labelledby="schoolHighlightsHeading">
+            <h2 id="schoolHighlightsHeading">Weekly highlights</h2>
+            <p class="school-section-intro">Videos selected by school administrators.</p>
+            <section class="video-grid" id="schoolHighlightGrid" aria-label="Weekly highlighted videos"></section>
+            <p class="school-empty" id="schoolHighlightsEmpty" hidden>No videos have been selected for this week yet.</p>
+        </section>
+    </main>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="school-community.js"></script>
+    <script src="site-theme.js"></script>
+</body>
+</html>
