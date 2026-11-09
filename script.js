@@ -1,5 +1,5 @@
-const SUPABASE_URL = window.WAMS_SUPABASE_URL = "https://xjioacoqufhoazdffbgs.supabase.co";
-const SUPABASE_KEY = "sb_publishable_5ko02yJrQJq5GQ3xcwRVuQ_P1PWLNe-";
+const SUPABASE_URL = window.WAMS_SUPABASE_URL = "https://mpxiqgknwitikoruynzh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_QRXRIBMBMUmEmXMQ4veURQ_tDSzGDoi"
 const MEDIA_BUCKET = "wams-media";
 
 function currentSession() {
