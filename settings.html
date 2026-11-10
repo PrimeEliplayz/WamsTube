@@ -75,7 +75,7 @@
             </article>
             <article class="settings-security-note">
                 <h3>Passcode lock this device</h3>
-                <p>This is a device-only screen lock, not an account password or server-side lock. Your passcode is stored as a salted PBKDF2 hash in this browser.</p>
+                <p>This is a device-only screen lock, not an account password or server-side lock. Your passcode is stored as a salted PBKDF2 hash in this browser. It does not protect your account on other devices.</p>
                 <form id="passcodeSetupForm" class="settings-security-form">
                     <label for="passcodeValue">New passcode (6–12 digits)</label>
                     <input id="passcodeValue" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
@@ -89,7 +89,7 @@
             </article>
             <article class="settings-security-note settings-security-danger-zone">
                 <h3>Delete account</h3>
-                <p>This permanently deletes your Supabase login and associated WamsTube database records. Uploaded files may need separate cleanup. This cannot be undone.</p>
+                <p>This permanently deletes your Supabase login and associated WamsTube database records. Uploaded files in Supabase Storage may need separate cleanup. This cannot be undone. Apply <code>account-security.sql</code> in Supabase before using this control.</p>
                 <form id="deleteAccountForm" class="settings-security-form">
                     <label for="deleteAccountConfirm">Type DELETE to confirm</label>
                     <input id="deleteAccountConfirm" autocomplete="off" required>
